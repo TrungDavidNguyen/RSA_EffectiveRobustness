@@ -35,9 +35,7 @@ def brain_similarity_rsa(model_name, netset, brain_path, roi, device="cuda" if t
     return RSA_helper(save_path, brain_path, model_name, roi)
 
 
-def brain_similarity_rsa_custom(model, model_name, my_preprocessor, my_cleaner, my_extractor, brain_path, roi, device="cuda" if torch.cuda.is_available() else "cpu"):
-    """ Same as function above but with custom model, preprocessor, cleaner and extractor
-    """
+def brain_similarity_rsa_custom(model, model_name, my_preprocessor, my_cleaner, my_extractor, brain_path, roi, layers_to_extract, device):
     # Set paths
     current_dir = os.getcwd()
     save_path = os.path.join(current_dir, f"{model_name}_RDM")
@@ -49,7 +47,8 @@ def brain_similarity_rsa_custom(model, model_name, my_preprocessor, my_cleaner, 
         feat_path = f"{model_name}_Feat"
         fx = FeatureExtractor(model=model, device=device, preprocessor=my_preprocessor, feature_cleaner=my_cleaner,
                               extraction_function=my_extractor)
-        fx.extract(data_path=stimuli_path, save_path=feat_path)
+        print(str(fx.get_all_layers()))
+        fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
         # Create RDM of model
         creator = RDMCreator(verbose=True, device=device)
         save_path = creator.create_rdms(feature_path=feat_path, save_path=f"{model_name}_RDM", save_format='npz')
