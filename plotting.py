@@ -20,6 +20,8 @@ def create_plot():
     x_vals = df["%R2"]
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, color="red")
+    # add correlation
+    plt.text(min(df["%R2"]), max(df["eff.Robustness"]), f"r = {r_value:.2f}")
 
     plt.xlabel("Brain Similarity")
     plt.ylabel("Effective Robustness")
