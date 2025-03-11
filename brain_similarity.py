@@ -27,7 +27,8 @@ def brain_similarity_rsa(model_name, netset, brain_path, roi, device="cuda" if t
         # Extract features
         feat_path = f"{model_name}_Feat"
         fx = FeatureExtractor(model=model_name, netset=netset, device=device)
-        fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False)
+        layers_to_extract = fx.get_all_layers()
+        fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
         # Create RDM of model
         creator = RDMCreator(verbose=True, device=device)
         save_path = creator.create_rdms(feature_path=feat_path, save_path=f"{model_name}_RDM", save_format='npz')
@@ -35,7 +36,7 @@ def brain_similarity_rsa(model_name, netset, brain_path, roi, device="cuda" if t
     return RSA_helper(save_path, brain_path, model_name, roi)
 
 
-def brain_similarity_rsa_custom(model, model_name, my_preprocessor, my_cleaner, my_extractor, brain_path, roi, layers_to_extract, device):
+def brain_similarity_rsa_custom(model, model_name, my_preprocessor, my_cleaner, my_extractor, brain_path, roi, device):
     # Set paths
     current_dir = os.getcwd()
     save_path = os.path.join(current_dir, f"{model_name}_RDM")
@@ -47,7 +48,7 @@ def brain_similarity_rsa_custom(model, model_name, my_preprocessor, my_cleaner, 
         feat_path = f"{model_name}_Feat"
         fx = FeatureExtractor(model=model, device=device, preprocessor=my_preprocessor, feature_cleaner=my_cleaner,
                               extraction_function=my_extractor)
-        print(str(fx.get_all_layers()))
+        layers_to_extract = fx.get_all_layers()
         fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
         # Create RDM of model
         creator = RDMCreator(verbose=True, device=device)
