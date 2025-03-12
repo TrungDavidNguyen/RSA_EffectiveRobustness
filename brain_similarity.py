@@ -34,6 +34,7 @@ def brain_similarity_rsa(model_name, netset, brain_path, roi, device="cuda" if t
         # Create RDM of model
         creator = RDMCreator(verbose=True, device=device)
         save_path = creator.create_rdms(feature_path=feat_path, save_path=f"{model_name}_RDM", save_format='npz')
+        shutil.rmtree(feat_path)  # delete features
     # Perform RSA
     return RSA_helper(save_path, brain_path, model_name, roi)
 
