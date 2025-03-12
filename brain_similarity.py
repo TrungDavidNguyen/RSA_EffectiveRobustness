@@ -85,4 +85,4 @@ if __name__ == '__main__':
     model = standard.get_model(pretrained=True)
 
     df = brain_similarity_rsa(model_name, "Standard", brain_path, "(3) V4_both_fmri")
-    print(df)
+    print(df.to_string())
