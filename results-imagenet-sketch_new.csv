@@ -1,0 +1,12 @@
+ROI,Layer,Model,%R2,eff.Robustness,imagenet1k,imagenet-sketch
+(3) V4_both_fmri,(22) RDM_features_12.npz,AlexNet,17.692144,-0.307353617,56.556,10.72333903
+(3) V4_both_fmri,(137) RDM_layer4_1_conv2.npz,ResNet50,17.533206,-0.376778814,76.146,24.09361552
+(3) V4_both_fmri,(211) RDM_features_5_2_block_1.npz,efficientnet_b0,28.6985793,-1.143059536,77.672,25.06828588
+(3) V4_both_fmri,(6) RDM_features_16.npz,VGG11,19.39980338,-2.353507255,69.04,15.72245475
+(3) V4_both_fmri,(302) RDM_features_denseblock4_denselayer1_conv1.npz,Densenet121,17.74842707,1.562147085,74.438,24.26064572
+(3) V4_both_fmri,(1) RDM_conv5.npz,ShuffleNetV2x05,21.11847813,-0.644634747,60.552,12.24036629
+(3) V4_both_fmri,(5) RDM_layer4.npz,resnext101_32x8d,6.066243239,1.164548074,79.308,29.43268683
+(3) V4_both_fmri,(3) RDM_layer4.npz,ResNet101,11.55106245,1.13690467,77.366,26.98618562
+(3) V4_both_fmri,(2) RDM_module_IT.npz,cornet_z,20.52155557,-0.301441578,47.724,7.514394073
+(3) V4_both_fmri,(47) RDM_module_V4_conv2.npz,cornet_s,24.20992885,0.21400275,73.014,21.56065161
+(3) V4_both_fmri,(2) RDM_module_IT.npz,cornet_rt,20.32940648,1.146545423,55.444,11.71176482
