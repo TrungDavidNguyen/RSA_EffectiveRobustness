@@ -6,6 +6,8 @@ from net2brain.utils.download_datasets import DatasetNSD_872
 from net2brain.feature_extraction import FeatureExtractor
 from net2brain.rdm_creation import RDMCreator
 from net2brain.architectures.pytorch_models import Standard
+import shutil
+
 
 
 def brain_similarity_rsa(model_name, netset, brain_path, roi, device="cuda" if torch.cuda.is_available() else "cpu"):
@@ -53,6 +55,7 @@ def brain_similarity_rsa_custom(model, model_name, my_preprocessor, my_cleaner, 
         # Create RDM of model
         creator = RDMCreator(verbose=True, device=device)
         save_path = creator.create_rdms(feature_path=feat_path, save_path=f"{model_name}_RDM", save_format='npz')
+        shutil.rmtree(feat_path)  # delete features
     # Perform RSA
     return RSA_helper(save_path, brain_path, model_name, roi)
 
