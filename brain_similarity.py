@@ -8,7 +8,6 @@ from net2brain.rdm_creation import RDMCreator
 from net2brain.architectures.pytorch_models import Standard
 
 
-
 def brain_similarity_rsa(model_name, netset, brain_path, feat_path,rdm_path, roi, device="cuda" if torch.cuda.is_available() else "cpu"):
     """
     :param model_name: name of model from net2brain
@@ -22,8 +21,10 @@ def brain_similarity_rsa(model_name, netset, brain_path, feat_path,rdm_path, roi
     current_dir = os.getcwd()
     save_path = os.path.join(current_dir, f"{model_name}_RDM")
     # Load dataset
-    dataset_path = DatasetNSD_872.load_dataset()
-    stimuli_path = dataset_path["NSD_872_images"]
+    #dataset_path = DatasetNSD_872.load_dataset()
+    #stimuli_path = dataset_path["NSD_872_images"]
+    stimuli_path = "/home/modelrep/public/NSD Dataset/NSD_872_images"
+
     if not os.path.isdir(save_path):
         # Extract features
         fx = FeatureExtractor(model=model_name, netset=netset, device=device)
