@@ -6,11 +6,10 @@ from net2brain.utils.download_datasets import DatasetNSD_872
 from net2brain.feature_extraction import FeatureExtractor
 from net2brain.rdm_creation import RDMCreator
 from net2brain.architectures.pytorch_models import Standard
-import shutil
 
 
 
-def brain_similarity_rsa(model_name, netset, brain_path, roi, device="cuda" if torch.cuda.is_available() else "cpu"):
+def brain_similarity_rsa(model_name, netset, brain_path, feat_path,rdm_path, roi, device="cuda" if torch.cuda.is_available() else "cpu"):
     """
     :param model_name: name of model from net2brain
     :param netset: netset of model from net2brain
@@ -27,19 +26,17 @@ def brain_similarity_rsa(model_name, netset, brain_path, roi, device="cuda" if t
     stimuli_path = dataset_path["NSD_872_images"]
     if not os.path.isdir(save_path):
         # Extract features
-        feat_path = f"{model_name}_Feat"
         fx = FeatureExtractor(model=model_name, netset=netset, device=device)
         layers_to_extract = fx.get_all_layers()
         fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
         # Create RDM of model
         creator = RDMCreator(verbose=True, device=device)
-        save_path = creator.create_rdms(feature_path=feat_path, save_path=f"{model_name}_RDM", save_format='npz')
-        shutil.rmtree(feat_path)  # delete features
+        save_path = creator.create_rdms(feature_path=feat_path, save_path=rdm_path, save_format='npz')
     # Perform RSA
     return RSA_helper(save_path, brain_path, model_name, roi)
 
 
-def brain_similarity_rsa_custom(model, model_name, my_preprocessor, my_cleaner, my_extractor, brain_path, roi, device):
+def brain_similarity_rsa_custom(model, model_name, my_preprocessor, my_cleaner, my_extractor, brain_path, feat_path, rdm_path, roi, device):
     # Set paths
     current_dir = os.getcwd()
     save_path = os.path.join(current_dir, f"{model_name}_RDM")
@@ -48,15 +45,13 @@ def brain_similarity_rsa_custom(model, model_name, my_preprocessor, my_cleaner, 
     stimuli_path = dataset_path["NSD_872_images"]
     if not os.path.isdir(save_path):
         # Extract features
-        feat_path = f"{model_name}_Feat"
         fx = FeatureExtractor(model=model, device=device, preprocessor=my_preprocessor, feature_cleaner=my_cleaner,
                               extraction_function=my_extractor)
         layers_to_extract = fx.get_all_layers()
         fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
         # Create RDM of model
         creator = RDMCreator(verbose=True, device=device)
-        save_path = creator.create_rdms(feature_path=feat_path, save_path=f"{model_name}_RDM", save_format='npz')
-        shutil.rmtree(feat_path)  # delete features
+        save_path = creator.create_rdms(feature_path=feat_path, save_path=rdm_path, save_format='npz')
     # Perform RSA
     return RSA_helper(save_path, brain_path, model_name, roi)
 
@@ -81,12 +76,15 @@ if __name__ == '__main__':
     #models = {0: "efficientnet_b6", 1: "efficientnet_b7", 2: "mnasnet05", 3: "mnasnet10"}
 
     model_name = models[num]
+
     # set path to the brain RDMs
     current_dir = os.getcwd()
     brain_path = os.path.join(current_dir, "NSD Dataset", "NSD_872_RDMs", "prf-visualrois", "combined")
+    feat_path = f"{model_name}_Feat"
+    rdm_path = f"{model_name}_RDM"
     # get model
     standard = Standard(model_name, device="cuda" if torch.cuda.is_available() else "cpu")
     model = standard.get_model(pretrained=True)
 
-    df = brain_similarity_rsa(model_name, "Standard", brain_path, "(3) V4_both_fmri")
+    df = brain_similarity_rsa(model_name, "Standard", brain_path, feat_path,rdm_path, "(3) V4_both_fmri")
     print(df.to_string())
