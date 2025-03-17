@@ -79,8 +79,10 @@ if __name__ == '__main__':
     model_name = models[num]
 
     # set path to the brain RDMs
-    current_dir = os.getcwd()
-    brain_path = os.path.join(current_dir, "NSD Dataset", "NSD_872_RDMs", "prf-visualrois", "combined")
+    #current_dir = os.getcwd()
+    #brain_path = os.path.join(current_dir, "NSD Dataset", "NSD_872_RDMs", "prf-visualrois", "combined")
+    brain_path = "/scratch/modelrep/sadiya/students/david/NSD Dataset/NSD_872_RDMs/prf-visualrois/combined"
+
     feat_path = "/scratch/modelrep/sadiya/students/david/"+f"{model_name}_Feat"
     rdm_path = "/scratch/modelrep/sadiya/students/david/"+f"{model_name}_RDM"
     # get model
