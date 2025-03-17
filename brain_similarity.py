@@ -10,7 +10,7 @@ from net2brain.architectures.pytorch_models import Standard
 
 def brain_similarity_rsa(model_name, netset, brain_path, feat_path,rdm_path, roi, device="cuda" if torch.cuda.is_available() else "cpu"):
     """
-    :param model_name: name of model from net2brain
+    :param model_name: name of the model from net2brain
     :param netset: netset of model from net2brain
     :param brain_path: path to brain RDMs
     :param roi: ROI we want to extract
