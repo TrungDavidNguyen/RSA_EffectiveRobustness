@@ -28,11 +28,18 @@ def measure_accuracy(model, path, transform, device="cuda" if torch.cuda.is_avai
 
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    models = {0: "Densenet161", 1: "Densenet169", 2: "Densenet201", 3: "GoogleNet"}
-    #models = {0: "ResNet152", 1: "ResNet18", 2: "VGG13_bn", 3: "VGG16"}
-    #models = {0: "VGG16_bn", 1: "VGG19", 2: "VGG19_bn", 3: "efficientnet_b1"}
-    #models = {0: "efficientnet_b2", 1: "efficientnet_b3", 2: "efficientnet_b4", 3: "efficientnet_b5"}
-    #models = {0: "efficientnet_b6", 1: "efficientnet_b7", 2: "mnasnet05", 3: "mnasnet10"}
+    models_list = [ 'Densenet161', 'Densenet169', 'Densenet201',
+                   'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18', 'ResNet34',
+                   'ShuffleNetV2x05', 'ShuffleNetV2x10', 'Squeezenet1_0', 'Squeezenet1_1',
+                   'VGG11', 'VGG11_bn', 'VGG13', 'VGG13_bn', 'VGG16',
+                   'VGG16_bn', 'VGG19', 'VGG19_bn', 'efficientnet_b0', 'efficientnet_b1',
+                   'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5',
+                   'efficientnet_b6', 'efficientnet_b7', 'mnasnet05', 'mnasnet10', 'mobilenet_v2',
+                   'mobilenet_v3_large', 'mobilenet_v3_small', 'mobilenet_v2','mobilenet_v3_large',
+                   'mobilenet_v3_small','resnext101_32x8d', 'resnext50_32x4d', 'wide_resnet101_2', 'wide_resnet50_2']
+    models = {}
+    for i in range(len(models_list)):
+        models[i] = models_list[i]
     model_name = models[num]
 
     # get model
@@ -45,4 +52,4 @@ if __name__ == '__main__':
         trn.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
 
-    print("imagenet Accuracy:", measure_accuracy(model, "/scratch/modelrep/sadiya/students/david", transform))
+    print(model_name, " imagenet Accuracy:", measure_accuracy(model, "/scratch/modelrep/sadiya/students/david/RSA_EffectiveRobustness/imagenet", transform))
