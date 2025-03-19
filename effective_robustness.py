@@ -19,11 +19,27 @@ def effective_robustness(id_accuracy, ood_accuracy, intercept, slope):
     return eff_robust
 
 
+def measure_accuracy(model, path, transform, device="cuda" if torch.cuda.is_available() else "cpu"):
+    dataset = datasets.ImageFolder(path, transform=transform)
+    data_loader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False)
+
+    model.to(device)
+    model.eval()
+
+    correct = 0
+    total = 0
+    with torch.inference_mode():
+        for inputs, labels in tqdm(data_loader, desc="Evaluating"):
+            inputs, labels = inputs.to(device), labels.to(device)
+            outputs = model(inputs) # Predictions for batch
+            predicted = torch.argmax(outputs, dim=1)
+            correct += (predicted == labels).sum().item() # Add num of correct predictions
+            total += labels.size(0)
+    top1_accuracy = correct / total * 100
+    return top1_accuracy
+
+
 if __name__ == '__main__':
-    # values for imagenet sketch
-    intercept = -2.370072912552283
-    slope = 1.0709154135668684
-    id_accuracy = 76.13
-    ood_accuracy = 24.0916519165039
-    print("resnet",effective_robustness(intercept, slope))
+    print("resnet",effective_robustness(76.13,24.0916519165039,-2.370072912552283,1.0709154135668684))
+    print("alexnet",effective_robustness(56.522003173828125,10.71940899,-2.370072912552283,1.0709154135668684))
 
