@@ -53,8 +53,9 @@ def main(model_name):
 
 
 if __name__ == '__main__':
-    num = int(sys.argv[1])
-    models_list = [ 'Densenet161', 'Densenet169', 'Densenet201',
+    """
+        num = int(sys.argv[1])
+        models_list = [ 'Densenet161', 'Densenet169', 'Densenet201',
                    'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18', 'ResNet34',
                    'ShuffleNetV2x05', 'ShuffleNetV2x10', 'Squeezenet1_0', 'Squeezenet1_1',
                    'VGG11', 'VGG11_bn', 'VGG13', 'VGG13_bn', 'VGG16',
@@ -63,5 +64,7 @@ if __name__ == '__main__':
                    'efficientnet_b6', 'efficientnet_b7', 'mnasnet05', 'mnasnet10', 'mobilenet_v2',
                    'mobilenet_v3_large', 'mobilenet_v3_small', 'mobilenet_v2','mobilenet_v3_large',
                    'mobilenet_v3_small','resnext101_32x8d', 'resnext50_32x4d', 'wide_resnet101_2', 'wide_resnet50_2']
-    model_name = models_list[num]
+        model_name = models_list[num]
+    """
+    model_name = "AlexNet"
     main(model_name)
