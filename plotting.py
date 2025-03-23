@@ -1,14 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
 from scipy.stats import linregress
 
 
 def create_plot():
     df = pd.read_csv("results-imagenet-sketch.csv")
     # create scatter plot with model names
-    scaler = StandardScaler()
-    df[["%R2", "eff.Robustness"]] = scaler.fit_transform(df[["%R2", "eff.Robustness"]])
     plt.scatter(df["%R2"], df["eff.Robustness"], marker="o", color="blue")
 
     for i in range(len(df)):
