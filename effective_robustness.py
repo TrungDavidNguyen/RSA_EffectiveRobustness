@@ -32,6 +32,8 @@ def measure_accuracy(model, path, transform, device="cuda" if torch.cuda.is_avai
         for inputs, labels in tqdm(data_loader, desc="Evaluating"):
             inputs, labels = inputs.to(device), labels.to(device)
             outputs = model(inputs) # Predictions for batch
+            if isinstance(outputs, list): # if output is logits,apply softmax
+                outputs = torch.nn.functional.softmax(outputs[0], dim=0)
             predicted = torch.argmax(outputs, dim=1)
             correct += (predicted == labels).sum().item() # Add num of correct predictions
             total += labels.size(0)

@@ -26,7 +26,7 @@ def main(model_name):
     # get model and transform
     models = Timm(model_name, "cuda" if torch.cuda.is_available() else "cpu")
     model = models.get_model(pretrained=True)
-    transform = model.create_transform()
+    transform = models.create_transform(model_name)
     """
         transform = trn.Compose([
         trn.Resize(256),
@@ -72,8 +72,7 @@ if __name__ == '__main__':
                    'mobilenet_v3_large', 'mobilenet_v3_small', 'mobilenet_v2', 'mobilenet_v3_large',
                    'mobilenet_v3_small', 'resnext101_32x8d', 'resnext50_32x4d', 'wide_resnet101_2', 'wide_resnet50_2']
     """
-    models_list = ['tf_efficientnet_l2_ns','xception','vit_base_patch16_224', 'vit_base_patch16_224_in21k',
-                   'vit_base_r50_s16_224_in21k', 'vit_huge_patch14_224_in21k', 'vit_large_patch16_224',
-                   'vit_large_patch16_224_in21k', 'vit_small_patch16_224','vit_tiny_patch16_224']
+    models_list = ['xception', 'vit_base_patch16_224', 'vit_large_patch16_224',
+                   'vit_small_patch16_224', 'vit_tiny_patch16_224']
     model_name = models_list[num]
     main(model_name)
