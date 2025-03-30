@@ -4,7 +4,9 @@ from scipy.stats import linregress
 
 
 def create_plot():
-    df = pd.read_csv("results-imagenet-sketch.csv")
+    df = pd.read_csv("results/results-imagenet-sketch-IT.csv")
+    #df = df[~df['Model'].str.contains("Densenet", case=False, na=False)]
+    df = df.reset_index()
     # create scatter plot with model names
     plt.scatter(df["%R2"], df["eff.Robustness"], marker="o", color="blue")
 
@@ -22,8 +24,8 @@ def create_plot():
 
     plt.xlabel("Brain Similarity")
     plt.ylabel("Effective Robustness")
-    plt.title("V4 and imagenet-sketch")
-    plt.savefig("V4_imagenet-sketch")
+    plt.title("IT and imagenet-sketch")
+    plt.savefig("plots/IT_imagenet-sketch")
     plt.show()
 
 

@@ -9,6 +9,7 @@ from effective_robustness import measure_accuracy
 from effective_robustness import effective_robustness
 from torchvision.transforms import transforms as trn
 
+
 def main(model_name):
     # set paths
     current_dir = os.getcwd()

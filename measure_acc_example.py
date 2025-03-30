@@ -21,7 +21,7 @@ def main(model_name):
         trn.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
     # get imagenet accuracy from csv
-    df_imagenet = pd.read_csv('results-imagenet-sketch.csv')
+    df_imagenet = pd.read_csv('results/results-imagenet-sketch.csv')
     model_row = df_imagenet[df_imagenet['Model'] == 'AlexNet']
     id_accuracy = model_row['imagenet1k'].values[0]
     print(model_name," id accuracy", id_accuracy)
@@ -37,7 +37,7 @@ def main(model_name):
     df.loc[len(df)] = [model_name,eff_robustness,id_accuracy,ood_accuracy]
 
     # Save to CSV
-    csv_filename = 'results-imagenet-r.csv'
+    csv_filename = 'results/results-imagenet-r.csv'
     file_exists = os.path.isfile(csv_filename)
     df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
 
