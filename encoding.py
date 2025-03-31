@@ -1,6 +1,7 @@
 import os
 import torch
 import sys
+import shutil
 from net2brain.feature_extraction import FeatureExtractor
 from net2brain.evaluations.encoding import Linear_Encoding
 from net2brain.utils.download_datasets import DatasetNSD_872
@@ -26,6 +27,9 @@ def encoding(model_name, roi_name):
     csv_filename = f'results/results-encoding-{roi_name}.csv'
     file_exists = os.path.isfile(csv_filename)
     df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
+    feat_path_complete = os.path.join(current_dir, f"{model_name}_Feat")
+    if os.path.exists(feat_path_complete):
+        shutil.rmtree(feat_path_complete)
     return df
 
 
