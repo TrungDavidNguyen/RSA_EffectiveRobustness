@@ -36,7 +36,7 @@ def encoding(model_name, roi_name):
 if __name__ == '__main__':
     num = int(sys.argv[1])
 
-    models_list = ['ResNet50','AlexNet','Densenet121', 'Densenet161', 'Densenet169', 'Densenet201',
+    models_list = ['ResNet50','Densenet121', 'Densenet161', 'Densenet169', 'Densenet201',
                'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18', 'ResNet34',
                'ShuffleNetV2x05', 'ShuffleNetV2x10', 'Squeezenet1_0', 'Squeezenet1_1',
                'VGG11', 'VGG11_bn', 'VGG13', 'VGG13_bn', 'VGG16',
