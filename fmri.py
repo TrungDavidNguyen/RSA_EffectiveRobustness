@@ -3,8 +3,8 @@ import os
 
 
 def generate_fmri(rois, roi_name):
-    fmri = None
     for subjects in range(1, 9):
+        fmri = None
         for roi in rois:
             for hemisphere in ["lh", "rh"]:
                 group = ""
@@ -28,11 +28,14 @@ def generate_fmri(rois, roi_name):
                         fmri = np.concatenate((fmri, np.load(roi_path)), axis=1)
                     except FileNotFoundError:
                         pass
-    np.save(f'{roi_name}_fmri/{roi_name}_both_fmri.npy', fmri)
+        os.makedirs(f'{roi_name}_fmri_subj{subjects}', exist_ok=True)
+        np.save(f'{roi_name}_fmri_subj{subjects}/{roi_name}_both_fmri_subj{subjects}.npy', fmri)
 
 
 if __name__ == '__main__':
     rois = ["hV4"]
     roi_name = "V4"
     generate_fmri(rois, roi_name)
-    print(np.load(r"C:\Users\david\Desktop\Thesis\V4_both_fmri.npy").shape)
+    rois = ["EBA", "FBA-1", "FBA-2", "FFA-1", "FFA-2", "PPA"]
+    roi_name = "IT"
+    generate_fmri(rois, roi_name)
