@@ -30,7 +30,7 @@ def generate_fmri(rois, roi_name):
                         pass
         os.makedirs(f'{roi_name}_fmri_subj{subjects}', exist_ok=True)
         np.save(f'{roi_name}_fmri_subj{subjects}/{roi_name}_both_fmri_subj{subjects}.npy', fmri)
-
+        print(fmri.dtype)
 
 if __name__ == '__main__':
     rois = ["hV4"]
