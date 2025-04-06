@@ -22,7 +22,7 @@ def main(model_name):
     ])
     # get imagenet accuracy from csv
     df_imagenet = pd.read_csv('results/results-imagenet-sketch.csv')
-    model_row = df_imagenet[df_imagenet['Model'] == 'AlexNet']
+    model_row = df_imagenet[df_imagenet['Model'] == model_name]
     id_accuracy = model_row['imagenet1k'].values[0]
     print(model_name," id accuracy", id_accuracy)
     ood_path = os.path.join(os.getcwd(), "imagenetv2-matched-frequency")
