@@ -33,7 +33,7 @@ def main(model_name):
     slope =  0.9113725552359271
     eff_robustness = effective_robustness(id_accuracy, ood_accuracy, intercept, slope)
     print(model_name, "eff robust", eff_robustness)
-    df = pd.DataFrame(columns=['Model', 'eff.Robustness', 'imagenet1k', 'imagenetv2-matched-frequency'])
+    df = pd.DataFrame(columns=['Model', 'eff.Robustness', 'imagenet1k', 'imagenetv2-matched-frequency-format-val'])
     df.loc[len(df)] = [model_name,eff_robustness,id_accuracy,ood_accuracy]
 
     # Save to CSV
