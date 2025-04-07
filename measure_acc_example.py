@@ -25,7 +25,7 @@ def main(model_name):
     model_row = df_imagenet[df_imagenet['Model'] == model_name]
     id_accuracy = model_row['imagenet1k'].values[0]
     print(model_name," id accuracy", id_accuracy)
-    ood_path = os.path.join(os.getcwd(), "imagenetv2-matched-frequency")
+    ood_path = os.path.join(os.getcwd(), "imagenetv2-matched-frequency-format-val")
     ood_accuracy = measure_accuracy_r(model, ood_path, transform)
     print(model_name," ood accuracy", ood_accuracy)
     # values for imagenet v2
@@ -33,7 +33,7 @@ def main(model_name):
     slope =  0.9113725552359271
     eff_robustness = effective_robustness(id_accuracy, ood_accuracy, intercept, slope)
     print(model_name, "eff robust", eff_robustness)
-    df = pd.DataFrame(columns=['Model', 'eff.Robustness', 'imagenet1k', 'imagenetv2-matched-frequency-format-val'])
+    df = pd.DataFrame(columns=['Model', 'eff.Robustness', 'imagenet1k', 'imagenetv2-matched-frequency'])
     df.loc[len(df)] = [model_name,eff_robustness,id_accuracy,ood_accuracy]
 
     # Save to CSV
