@@ -5,7 +5,7 @@ import sys
 
 from net2brain.architectures.pytorch_models import Standard
 from torchvision.transforms import transforms as trn
-from effective_robustness import measure_accuracy
+from effective_robustness import measure_accuracy_a
 from effective_robustness import effective_robustness
 
 
@@ -26,7 +26,7 @@ def main(model_name):
     id_accuracy = model_row['imagenet1k'].values[0]
     print(model_name," id accuracy", id_accuracy)
     ood_path = os.path.join(os.getcwd(), "imagenet-a")
-    ood_accuracy = measure_accuracy(model, ood_path, transform)
+    ood_accuracy = measure_accuracy_a(model, ood_path, transform)
     print(model_name," ood accuracy", ood_accuracy)
     # values for imagenet a
     intercept = -6.291670522669618
