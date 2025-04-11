@@ -3,8 +3,8 @@ import torch
 import sys
 import pandas as pd
 import shutil
-from net2brain.feature_extraction import FeatureExtractor
-from net2brain.evaluations.encoding import Linear_Encoding
+from utils.feature_extraction import FeatureExtractor
+from utils.ridge_regression import RidgeCV_Encoding
 from net2brain.utils.download_datasets import DatasetNSD_872
 
 
@@ -16,15 +16,14 @@ def encoding(model_name, roi_name):
     dataset_path = DatasetNSD_872.load_dataset()
     stimuli_path = dataset_path["NSD_872_images"]
 
-    if not os.path.isdir(feat_path):
-        # Extract features
-        fx = FeatureExtractor(model=model_name, netset=netset, device=device)
-        layers_to_extract = fx.get_all_layers()
-        fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
+    # Extract features
+    fx = FeatureExtractor(model=model_name, netset=netset, device=device)
+    layers_to_extract = fx.get_all_layers()
+    features = fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
     R_sum = 0
     for subj in range(1,9):
         roi_path = os.path.join(current_dir, f"fmri/{roi_name}_fmri_subj{subj}")
-        df = Linear_Encoding(feat_path, roi_path, model_name, save_path=f"encoding/encoding_{roi_name}_subj{subj}",)
+        df = RidgeCV_Encoding(features, roi_path, model_name,1.0, save_path=f"encoding/encoding_{roi_name}_subj{subj}")
         df = df[['ROI', 'Layer', 'Model', 'R']]
         df = df.loc[[df['R'].idxmax()]]
         R_sum += df.loc[df.index[0], "R"]

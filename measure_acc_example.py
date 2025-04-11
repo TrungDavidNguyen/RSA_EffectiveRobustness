@@ -5,8 +5,7 @@ import sys
 
 from net2brain.architectures.pytorch_models import Standard
 from torchvision.transforms import transforms as trn
-from effective_robustness import measure_accuracy_a
-from effective_robustness import effective_robustness
+from measure_accuracy import measure_accuracy_o
 
 
 def main(model_name):
@@ -21,29 +20,26 @@ def main(model_name):
         trn.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
     # get imagenet accuracy from csv
-    df_imagenet = pd.read_csv('results/results-imagenet-sketch.csv')
-    model_row = df_imagenet[df_imagenet['Model'] == model_name]
-    id_accuracy = model_row['imagenet1k'].values[0]
-    print(model_name," id accuracy", id_accuracy)
-    ood_path = os.path.join(os.getcwd(), "imagenet-a")
-    ood_accuracy = measure_accuracy_a(model, ood_path, transform)
-    print(model_name," ood accuracy", ood_accuracy)
-    # values for imagenet a
-    intercept = -6.291670522669618
-    slope = 3.051638725976987
-    eff_robustness = effective_robustness(id_accuracy, ood_accuracy, intercept, slope)
-    print(model_name, "eff robust", eff_robustness)
-    df = pd.DataFrame(columns=['Model', 'eff.Robustness', 'imagenet1k', 'imagenet-a'])
-    df.loc[len(df)] = [model_name,eff_robustness,id_accuracy,ood_accuracy]
+    df = pd.read_csv('results/accuracies.csv')
+    id_accuracy = df.loc[df['Model'] == model_name, 'imagenet1k'].iloc[0]
+    print(model_name, " id accuracy", id_accuracy)
+
+    ood_path = "objectnet-1.0/images"
+    ood_name = "objectnet"
+    ood_path_complete = os.path.join(os.getcwd(), ood_path)
+    ood_accuracy = measure_accuracy_o(model, ood_path_complete, transform)
+    print(model_name, " ood accuracy", ood_accuracy)
+    if ood_name not in df.columns:
+        df[ood_name] = None
+    df.loc[df['Model'] == model_name, ood_name] = ood_accuracy
 
     # Save to CSV
-    csv_filename = 'results/results-imagenet-a.csv'
-    file_exists = os.path.isfile(csv_filename)
-    df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
+    csv_filename = f'results/accuracies.csv'
+    df.to_csv(csv_filename, mode='w', index=False, header=True)
 
 
 if __name__ == '__main__':
-    num =int(sys.argv[1])
+    num = int(sys.argv[1])
     models_list = ['ResNet50','AlexNet','Densenet121', 'Densenet161', 'Densenet169', 'Densenet201',
                'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18', 'ResNet34',
                'ShuffleNetV2x05', 'ShuffleNetV2x10', 'Squeezenet1_0', 'Squeezenet1_1',
