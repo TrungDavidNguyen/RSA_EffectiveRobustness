@@ -5,7 +5,7 @@ import sys
 
 from net2brain.architectures.pytorch_models import Standard
 from torchvision.transforms import transforms as trn
-from measure_accuracy import measure_accuracy_o
+from measure_accuracy import measure_accuracy_subset
 
 
 def main(model_name):
@@ -23,11 +23,10 @@ def main(model_name):
     df = pd.read_csv('results/accuracies.csv')
     id_accuracy = df.loc[df['Model'] == model_name, 'imagenet1k'].iloc[0]
     print(model_name, " id accuracy", id_accuracy)
-
-    ood_path = "objectnet-1.0/images"
-    ood_name = "objectnet"
+    ood_path = "imagenet-val"
+    ood_name = "imagenet-subset-r"
     ood_path_complete = os.path.join(os.getcwd(), ood_path)
-    ood_accuracy = measure_accuracy_o(model, ood_path_complete, transform)
+    ood_accuracy = measure_accuracy_subset(model, ood_path_complete, transform)
     print(model_name, " ood accuracy", ood_accuracy)
     if ood_name not in df.columns:
         df[ood_name] = None
