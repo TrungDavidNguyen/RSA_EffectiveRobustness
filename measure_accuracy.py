@@ -94,7 +94,7 @@ def measure_accuracy_o(model, path, transform, device="cuda" if torch.cuda.is_av
 def measure_accuracy_subset(model, path, transform, device="cuda" if torch.cuda.is_available() else "cpu"):
     with open(r'wnids/wnids.json', 'r') as f:
         all_wnids = json.load(f)
-    with open(r'wnids/imagenet_r_wnids.json', 'r') as f:
+    with open(r'wnids/imagenet_a_wnids.json', 'r') as f:
         subset_wnids = json.load(f)
     # Mapping from wnid to index in the 1000-class output
     wnid_to_index = {wnid: idx for idx, wnid in enumerate(all_wnids)}
@@ -126,11 +126,6 @@ def measure_accuracy_subset(model, path, transform, device="cuda" if torch.cuda.
 
             predicted = torch.argmax(outputs, dim=1)
             subset_preds = subset_to_imagenet_tensor[predicted]
-            print(predicted)
-            print("-"*100)
-            print(subset_preds)
-            print("-"*100)
-            print(labels)
             correct += (subset_preds == labels).sum().item()
             total += labels.size(0)
     top1_accuracy = correct / total * 100

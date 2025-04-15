@@ -24,7 +24,7 @@ def main(model_name):
     id_accuracy = df.loc[df['Model'] == model_name, 'imagenet1k'].iloc[0]
     print(model_name, " id accuracy", id_accuracy)
     ood_path = "imagenet-val"
-    ood_name = "imagenet-subset-r"
+    ood_name = "imagenet-subset-a"
     ood_path_complete = os.path.join(os.getcwd(), ood_path)
     ood_accuracy = measure_accuracy_subset(model, ood_path_complete, transform)
     print(model_name, " ood accuracy", ood_accuracy)
