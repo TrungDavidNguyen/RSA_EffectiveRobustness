@@ -19,22 +19,35 @@ def main(model_name):
         trn.ToTensor(),
         trn.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
-    # get imagenet accuracy from csv
+    dataset_name = "imagenet1k-subset-r"
+    dataset_path = os.path.join(os.getcwd(), "imagenet-val")
+
     df = pd.read_csv('results/accuracies.csv')
-    id_accuracy = df.loc[df['Model'] == model_name, 'imagenet1k'].iloc[0]
-    print(model_name, " id accuracy", id_accuracy)
-    ood_path = "imagenet-val"
-    ood_name = "imagenet-subset-a"
-    ood_path_complete = os.path.join(os.getcwd(), ood_path)
-    ood_accuracy = measure_accuracy_subset(model, ood_path_complete, transform)
-    print(model_name, " ood accuracy", ood_accuracy)
-    if ood_name not in df.columns:
-        df[ood_name] = None
-    df.loc[df['Model'] == model_name, ood_name] = ood_accuracy
+    accuracy = measure_accuracy_subset(model, dataset_path, transform)
+    print(model_name, " accuracy", accuracy)
+    if dataset_name not in df.columns:
+        df[dataset_name] = None
+    df.loc[df['Model'] == model_name, dataset_name] = accuracy
 
     # Save to CSV
-    csv_filename = f'results/accuracies.csv'
-    df.to_csv(csv_filename, mode='w', index=False, header=True)
+
+    csv_filename = 'results/accuracies.csv'
+
+    if os.path.exists(csv_filename):
+        df = pd.read_csv(csv_filename)
+        if model_name in df['Model'].values:
+            if dataset_name not in df.columns:
+                df[dataset_name] = None
+            df.loc[df['Model'] == model_name, dataset_name] = accuracy
+        else:
+            new_row = pd.Series({col: None for col in df.columns})
+            new_row['Model'] = model_name
+            new_row[dataset_name] = accuracy
+            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        df = pd.DataFrame({"Model": [model_name], dataset_name: [accuracy]})
+
+    df.to_csv(csv_filename, index=False)
 
 
 if __name__ == '__main__':

@@ -21,11 +21,11 @@ def encoding(model_name, netset, roi_name):
     R_sum = 0
     for subj in range(1,9):
         roi_path = os.path.join(current_dir, f"fmri/{roi_name}_fmri_subj{subj}")
-        df = RidgeCV_Encoding(features, roi_path, model_name,1.0, save_path=f"encoding/encoding_{roi_name}_subj{subj}")
+        df = RidgeCV_Encoding(features, roi_path, model_name,1.0, save_path=f"encoding/{roi_name}/encoding_{roi_name}_subj{subj}")
         df = df[['ROI', 'Layer', 'Model', 'R']]
         df = df.loc[[df['R'].idxmax()]]
         R_sum += df.loc[df.index[0], "R"]
-        csv_filename = f'encoding/encoding_{roi_name}_subj{subj}/results-encoding-{roi_name}.csv'
+        csv_filename = f'encoding/{roi_name}/encoding_{roi_name}_subj{subj}/results-encoding-{roi_name}.csv'
         file_exists = os.path.isfile(csv_filename)
         df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
     R_mean = R_sum/8

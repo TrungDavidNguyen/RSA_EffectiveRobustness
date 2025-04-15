@@ -33,9 +33,6 @@ def generate_csv():
     acc.to_csv(csv_filename, mode='w', index=False, header=True)
 
 
-
-
-
 if __name__ == '__main__':
     generate_csv()
 
