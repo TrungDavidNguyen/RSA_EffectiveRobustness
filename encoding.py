@@ -2,14 +2,12 @@ import os
 import torch
 import sys
 import pandas as pd
-import shutil
 from utils.feature_extraction import FeatureExtractor
 from utils.ridge_regression import RidgeCV_Encoding
 from net2brain.utils.download_datasets import DatasetNSD_872
 
 
-def encoding(model_name, roi_name):
-    netset = "Standard"
+def encoding(model_name, netset, roi_name):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     current_dir = os.getcwd()
     feat_path = f"{model_name}_Feat"
@@ -31,29 +29,30 @@ def encoding(model_name, roi_name):
         file_exists = os.path.isfile(csv_filename)
         df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
     R_mean = R_sum/8
-    df = pd.DataFrame({"ROI": [roi_name], "Model": [model_name], "R": [R_mean]
-                       })
-    csv_filename = f'results/results-encoding-{roi_name}.csv'
 
-    file_exists = os.path.isfile(csv_filename)
-    df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
+    csv_filename = 'results/encoding.csv'
 
-    feat_path_complete = os.path.join(current_dir, f"{model_name}_Feat")
-    if os.path.exists(feat_path_complete):
-        shutil.rmtree(feat_path_complete)
+    if os.path.exists(csv_filename):
+        df = pd.read_csv(csv_filename)
+        if model_name in df['Model'].values:
+            if f"R_{roi_name}" not in df.columns:
+                df[f"R_{roi_name}"] = None
+            df.loc[df['Model'] == model_name, f"R_{roi_name}"] = R_mean
+        else:
+            new_row = pd.Series({col: None for col in df.columns})
+            new_row['Model'] = model_name
+            new_row[f"R_{roi_name}"] = R_mean
+            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        df = pd.DataFrame({"Model": [model_name], f"R_{roi_name}": [R_mean]})
+
+    df.to_csv(csv_filename, index=False)
 
 
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    models_list = ['AlexNet','ResNet50','Densenet121', 'Densenet161', 'Densenet169', 'Densenet201',
-               'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18', 'ResNet34',
-               'ShuffleNetV2x05', 'ShuffleNetV2x10', 'Squeezenet1_0', 'Squeezenet1_1',
-               'VGG11', 'VGG11_bn', 'VGG13', 'VGG13_bn', 'VGG16',
-               'VGG16_bn', 'VGG19', 'VGG19_bn', 'efficientnet_b0', 'efficientnet_b1',
-               'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5',
-               'mnasnet05', 'mnasnet10', 'mobilenet_v2',
-               'mobilenet_v3_large', 'mobilenet_v3_small','cornet_rt','cornet_s', 'cornet_z']
+    models_list = ['cornet_rt','cornet_s', 'cornet_z']
     model_name = models_list[num]
-    encoding(model_name, "V4")
-    encoding(model_name, "IT")
+    encoding(model_name, "Cornet", "V4")
+    encoding(model_name, "Cornet", "IT")
 
