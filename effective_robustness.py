@@ -18,17 +18,28 @@ def effective_robustness(id_accuracy, ood_accuracy, intercept, slope):
 
 
 def generate_csv():
-    # first element is intercept, second is slope
-    line_fit = {"imagenet-r": [-1.5999151525728197,  0.9115905266235703], "imagenet-sketch": [-2.370072912552283, 1.0709154135668684], "imagenetv2-matched-frequency": [-0.4813069457734013, 0.9113725552359271], }
+    # first element is intercept, second is slope, third is imagenet version
+    line_fit = {"imagenet-r": [-2.1077156197680713,  0.636843984281646, "imagenet1k-subset-r"],
+                "imagenet-sketch": [-2.370072912552283, 1.0709154135668684, "imagenet1k"],
+                "imagenetv2-matched-frequency": [-0.4813069457734013, 0.9113725552359271, "imagenet1k"],
+                "imagenet-a_1": [-5.14004617225444,   0.6894464990989362, "imagenet1k-subset-a"],
+                "imagenet-a_2": [-10.27739708860645,  2.9559595169134285, "imagenet1k-subset-a"]}
 
     acc = pd.read_csv("results/accuracies.csv")
     for col in acc.columns:
         if col == "imagenet-a":
-            pass
-        elif col not in ["imagenet1k", "Model"]:
-            acc[col] = acc.apply(lambda row: effective_robustness(row['imagenet1k'], row[col], line_fit[col][0], line_fit[col][1]), axis=1)
-    #TODO remove imagenet-a from cols and implement calculation for it
-    acc.drop(columns=["imagenet1k", "imagenet-a"], inplace=True)
+            acc[col] = acc.apply(
+                lambda row: effective_robustness(
+                    row[line_fit["imagenet-a_1"][2]],
+                    row[col],
+                    line_fit["imagenet-a_1"][0] if row["imagenet1k-subset-a"] < 91.86 else line_fit["imagenet-a_2"][0],
+                    line_fit["imagenet-a_1"][1] if row["imagenet1k-subset-a"] < 91.86 else line_fit["imagenet-a_2"][1]
+                ),
+                axis=1
+            )
+        elif col not in ["imagenet1k", "Model", "imagenet1k-subset-r", "imagenet1k-subset-a"]:
+            acc[col] = acc.apply(lambda row: effective_robustness(row[line_fit[col][2]], row[col], line_fit[col][0], line_fit[col][1]), axis=1)
+    acc.drop(columns=["imagenet1k","imagenet1k-subset-r", "imagenet1k-subset-a"], inplace=True)
     csv_filename = 'results/effective_robustness.csv'
     acc.to_csv(csv_filename, mode='w', index=False, header=True)
 

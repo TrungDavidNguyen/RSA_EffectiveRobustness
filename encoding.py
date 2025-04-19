@@ -2,6 +2,7 @@ import os
 import torch
 import sys
 import pandas as pd
+import numpy as np
 from utils.feature_extraction import FeatureExtractor
 from utils.ridge_regression import RidgeCV_Encoding
 from net2brain.utils.download_datasets import DatasetNSD_872
@@ -19,9 +20,9 @@ def encoding(model_name, netset, roi_name):
     layers_to_extract = fx.get_all_layers()
     features = fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
     R_sum = 0
-    for subj in range(1,9):
-        roi_path = os.path.join(current_dir, f"fmri/{roi_name}_fmri_subj{subj}")
-        df = RidgeCV_Encoding(features, roi_path, model_name,1.0, save_path=f"encoding/{roi_name}/encoding_{roi_name}_subj{subj}")
+    for subj in range(1, 9):
+        roi_path = os.path.join(current_dir, f"fmri/{roi_name}/{roi_name}_fmri_subj{subj}")
+        df = RidgeCV_Encoding(features, roi_path, model_name, np.logspace(-3, 3, 10), save_path=f"encoding/{roi_name}/encoding_{roi_name}_subj{subj}")
         df = df[['ROI', 'Layer', 'Model', 'R']]
         df = df.loc[[df['R'].idxmax()]]
         R_sum += df.loc[df.index[0], "R"]
@@ -50,9 +51,10 @@ def encoding(model_name, netset, roi_name):
 
 
 if __name__ == '__main__':
-    num = int(sys.argv[1])
-    models_list = ['cornet_rt','cornet_s', 'cornet_z']
+    # num = int(sys.argv[1])
+    num = 0
+    models_list = ['Squeezenet1_1']
     model_name = models_list[num]
-    encoding(model_name, "Cornet", "V4")
-    encoding(model_name, "Cornet", "IT")
+    encoding(model_name, "Standard", "V4")
+    encoding(model_name, "Standard", "IT")
 

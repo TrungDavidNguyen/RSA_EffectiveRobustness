@@ -7,9 +7,13 @@ def create_plot(ood_dataset, roi, evaluation):
     brain_similarity = pd.read_csv(f"results/{evaluation}.csv")
     robustness = pd.read_csv("results/effective_robustness.csv")
     df = pd.merge(brain_similarity, robustness, on='Model', how='inner')
-
+    if ood_dataset == "imagenet-a":
+        df = df[df['Model'].str.lower() != "resnet50"]
+        df = df.reset_index()
     #df = df[~df['Model'].str.contains("Densenet", case=False, na=False)]
     #df = df.reset_index()
+    df = df[~df['Model'].str.contains("squeezenet", case=False, na=False)]
+    df = df.reset_index()
     # create scatter plot with model names
     if evaluation == "rsa":
         eval_name = f"%R2_{evaluation}"
@@ -39,6 +43,6 @@ def create_plot(ood_dataset, roi, evaluation):
 
 
 if __name__ == '__main__':
-    for ood_dataset in ["imagenet-r", "imagenet-sketch", "imagenetv2-matched-frequency"]:
+    for ood_dataset in ["imagenet-r", "imagenet-sketch", "imagenetv2-matched-frequency", "imagenet-a"]:
         for roi in ["IT", "V4"]:
             create_plot(ood_dataset, roi, "encoding")

@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.decomposition import IncrementalPCA
 from sklearn.linear_model import Ridge, RidgeCV
+from sklearn.preprocessing import StandardScaler
 from scipy.stats import pearsonr, ttest_1samp, sem
 import warnings
 
@@ -239,7 +240,9 @@ def RidgeCV_Encoding(features, roi_path, model_name, alpha, trn_tst_split=0.8, n
 
     for layer_id in layer_list:
         X_train, X_test = encode_layer(layer_id, n_components, batch_size, trn_Idx, tst_Idx, features)
-
+        x_scaler = StandardScaler()
+        X_train = x_scaler.fit_transform(X_train)
+        X_test = x_scaler.transform(X_test)
         if return_correlations:
             corr_dict[layer_id] = {}
 
@@ -251,12 +254,20 @@ def RidgeCV_Encoding(features, roi_path, model_name, alpha, trn_tst_split=0.8, n
                 fmri_data = np.load(roi_file)
                 y_train, y_test = fmri_data[trn_Idx], fmri_data[tst_Idx]
 
-                ridgecv = RidgeCV(alphas=[alpha], cv=n_folds)
+                # Normalize y
+                y_scaler = StandardScaler()
+                y_train = y_scaler.fit_transform(y_train)
+                y_test = y_scaler.transform(y_test)
+
+                alphas = [alpha] if isinstance(alpha, (float, int)) else alpha
+                ridgecv = RidgeCV(alphas=alphas, cv=n_folds)
                 ridgecv.fit(X_train, y_train)
                 y_pred = ridgecv.predict(X_test)
 
                 correlations = np.array([pearsonr(y_pred[:, v], y_test[:, v])[0] for v in range(y_test.shape[1])])
                 r = np.mean(correlations)
+
+                print(ridgecv.alpha_)
 
                 result = {
                     "ROI": roi_name,
@@ -266,7 +277,7 @@ def RidgeCV_Encoding(features, roi_path, model_name, alpha, trn_tst_split=0.8, n
                     "%R2": r ** 2,
                     "Significance": ttest_1samp(correlations, 0)[1],
                     "SEM": sem(correlations),
-                    "Alpha": alpha,
+                    "Alpha": ridgecv.alpha_,
                     "LNC": np.nan,
                     "UNC": np.nan
                 }

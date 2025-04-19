@@ -28,9 +28,8 @@ def generate_fmri(rois, roi_name):
                         fmri = np.concatenate((fmri, np.load(roi_path)), axis=1)
                     except FileNotFoundError:
                         pass
-        os.makedirs(f'fmri/{roi_name}_fmri_subj{subjects}', exist_ok=True)
-        np.save(f'fmri/{roi_name}_fmri_subj{subjects}/{roi_name}_both_fmri_subj{subjects}.npy', fmri)
-        print(fmri.dtype)
+        os.makedirs(f'fmri/{roi_name}/{roi_name}_fmri_subj{subjects}', exist_ok=True)
+        np.save(f'fmri/{roi_name}/{roi_name}_fmri_subj{subjects}/{roi_name}_both_fmri_subj{subjects}.npy', fmri)
 
 if __name__ == '__main__':
     rois = ["hV4"]
