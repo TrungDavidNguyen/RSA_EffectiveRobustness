@@ -21,7 +21,7 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name):
     brain_rdms = folderlookup(brain_rdms_path)
     brain_rdms_path_full = os.path.join(brain_rdms_path, brain_rdms[0])
 
-    noise_ceiling_calc = NoiseCeiling(brain_rdms[0], brain_rdms_path_full, "spearman")
+    noise_ceiling_calc = NoiseCeiling(brain_rdms[0], brain_rdms_path_full, "spearman", True)
     this_nc = noise_ceiling_calc.noise_ceiling()
     lnc = this_nc["lnc"]
     unc = this_nc["unc"]
@@ -72,6 +72,7 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name):
                         "UNC": [unc]
                         }
         all_dicts[num_subj].append(output_dict)
+    # all subjects
     for i in range(num_subj):
         all_rois_df = pd.DataFrame(
             columns=['ROI', 'Layer', "Model", "R2", "%R2", 'Significance', 'SEM', 'LNC', 'UNC'])
@@ -81,6 +82,12 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name):
         os.makedirs(f"rsa/{roi_name}/rsa_{roi_name}_subj{i+1}", exist_ok=True)
         csv_filename = f"rsa/{roi_name}/rsa_{roi_name}_subj{i+1}/{model_name}_RSA.csv"
         all_rois_df.to_csv(csv_filename, index=False)
+
+        all_rois_df = all_rois_df.loc[[all_rois_df['%R2'].idxmax()]]
+        csv_filename = f'rsa/{roi_name}/rsa_{roi_name}_subj{i+1}/results-rsa-{roi_name}.csv'
+        file_exists = os.path.isfile(csv_filename)
+        all_rois_df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
+    # mean of all subjects
     all_rois_df = pd.DataFrame(
         columns=['ROI', 'Layer', "Model", "R2", "%R2", 'Significance', 'SEM', 'LNC', 'UNC'])
     for layer_dict in all_dicts[num_subj]:
@@ -109,6 +116,11 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name):
         df_new = pd.DataFrame({"Model": [model_name], f"%R2_{roi_name}": [max_r2_value]})
     df_new.to_csv(csv_filename, index=False)
 
+
+    all_rois_df = all_rois_df.loc[[all_rois_df['%R2'].idxmax()]]
+    csv_filename = f'rsa/{roi_name}/rsa_{roi_name}_mean/results-rsa-{roi_name}.csv'
+    file_exists = os.path.isfile(csv_filename)
+    all_rois_df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
 def folderlookup(path):
     """Looks at the available files and returns the chosen one
     Args:
@@ -161,32 +173,3 @@ def model_spearman(model_rdm, rdms):
     """Calculate Spearman correlation."""
     model_rdm_sq = sq(model_rdm)
     return [stats.spearmanr(sq(rdm), model_rdm_sq)[0] for rdm in rdms]
-
-def get_lowernoiseceiling(rdm):
-        """Take the lower noise ceiling
-        1. Extracting one subject from the overall rdm
-        2. Take the mean of all the other RDMs
-        3. Take spearman correlation of subject RDM and mean subject RDM
-        4. We do this for all the subjects and then calculate the average
-        => Can we predict person 15 from the rest of the subjects?
-        => Low Noise-Ceiling means we need better data
-
-        Args:
-            rdm (list of rdms): all subject rdms
-
-        Returns:
-            float: lower noise ceiling
-        """
-
-        num_subs = rdm.shape[0]
-        lnc = 0.0
-
-        for i in range(num_subs):
-            sub_rdm = rdm[i, :, :]
-            rdm_sub_removed = np.delete(rdm, i, axis=0)  # remove one person
-            # take mean of other RDMs
-            mean_sub_rdm = np.mean(rdm_sub_removed, axis=0)
-            lnc += self.noise_ceiling_spearman(sub_rdm, mean_sub_rdm)  # take spearman
-
-        lnc = lnc / num_subs  # average it
-        return lnc
