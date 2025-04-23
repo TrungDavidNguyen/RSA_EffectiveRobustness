@@ -51,8 +51,7 @@ if __name__ == '__main__':
                   'resnext50_32x4d', 'resnext101_32x8d',
                   'vit_base_patch16_224', 'vit_large_patch16_224', 'vit_huge_patch14_224_in21k',
                   'deit_base_patch16_224', 'swin_base_patch4_window7_224',
-                  'mixer_b16_224', 'convnext_base', 'convnext_large',
-                  'nfnet_l0', 'dm_nfnet_f0', 'regnety_032', 'regnety_080',
+                  'convnext_base', 'convnext_large', 'regnety_032', 'regnety_080',
                   'cait_m36_384', 'coat_lite_mini','hrnet_w48', 'seresnet50',
                   'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
                   'wide_resnet50_2', 'wide_resnet101_2']
