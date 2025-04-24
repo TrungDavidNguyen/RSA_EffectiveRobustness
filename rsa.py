@@ -24,7 +24,7 @@ def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available(
         # Extract features
         fx = FeatureExtractor(model=model_name, netset=netset, device=device)
         layers_to_extract = fx.get_all_layers()
-        fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
+        fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=True,  layers_to_extract=layers_to_extract)
         # Create RDM of model
         creator = RDMCreator(verbose=True, device=device)
         save_path = creator.create_rdms(feature_path=feat_path, save_path=rdm_path, save_format='npz')
@@ -47,10 +47,10 @@ if __name__ == '__main__':
                    'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5',
                    'mnasnet05', 'mnasnet10', 'mobilenet_v2',
                    'mobilenet_v3_large', 'mobilenet_v3_small']"""
-    models_list = ['nasnetalarge', 'pnasnet5large', 'tf_efficientnet_b2_ns','tf_efficientnet_b4_ns',
+    models_list = ['nasnetalarge', 'pnasnet5large',
                   'resnext50_32x4d', 'resnext101_32x8d',
                   'vit_base_patch16_224', 'vit_large_patch16_224', 'vit_huge_patch14_224_in21k',
-                  'deit_base_patch16_224', 'swin_base_patch4_window7_224',
+                  'swin_base_patch4_window7_224',
                   'convnext_base', 'convnext_large', 'regnety_032', 'regnety_080',
                   'cait_m36_384', 'coat_lite_mini','hrnet_w48', 'seresnet50',
                   'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
