@@ -70,5 +70,5 @@ if __name__ == '__main__':
                   'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
                   'wide_resnet50_2']
     model_name = models_list[num]
-    encoding(model_name, "Standard", "V4")
-    encoding(model_name, "Standard", "IT")
+    encoding(model_name, "Timm", "V4")
+    encoding(model_name, "Timm", "IT")
