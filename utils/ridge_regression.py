@@ -267,7 +267,6 @@ def RidgeCV_Encoding(features, roi_path, model_name, alpha, trn_tst_split=0.8, n
                 correlations = np.array([pearsonr(y_pred[:, v], y_test[:, v])[0] for v in range(y_test.shape[1])])
                 r = np.mean(correlations)
 
-                print(ridgecv.alpha_)
 
                 result = {
                     "ROI": roi_name,

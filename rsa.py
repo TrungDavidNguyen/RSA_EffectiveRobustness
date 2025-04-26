@@ -48,7 +48,7 @@ if __name__ == '__main__':
                    'mnasnet05', 'mnasnet10', 'mobilenet_v2',
                    'mobilenet_v3_large', 'mobilenet_v3_small']"""
     models_list = ['nasnetalarge', 'vit_huge_patch14_224_in21k',
-                  'convit_small', 'convit_base', 'cait_m36_384', 'hrnet_w48',
+                   'convit_base', 'cait_m36_384', 'hrnet_w48',
                    'pnasnet5large','wide_resnet101_2']
     model_name = models_list[num]
     main(model_name, "Timm", "V4")
