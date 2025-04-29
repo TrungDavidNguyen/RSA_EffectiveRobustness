@@ -68,7 +68,8 @@ if __name__ == '__main__':
                       'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032', 'regnety_080',
                       'coat_lite_mini','seresnet50',
                       'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
-                      'wide_resnet50_2']"""
+                      'wide_resnet50_2', 'convit_small']"""
+
     model_name = models_list[num]
-    encoding("vit_large_patch16_224", "Timm", "V4")
-    encoding("vit_large_patch16_224", "Timm", "IT")
+    encoding("convit_small", "Timm", "V4")
+    encoding("convit_small", "Timm", "IT")
