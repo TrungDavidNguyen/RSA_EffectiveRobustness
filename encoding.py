@@ -71,5 +71,5 @@ if __name__ == '__main__':
                       'wide_resnet50_2', 'convit_small']"""
 
     model_name = models_list[num]
-    encoding("inception_resnet_v2", "Timm", "V4")
-    encoding("inception_resnet_v2", "Timm", "IT")
+    encoding(model_name, "Standard", "V4")
+    encoding(model_name, "Standard", "IT")
