@@ -100,7 +100,7 @@ if __name__ == '__main__':
                        'mnasnet05', 'mnasnet10', 'mobilenet_v2',
                        'mobilenet_v3_large', 'mobilenet_v3_small']"""
     models_list = ['inception_v3', 'inception_resnet_v2', 'xception',
-                  'tf_efficientnet_b2_ns','tf_efficientnet_b4_ns'
+                  'tf_efficientnet_b2_ns','tf_efficientnet_b4_ns',
                   'resnext50_32x4d', 'resnext101_32x8d',
                   'vit_base_patch16_224', 'vit_large_patch16_224',
                   'deit_base_patch16_224', 'swin_base_patch4_window7_224',
