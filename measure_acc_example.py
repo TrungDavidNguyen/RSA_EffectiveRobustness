@@ -7,6 +7,7 @@ from net2brain.architectures.pytorch_models import Standard
 from torchvision.transforms import transforms as trn
 from measure_accuracy import measure_accuracy_subset
 from measure_accuracy import measure_accuracy
+from measure_accuracy import measure_accuracy_a
 from net2brain.architectures.timm_models import Timm
 from timm.data import resolve_data_config
 from timm.data.transforms_factory import create_transform
@@ -59,7 +60,7 @@ def timm(model_name):
     config = resolve_data_config({}, model=model)
     transform = create_transform(**config)
     print(transform)
-    dataset_name = "imagenet1k-subset-a"
+    dataset_name = "imagenet-a"
     dataset_path = os.path.join(os.getcwd(), "imagenet-val")
 
     df = pd.read_csv('results/accuracies.csv')
