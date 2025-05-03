@@ -59,11 +59,11 @@ def timm(model_name):
     config = resolve_data_config({}, model=model)
     transform = create_transform(**config)
     print(transform)
-    dataset_name = "imagenet1k"
+    dataset_name = "imagenet1k-subset-r"
     dataset_path = os.path.join(os.getcwd(), "imagenet-val")
 
     df = pd.read_csv('results/accuracies.csv')
-    accuracy = measure_accuracy(model, dataset_path, transform)
+    accuracy = measure_accuracy_subset(model, dataset_path, transform)
     print(model_name, " accuracy", accuracy)
     if dataset_name not in df.columns:
         df[dataset_name] = None
