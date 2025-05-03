@@ -59,7 +59,7 @@ def timm(model_name):
     config = resolve_data_config({}, model=model)
     transform = create_transform(**config)
     print(transform)
-    dataset_name = "imagenet1k-subset-r"
+    dataset_name = "imagenet1k-subset-a"
     dataset_path = os.path.join(os.getcwd(), "imagenet-val")
 
     df = pd.read_csv('results/accuracies.csv')
