@@ -6,32 +6,45 @@ import shutil
 from scipy.spatial.distance import squareform
 
 
-def generate_IT_RDM():
-    rois = {"EBA": "floc-bodies", "FFA-1": "floc-faces", "FFA-2": "floc-faces", "FBA-1": "floc-bodies", "FBA-2": "floc-bodies", "PPA": "floc-places"}
+def generate_RDMs(rois, roi_name, dataset):
+    images = 0
+    if dataset == "NSD Dataset":
+        images = 872
+    elif dataset == "NSD Synthetic":
+        images = 284
+
     all_rdms = []
     for subjects in range(1, 9):
-        IT_fmri = None
-        for roi in rois.keys():
+        fmri = None
+        for roi in rois:
             for hemisphere in ["lh","rh"]:
-                group = rois[roi]
+                group = ""
+                if roi in ["EBA", "FBA-1", "FBA-2"]:
+                    group = "floc-bodies"
+                elif roi in ["FFA-1", "FFA-2", "OFA"]:
+                    group = "floc-faces"
+                elif roi in ["PPA", "OPA", "RSC"]:
+                    group = "floc-places"
+                elif roi in ["hV4", "V1d", "V1v", "V2d", "V2v", "V3d", "V3v",]:
+                    group = "prf-visualrois"
                 current_dir = os.getcwd()
-                roi_path = os.path.join(current_dir,"NSD Dataset","NSD_872_fmri",group,roi,f"subj0{subjects}_roi-{roi}_{hemisphere}.npy")
-                if IT_fmri is None:
+                roi_path = os.path.join(current_dir,dataset,f"NSD_{images}_fmri", group, roi, f"subj0{subjects}_roi-{roi}_{hemisphere}.npy")
+                if fmri is None:
                     try:
-                        IT_fmri = np.load(roi_path).astype(np.float64)
+                        fmri = np.load(roi_path).astype(np.float64)
                     except FileNotFoundError:
                         pass
                 else:
                     try:
-                        IT_fmri = np.concatenate((IT_fmri, np.load(roi_path).astype(np.float64)), axis=1)
+                        fmri = np.concatenate((fmri, np.load(roi_path).astype(np.float64)), axis=1)
                     except FileNotFoundError:
                         pass
-        all_rdms.append(squareform(pdist(torch.from_numpy(IT_fmri), metric='correlation')))
-    os.makedirs(f"rdm/IT", exist_ok=True)
-    np.savez(f"rdm/IT/IT_both_fmri.npz", rdm=np.stack(all_rdms))
+        all_rdms.append(squareform(pdist(torch.from_numpy(fmri), metric='correlation')))
+    os.makedirs(f"rdm_synthetic/{roi_name}", exist_ok=True)
+    np.savez(f"rdm_synthetic/{roi_name}/{roi_name}_both_fmri.npz", rdm=np.stack(all_rdms))
 
 
-def generate_RDM(roi):
+def copy_RDM(roi):
     current_dir = os.getcwd()
     group = ""
     if roi in ["EBA", "FBA-1", "FBA-2"]:
@@ -52,6 +65,6 @@ def generate_RDM(roi):
 
 
 if __name__ == '__main__':
-    generate_IT_RDM()
-    generate_RDM("V4")
-    print(np.load(r"C:\Users\david\Desktop\RSA_EffectiveRobustness\rdm\V4\V4_both_fmri.npz")["rdm"].shape)
+    generate_RDMs(["hV4"], "V4", "NSD Synthetic")
+    generate_RDMs(["EBA", "FFA-1", "FFA-2", "FBA-1", "FBA-2", "PPA"], "IT", "NSD Synthetic")
+
