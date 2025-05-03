@@ -61,7 +61,7 @@ def timm(model_name):
     transform = create_transform(**config)
     print(transform)
     dataset_name = "imagenet-a"
-    dataset_path = os.path.join(os.getcwd(), "imagenet-val")
+    dataset_path = os.path.join(os.getcwd(), "imagenet-a")
 
     df = pd.read_csv('results/accuracies.csv')
     accuracy = measure_accuracy_subset(model, dataset_path, transform)
