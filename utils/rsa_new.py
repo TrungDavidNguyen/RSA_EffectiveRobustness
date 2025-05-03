@@ -13,7 +13,7 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name):
     :param model_name: name of model
     :return:
     """
-
+    name = "rsa_synthetic"
     # list of rdm file names of each layer
     model_rdms = folderlookup(model_rdms_path)
     model_rdms.sort(key=natural_keys)
@@ -79,12 +79,12 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name):
         for layer_dict in all_dicts[i]:
             layer_df = pd.DataFrame.from_dict(layer_dict)
             all_rois_df = pd.concat([all_rois_df, layer_df], ignore_index=True)
-        os.makedirs(f"rsa/{roi_name}/rsa_{roi_name}_subj{i+1}", exist_ok=True)
-        csv_filename = f"rsa/{roi_name}/rsa_{roi_name}_subj{i+1}/{model_name}_RSA.csv"
+        os.makedirs(f"{name}/{roi_name}/rsa_{roi_name}_subj{i+1}", exist_ok=True)
+        csv_filename = f"{name}/{roi_name}/rsa_{roi_name}_subj{i+1}/{model_name}_RSA.csv"
         all_rois_df.to_csv(csv_filename, index=False)
 
         all_rois_df = all_rois_df.loc[[all_rois_df['%R2'].idxmax()]]
-        csv_filename = f'rsa/{roi_name}/rsa_{roi_name}_subj{i+1}/results-rsa-{roi_name}.csv'
+        csv_filename = f'{name}/{roi_name}/rsa_{roi_name}_subj{i+1}/results-rsa-{roi_name}.csv'
         file_exists = os.path.isfile(csv_filename)
         all_rois_df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
     # mean of all subjects
@@ -93,13 +93,13 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name):
     for layer_dict in all_dicts[num_subj]:
         layer_df = pd.DataFrame.from_dict(layer_dict)
         all_rois_df = pd.concat([all_rois_df, layer_df], ignore_index=True)
-    os.makedirs(f"rsa/{roi_name}/rsa_{roi_name}_mean", exist_ok=True)
-    csv_filename = f"rsa/{roi_name}/rsa_{roi_name}_mean/{model_name}_RSA.csv"
+    os.makedirs(f"{name}/{roi_name}/rsa_{roi_name}_mean", exist_ok=True)
+    csv_filename = f"{name}/{roi_name}/rsa_{roi_name}_mean/{model_name}_RSA.csv"
     all_rois_df.to_csv(csv_filename, index=False)
 
     max_r2_value = all_rois_df['%R2'].max()
 
-    csv_filename = 'results/rsa.csv'
+    csv_filename = f'results/{name}.csv'
 
     if os.path.exists(csv_filename):
         df_new = pd.read_csv(csv_filename)
@@ -116,9 +116,8 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name):
         df_new = pd.DataFrame({"Model": [model_name], f"%R2_{roi_name}": [max_r2_value]})
     df_new.to_csv(csv_filename, index=False)
 
-
     all_rois_df = all_rois_df.loc[[all_rois_df['%R2'].idxmax()]]
-    csv_filename = f'rsa/{roi_name}/rsa_{roi_name}_mean/results-rsa-{roi_name}.csv'
+    csv_filename = f'{name}/{roi_name}/rsa_{roi_name}_mean/results-rsa-{roi_name}.csv'
     file_exists = os.path.isfile(csv_filename)
     all_rois_df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
 def folderlookup(path):
