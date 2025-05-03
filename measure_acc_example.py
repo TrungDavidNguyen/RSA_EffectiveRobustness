@@ -61,8 +61,8 @@ def timm(model_name):
     config = resolve_data_config({}, model=model)
     transform = create_transform(**config)
     print(transform)
-    dataset_name = "imagenet-sketch"
-    dataset_path = os.path.join(os.getcwd(), "sketch")
+    dataset_name = "imagenetv2-matched-frequency"
+    dataset_path = os.path.join(os.getcwd(), "imagenetv2-matched-frequency-format-val")
 
     df = pd.read_csv('results/accuracies.csv')
     accuracy = measure_accuracy_r(model, dataset_path, transform)
