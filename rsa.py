@@ -12,6 +12,17 @@ from utils.rsa_new import RSA
 
 def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available() else "cpu"):
     # Set paths
+    dataset = "NSD Synthetic"
+    images = 0
+    rdm_save_path = ""
+    if dataset == "NSD Dataset":
+        images = 872
+        rdm_save_path = "rdm"
+    elif dataset == "NSD Synthetic":
+        images = 284
+        rdm_save_path = "rdm_synthetic"
+
+
     current_dir = os.getcwd()
     save_path = os.path.join(current_dir, f"{model_name}_RDM")
     rdm_path = f"{model_name}_RDM"
@@ -19,7 +30,7 @@ def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available(
     # Load dataset
     #dataset_path = DatasetNSD_872.load_dataset()
     #stimuli_path = dataset_path["NSD_872_images"]
-    stimuli_path = os.path.join(os.getcwd(),"NSD Synthetic", "NSD_284_images")
+    stimuli_path = os.path.join(os.getcwd(),dataset, f"NSD_{images}_images")
 
     if not os.path.isdir(save_path):
         # Extract features
@@ -34,7 +45,7 @@ def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available(
     if os.path.exists(feat_path_complete):
         shutil.rmtree(feat_path_complete)
 
-    brain_path = os.path.join(current_dir, "rdm_synthetic", roi_name)
+    brain_path = os.path.join(current_dir, rdm_save_path, roi_name)
     RSA(save_path, brain_path,model_name,roi_name)
 
 
@@ -48,15 +59,8 @@ if __name__ == '__main__':
                        'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5',
                        'mnasnet05', 'mnasnet10', 'mobilenet_v2',
                        'mobilenet_v3_large', 'mobilenet_v3_small']"""
-    models_list = ['inception_v3', 'inception_resnet_v2', 'xception',
-                  'tf_efficientnet_b2_ns','tf_efficientnet_b4_ns',
-                  'resnext50_32x4d', 'resnext101_32x8d',
-                  'vit_base_patch16_224', 'vit_large_patch16_224',
-                  'deit_base_patch16_224', 'swin_base_patch4_window7_224',
-                  'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032', 'regnety_080',
-                  'coat_lite_mini','seresnet50',
-                  'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
-                  'wide_resnet50_2', 'convit_small']
+    models_list = ['vit_large_patch16_224',
+                  'wide_resnet50_2']
     model_name = models_list[num]
     main(model_name, "Timm", "V4")
     main(model_name, "Timm", "IT")
