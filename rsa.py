@@ -59,8 +59,7 @@ if __name__ == '__main__':
                        'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5',
                        'mnasnet05', 'mnasnet10', 'mobilenet_v2',
                        'mobilenet_v3_large', 'mobilenet_v3_small']"""
-    models_list = ['vit_large_patch16_224','vit_base_patch16_224',
-                  'wide_resnet50_2', 'mixer_b16_224']
+    models_list = ['vit_large_patch16_224','mixer_b16_224']
     model_name = models_list[num]
     main(model_name, "Timm", "V4")
     main(model_name, "Timm", "IT")
