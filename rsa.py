@@ -60,5 +60,5 @@ if __name__ == '__main__':
                    'mnasnet05', 'mnasnet10', 'mobilenet_v2',
                    'mobilenet_v3_large', 'mobilenet_v3_small']
     model_name = models_list[num]
-    main(model_name, "Timm", "V4")
-    main(model_name, "Timm", "IT")
+    main(model_name, "Standard", "V4")
+    main(model_name, "Standard", "IT")
