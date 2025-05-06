@@ -51,10 +51,9 @@ def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available(
 
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    models_list = ['Squeezenet1_0', 'VGG11', 'VGG11_bn', 'VGG13', 'VGG13_bn', 'VGG16',
-                   'VGG19', 'VGG19_bn', 'efficientnet_b1',
+    models_list = ['Squeezenet1_0', 'VGG13_bn', 'VGG16',
+                   'efficientnet_b1',
                    'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b5',
-                   'mnasnet10', 'mobilenet_v2',
                    'mobilenet_v3_large']
     model_name = models_list[num]
     main(model_name, "Standard", "V4")

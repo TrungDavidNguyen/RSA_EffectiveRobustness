@@ -13,8 +13,9 @@ def encoding(model_name, netset, roi_name):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     current_dir = os.getcwd()
     feat_path = f"{model_name}_Feat"
-    dataset_path = DatasetNSD_872.load_dataset()
-    stimuli_path = dataset_path["NSD_872_images"]
+    #dataset_path = DatasetNSD_872.load_dataset()
+    #stimuli_path = dataset_path["NSD_872_images"]
+    stimuli_path = os.path.join(os.getcwd(),"NSD Synthetic", f"NSD_284_images")
 
     # Extract features
     fx = FeatureExtractor(model=model_name, netset=netset, device=device)
