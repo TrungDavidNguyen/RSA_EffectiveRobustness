@@ -60,12 +60,11 @@ def timm(model_name):
     model = create_model(model_name, pretrained=True)
     config = resolve_data_config({}, model=model)
     transform = create_transform(**config)
-    print(transform)
-    dataset_name = "imagenet-sketch"
-    dataset_path = os.path.join(os.getcwd(), "sketch")
+    dataset_name = "imagenet-r"
+    dataset_path = os.path.join(os.getcwd(), "imagenet-r")
 
     df = pd.read_csv('results/accuracies.csv')
-    accuracy = measure_accuracy(model, dataset_path, transform)
+    accuracy = measure_accuracy_r(model, dataset_path, transform)
     print(model_name, " accuracy", accuracy)
     if dataset_name not in df.columns:
         df[dataset_name] = None
@@ -110,6 +109,7 @@ if __name__ == '__main__':
                       'coat_lite_mini','seresnet50',
                       'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
                       'wide_resnet50_2', 'convit_small']"""
-    models_list = ["vit_base_patch16_224", "vit_large_patch16_224", "wide_resnet50_2", "mixer_b16_224"]
+    models_list = ["inception_v3", "xception", "resnext50_32x4d", "vit_large_patch16_224", "gluon_resnet50_v1c",
+                   "regnety_032", "dm_nfnet_f0", "wide_resnet50_2"]
     model_name = models_list[num]
     timm(model_name)
