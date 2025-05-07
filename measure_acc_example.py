@@ -109,7 +109,6 @@ if __name__ == '__main__':
                       'coat_lite_mini','seresnet50',
                       'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
                       'wide_resnet50_2', 'convit_small']"""
-    models_list = ["inception_v3", "xception", "resnext50_32x4d", "vit_large_patch16_224", "gluon_resnet50_v1c",
-                   "regnety_032", "dm_nfnet_f0", "wide_resnet50_2"]
+    models_list = ["resnext50_32x4d"]
     model_name = models_list[num]
     timm(model_name)
