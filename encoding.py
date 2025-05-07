@@ -52,8 +52,8 @@ def encoding(model_name, netset, roi_name):
 
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    models_list = ['inception_resnet_v2', 'vit_large_patch16_224','convit_small']
+    models_list = ['inception_resnet_v2', 'vit_large_patch16_224','convit_small']2
 
     model_name = models_list[num]
-    encoding(model_name, "Standard", "V4")
-    encoding(model_name, "Standard", "IT")
+    encoding(model_name, "Timm", "V4")
+    encoding(model_name, "Timm", "IT")
