@@ -43,7 +43,7 @@ def encoding(model_name, netset, roi_name):
             new_row = pd.Series({col: None for col in df.columns})
             new_row['Model'] = model_name
             new_row[f"R_{roi_name}"] = R_mean
-            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=Truüe)
+            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
     else:
         df = pd.DataFrame({"Model": [model_name], f"R_{roi_name}": [R_mean]})
 
