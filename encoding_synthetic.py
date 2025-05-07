@@ -60,7 +60,7 @@ if __name__ == '__main__':
     """    models_list = ['inception_resnet_v2',
                       'vit_large_patch16_224',
                       'swin_base_patch4_window7_224',
-                      nfnet_l0', 'regnety_032', 'regnety_080',
+                      'regnety_032', 'regnety_080',
                       'coat_lite_mini','seresnet50',
                       'gluon_resnext101_64x4d',
                       'convit_small']"""
