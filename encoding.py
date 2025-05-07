@@ -43,7 +43,7 @@ def encoding(model_name, netset, roi_name):
             new_row = pd.Series({col: None for col in df.columns})
             new_row['Model'] = model_name
             new_row[f"R_{roi_name}"] = R_mean
-            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=Truüe)
     else:
         df = pd.DataFrame({"Model": [model_name], f"R_{roi_name}": [R_mean]})
 
@@ -52,8 +52,7 @@ def encoding(model_name, netset, roi_name):
 
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    models_list = ['VGG16']
-    """    models_list = ['inception_resnet_v2', 'vit_large_patch16_224','convit_small']"""
+    models_list = ['inception_resnet_v2', 'vit_large_patch16_224','convit_small']
 
     model_name = models_list[num]
     encoding(model_name, "Standard", "V4")
