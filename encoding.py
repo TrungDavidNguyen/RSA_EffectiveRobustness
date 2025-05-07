@@ -8,7 +8,7 @@ from utils.ridge_regression import RidgeCV_Encoding
 from net2brain.utils.download_datasets import DatasetNSD_872
 
 
-def encoding(model_name, netset, roi_name):
+def encoding(model_name, netset, roi_name, features=None):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     current_dir = os.getcwd()
     feat_path = f"{model_name}_Feat"
@@ -16,9 +16,10 @@ def encoding(model_name, netset, roi_name):
     stimuli_path = dataset_path["NSD_872_images"]
 
     # Extract features
-    fx = FeatureExtractor(model=model_name, netset=netset, device=device)
-    layers_to_extract = fx.get_all_layers()
-    features = fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
+    if features is None:
+        fx = FeatureExtractor(model=model_name, netset=netset, device=device)
+        layers_to_extract = fx.get_all_layers()
+        features = fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
     R_sum = 0
     for subj in range(1, 9):
         roi_path = os.path.join(current_dir, f"fmri/{roi_name}/{roi_name}_fmri_subj{subj}")
@@ -48,13 +49,15 @@ def encoding(model_name, netset, roi_name):
         df = pd.DataFrame({"Model": [model_name], f"R_{roi_name}": [R_mean]})
 
     df.to_csv(csv_filename, index=False)
-
+    return features
 
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    #models_list = ['vit_large_patch16_224']
-    models_list = ['efficientnet_b4']
+    """    models_list = ['Densenet169','efficientnet_b5']"""
+    """    models_list = ['inception_resnet_v2','vit_large_patch16_224', 'convit_small']"""
+
+    models_list = ['vit_large_patch16_224']
 
     model_name = models_list[num]
-    encoding(model_name, "Standard", "V4")
-    encoding(model_name, "Standard", "IT")
+    features = encoding(model_name, "Timm", "V4")
+    encoding(model_name, "Timm", "IT", features)
