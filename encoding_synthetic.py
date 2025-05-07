@@ -55,13 +55,8 @@ def encoding(model_name, netset, roi_name):
 if __name__ == '__main__':
     num = int(sys.argv[1])
     #models_list = ['VGG11_bn', 'VGG16_bn', 'VGG19_bn']
-    models_list = ['inception_resnet_v2',
-                  'vit_large_patch16_224',
-                  'swin_base_patch4_window7_224',
-                  'nfnet_l0', 'regnety_080',
-                  'coat_lite_mini','seresnet50',
-                  'gluon_resnext101_64x4d',
-                  'convit_small']
+    models_list = ['vit_large_patch16_224',
+                  'coat_lite_mini','seresnet50']
     model_name = models_list[num]
     encoding(model_name, "Timm", "V4")
     encoding(model_name, "Timm", "IT")

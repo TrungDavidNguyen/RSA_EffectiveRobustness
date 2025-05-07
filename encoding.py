@@ -53,6 +53,8 @@ def encoding(model_name, netset, roi_name):
 if __name__ == '__main__':
     num = int(sys.argv[1])
     models_list = ['vit_large_patch16_224']
+    #models_list = ['efficientnet_b4']
+
     model_name = models_list[num]
     encoding(model_name, "Timm", "V4")
     encoding(model_name, "Timm", "IT")
