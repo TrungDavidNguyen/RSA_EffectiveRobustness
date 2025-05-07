@@ -52,7 +52,7 @@ def encoding(model_name, netset, roi_name):
 
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    models_list = ['VGG13_bn', 'VGG16']
+    models_list = ['VGG16']
     """    models_list = ['inception_resnet_v2', 'vit_large_patch16_224','convit_small']"""
 
     model_name = models_list[num]
