@@ -53,12 +53,15 @@ def encoding(model_name, netset, roi_name, features=None):
 
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    """    models_list = ['Densenet169','efficientnet_b5']"""
-    """    models_list = ['inception_resnet_v2','vit_large_patch16_224', 'convit_small']"""
 
-    #models_list = ['vit_large_patch16_224']
+    standard = ["Densenet169", "efficientnet_b5"]
+    timm = ["convit_small", "inception_resnet_v2", "vit_large_patch16_224"]
+    cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
-    models_list = ["cornet_s","cornet_rt","cornet_z"]
+    models_list = ["convit_small","Densenet169", "efficientnet_b5"]
     model_name = models_list[num]
-    features = encoding(model_name, "Cornet", "V4")
-    encoding(model_name, "Cornet", "IT", features)
+    if model_name in timm:
+        features = encoding(model_name, "Timm", "V4")
+        encoding(model_name, "Timm", "IT", features)
+    else:
+        encoding(model_name, "Standard", "IT")
