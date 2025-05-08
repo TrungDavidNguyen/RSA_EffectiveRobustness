@@ -51,4 +51,4 @@ def create_plot(ood_dataset, roi, evaluation):
 if __name__ == '__main__':
     for ood_dataset in ["imagenet-r", "imagenet-sketch", "imagenetv2-matched-frequency", "imagenet-a"]:
         for roi in ["IT", "V4"]:
-            create_plot(ood_dataset, roi, "rsa_synthetic")
+            create_plot(ood_dataset, roi, "encoding_synthetic")
