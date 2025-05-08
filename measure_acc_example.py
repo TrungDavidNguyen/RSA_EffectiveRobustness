@@ -60,11 +60,11 @@ def timm(model_name):
     model = create_model(model_name, pretrained=True)
     config = resolve_data_config({}, model=model)
     transform = create_transform(**config)
-    dataset_name = "imagenetv2-matched-frequency"
-    dataset_path = os.path.join(os.getcwd(), "imagenetv2-matched-frequency-format-val")
+    dataset_name = "imagenet-a"
+    dataset_path = os.path.join(os.getcwd(), "imagenet-a")
 
     df = pd.read_csv('results/accuracies.csv')
-    accuracy = measure_accuracy(model, dataset_path, transform)
+    accuracy = measure_accuracy_a(model, dataset_path, transform)
     print(model_name, " accuracy", accuracy)
     if dataset_name not in df.columns:
         df[dataset_name] = None
@@ -109,9 +109,9 @@ if __name__ == '__main__':
                       'coat_lite_mini','seresnet50',
                       'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
                       'wide_resnet50_2', 'convit_small']"""
-    """    imagenet_a = ['inception_v3', 'xception',
-                        'resnext50_32x4d','vit_large_patch16_224']"""
-    models_list = ['vit_large_patch16_224', 'wide_resnet50_2']
+    models_list = ['inception_v3', 'xception',
+                        'resnext50_32x4d','vit_large_patch16_224']
+    #imagenetv2 = ['vit_large_patch16_224', 'wide_resnet50_2']
     #imagenet-r = ["resnext50_32x4d"]
     model_name = models_list[num]
     timm(model_name)
