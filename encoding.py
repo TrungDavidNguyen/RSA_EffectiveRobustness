@@ -56,8 +56,9 @@ if __name__ == '__main__':
     """    models_list = ['Densenet169','efficientnet_b5']"""
     """    models_list = ['inception_resnet_v2','vit_large_patch16_224', 'convit_small']"""
 
-    models_list = ['vit_large_patch16_224']
+    #models_list = ['vit_large_patch16_224']
 
+    models_list = ["cornet_s","cornet_rt","cornet_z"]
     model_name = models_list[num]
-    features = encoding(model_name, "Timm", "V4")
-    encoding(model_name, "Timm", "IT", features)
+    features = encoding(model_name, "Cornet", "V4")
+    encoding(model_name, "Cornet", "IT", features)

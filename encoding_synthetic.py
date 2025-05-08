@@ -65,11 +65,13 @@ if __name__ == '__main__':
                       'gluon_resnext101_64x4d',
                       'convit_small']"""
 
-    models_list = ['VGG11_bn', 'VGG16_bn','VGG19_bn']
+    #models_list = ['VGG11_bn', 'VGG16_bn','VGG19_bn']
     """    models_list = ['inception_resnet_v2',
                       'vit_large_patch16_224',
                       'coat_lite_mini','seresnet50',
                       ]"""
+    models_list = ["cornet_s","cornet_rt","cornet_z"]
+
     model_name = models_list[num]
-    features = encoding(model_name, "Timm", "V4")
-    encoding(model_name, "Timm", "IT", features)
+    features = encoding(model_name, "Cornet", "V4")
+    encoding(model_name, "Cornet", "IT", features)
