@@ -61,6 +61,12 @@ def generate_fmri_synthetic(rois, roi_name):
         np.save(f'fmri_synthetic/{roi_name}/{roi_name}_fmri_subj{subjects}/{roi_name}_both_fmri_subj{subjects}.npy', fmri)
 
 if __name__ == '__main__':
+    rois = ["V1d","V1v"]
+    roi_name = "V1"
+    generate_fmri_synthetic(rois, roi_name)
+    rois = ["V2d","V2v"]
+    roi_name = "V2"
+    generate_fmri_synthetic(rois, roi_name)
     rois = ["hV4"]
     roi_name = "V4"
     generate_fmri_synthetic(rois, roi_name)
