@@ -46,7 +46,7 @@ def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available(
         shutil.rmtree(feat_path_complete)
 
     brain_path = os.path.join(current_dir, rdm_save_path, roi_name)
-    RSA(save_path, brain_path,model_name,roi_name)
+    RSA(save_path, brain_path,model_name,roi_name, "rsa")
 
 
 if __name__ == '__main__':
