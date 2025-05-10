@@ -12,7 +12,7 @@ from utils.rsa_new import RSA
 
 def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available() else "cpu"):
     # Set paths
-    dataset = "NSD Dataset"
+    dataset = "NSD Synthetic"
     images = 0
     rdm_save_path = ""
     if dataset == "NSD Dataset":
