@@ -63,13 +63,13 @@ def generate_fmri_synthetic(rois, roi_name):
 if __name__ == '__main__':
     rois = ["V1d","V1v"]
     roi_name = "V1"
-    generate_fmri_synthetic(rois, roi_name)
+    generate_fmri(rois, roi_name)
     rois = ["V2d","V2v"]
     roi_name = "V2"
-    generate_fmri_synthetic(rois, roi_name)
+    generate_fmri(rois, roi_name)
     rois = ["hV4"]
     roi_name = "V4"
-    generate_fmri_synthetic(rois, roi_name)
+    generate_fmri(rois, roi_name)
     rois = ["EBA", "FBA-1", "FBA-2", "FFA-1", "FFA-2", "PPA"]
     roi_name = "IT"
-    generate_fmri_synthetic(rois, roi_name)
+    generate_fmri(rois, roi_name)
