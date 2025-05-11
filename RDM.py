@@ -65,8 +65,8 @@ def copy_RDM(roi):
 
 
 if __name__ == '__main__':
-    generate_RDMs(["V1d","V1v"], "V1", "NSD Synthetic")
-    generate_RDMs(["V2d","V2v"], "V2", "NSD Synthetic")
-    generate_RDMs(["hV4"], "V4", "NSD Synthetic")
-    generate_RDMs(["EBA", "FFA-1", "FFA-2", "FBA-1", "FBA-2", "PPA"], "IT", "NSD Synthetic")
+    generate_RDMs(["V1d","V1v"], "V1", "NSD Dataset")
+    generate_RDMs(["V2d","V2v"], "V2", "NSD Dataset")
+    generate_RDMs(["hV4"], "V4", "NSD Dataset")
+    generate_RDMs(["EBA", "FFA-1", "FFA-2", "FBA-1", "FBA-2", "PPA"], "IT", "NSD Dataset")
 
