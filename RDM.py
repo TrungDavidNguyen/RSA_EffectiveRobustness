@@ -10,8 +10,10 @@ def generate_RDMs(rois, roi_name, dataset):
     images = 0
     if dataset == "NSD Dataset":
         images = 872
+        folder = "rdm"
     elif dataset == "NSD Synthetic":
         images = 284
+        folder = "rdm_synthetic"
 
     all_rdms = []
     for subjects in range(1, 9):
@@ -40,8 +42,8 @@ def generate_RDMs(rois, roi_name, dataset):
                     except FileNotFoundError:
                         pass
         all_rdms.append(squareform(pdist(torch.from_numpy(fmri), metric='correlation')))
-    os.makedirs(f"rdm_synthetic/{roi_name}", exist_ok=True)
-    np.savez(f"rdm_synthetic/{roi_name}/{roi_name}_both_fmri.npz", rdm=np.stack(all_rdms))
+    os.makedirs(f"{folder}/{roi_name}", exist_ok=True)
+    np.savez(f"{folder}/{roi_name}/{roi_name}_both_fmri.npz", rdm=np.stack(all_rdms))
 
 
 def copy_RDM(roi):
