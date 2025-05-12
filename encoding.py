@@ -57,13 +57,9 @@ if __name__ == '__main__':
     standard = ["efficientnet_b5"]
     timm = ["convit_small", "inception_resnet_v2", "vit_large_patch16_224"]
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
-    models_list = ['inception_v3', 'inception_resnet_v2', 'xception',
-                      'tf_efficientnet_b2_ns','tf_efficientnet_b4_ns',
-                      'resnext50_32x4d', 'resnext101_32x8d',
-                      'vit_base_patch16_224', 'vit_large_patch16_224',
-                      'deit_base_patch16_224', 'swin_base_patch4_window7_224',
-                      'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032', 'regnety_080',
-                      'coat_lite_mini','seresnet50',
+    models_list = [
+                      'swin_base_patch4_window7_224',
+                      'seresnet50',
                       'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
                       'wide_resnet50_2', 'convit_small']
     model_name = models_list[num]

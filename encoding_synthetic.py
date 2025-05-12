@@ -58,11 +58,20 @@ if __name__ == '__main__':
     standard = ["VGG11_bn", "VGG16_bn", "VGG19_bn"]
     timm = ['inception_resnet_v2','vit_large_patch16_224']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
-    models_list = [
-                      'swin_base_patch4_window7_224',
-                      'seresnet50',
-                      'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
-                      'wide_resnet50_2', 'convit_small']
+
+    models_list = ['swin_base_patch4_window7_224','seresnet50','gluon_resnet50_v1c', 'gluon_resnext101_64x4d','wide_resnet50_2',
+                   'convit_small',
+                   'ResNet50', 'AlexNet', 'Densenet121', 'Densenet161', 'Densenet169',
+                   'Densenet201', 'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18',
+                   'ResNet34', 'ShuffleNetV2x05', 'ShuffleNetV2x10', 'Squeezenet1_0', 'Squeezenet1_1',
+                   'VGG11', 'VGG11_bn', 'VGG13', 'VGG13_bn', 'VGG16',
+                   'VGG16_bn', 'VGG19', 'VGG19_bn', 'efficientnet_b0', 'efficientnet_b1',
+                   'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5', 'mnasnet05',
+                   'mnasnet10', 'mobilenet_v2', 'mobilenet_v3_large', 'mobilenet_v3_small']
     model_name = models_list[num]
-    features = encoding(model_name, "Timm", "V1")
-    encoding(model_name, "Timm", "V2", features)
+    if num<=5:
+        features = encoding(model_name, "Timm", "V1")
+        encoding(model_name, "Timm", "V2", features)
+    else:
+        features = encoding(model_name, "Standard", "V1")
+        encoding(model_name, "Standard", "V2", features)
