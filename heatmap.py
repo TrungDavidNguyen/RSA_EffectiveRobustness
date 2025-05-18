@@ -1,0 +1,44 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from scipy.stats import linregress
+
+def create_heatmap(evaluation):
+    roi_names = ["V1","V2","V4","IT"]
+    ood_datasets = pd.read_csv("results/effective_robustness.csv").columns[1:]
+    if evaluation in ["rsa", "rsa_synthetic"]:
+        roi_name = f"%R2_"
+    elif evaluation in ["encoding", "encoding_synthetic"]:
+        roi_name = f"R_"
+
+    # Initialize a results DataFrame
+    r_value_matrix = pd.DataFrame(index=ood_datasets, columns=roi_names)
+
+    for ood_dataset in ood_datasets:
+        for roi in roi_names:
+            brain_similarity = pd.read_csv(f"results/{evaluation}.csv")
+            brain_similarity = brain_similarity.dropna(subset=[roi_name + roi])
+
+            robustness = pd.read_csv("results/effective_robustness.csv")
+            df = pd.merge(brain_similarity, robustness, on='Model', how='inner')
+
+            if ood_dataset == "imagenet-a":
+                df = df[df['Model'].str.lower() != "resnet50"]
+                df = df.reset_index(drop=True)
+            print(roi_name + roi)
+            print(ood_dataset)
+            # Perform linear regression and store r-value
+            slope, intercept, r_value, p_value, std_err = linregress(df[roi_name + roi], df[ood_dataset])
+            r_value_matrix.loc[ood_dataset, roi] = r_value
+    r_value_matrix = r_value_matrix.astype(float)
+
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', center=0, fmt=".2f")
+    plt.title(f"{roi_name}values between Brain Similarity ({evaluation}) and Effective Robustness")
+    plt.xlabel("ROI")
+    plt.ylabel("OOD Dataset")
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == '__main__':
+    create_heatmap("rsa")

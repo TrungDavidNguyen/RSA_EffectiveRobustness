@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from scipy.stats import linregress
 
 
 def create_bar_plot(method, rois, model=None):
@@ -12,7 +13,10 @@ def create_bar_plot(method, rois, model=None):
         eval = "%R2"
     elif method == "encoding":
         eval = "R"
+    df = df.dropna(subset=[f"{eval}_{rois[0]} {method}"])
 
+    slope, intercept, r_value, p_value, std_err = linregress(df[f"{eval}_{rois[0]} {method}_synthetic"], df[f"{eval}_{rois[0]} {method}"])
+    print(r_value)
     # Set model as index
     df_plot = df.set_index('Model')
     order = []

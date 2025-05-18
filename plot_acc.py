@@ -13,7 +13,7 @@ def create_plot(ood_dataset, roi, evaluation):
 
 
     brain_similarity = pd.read_csv(f"results/{evaluation}.csv")
-    robustness = pd.read_csv("results/effective_robustness.csv")
+    robustness = pd.read_csv("results/accuracies.csv")
     categories = pd.read_csv("results/categories.csv")
 
     brain_similarity = brain_similarity.dropna(subset=[roi_name])
@@ -73,7 +73,7 @@ def create_plot(ood_dataset, roi, evaluation):
     plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
 
     plt.xlabel(eval_name)
-    plt.ylabel("Effective Robustness")
+    plt.ylabel("Accuracy")
     plt.title(f"{roi} and {ood_dataset}")
     plt.tight_layout()
     plt.savefig(f"plots/{roi}_{ood_dataset}_{evaluation}")
@@ -83,4 +83,4 @@ def create_plot(ood_dataset, roi, evaluation):
 if __name__ == '__main__':
     for ood_dataset in ["imagenet-r", "imagenet-sketch", "imagenetv2-matched-frequency", "imagenet-a"]:
         for roi in ["V1", "V2", "V4","IT"]:
-            create_plot(ood_dataset, roi, "encoding")
+            create_plot(ood_dataset, roi, "rsa_synthetic")
