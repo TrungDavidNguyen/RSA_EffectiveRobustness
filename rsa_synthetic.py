@@ -53,9 +53,6 @@ if __name__ == '__main__':
     num = int(sys.argv[1])
     models_list = ['VGG19', 'VGG19_bn', 'efficientnet_b0']
     model_name = models_list[num]
-    if num<=0:
-        main(model_name, "Timm", "V1")
-        main(model_name, "Timm", "V2")
-    else:
-        main(model_name, "Standard", "V1")
-        main(model_name, "Standard", "V2")
+
+    main(model_name, "Standard", "V1")
+    main(model_name, "Standard", "V2")
