@@ -51,8 +51,11 @@ def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available(
 
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    models_list = ['VGG19', 'VGG19_bn', 'efficientnet_b0']
+    models_list = ['VGG19', 'VGG19_bn', 'efficientnet_b0', "cornet_s", "cornet_z"]
     model_name = models_list[num]
-
-    main(model_name, "Standard", "V1")
-    main(model_name, "Standard", "V2")
+    if num > 2:
+        main(model_name, "Standard", "V1")
+        main(model_name, "Standard", "V2")
+    else:
+        main(model_name, "Cornet", "V1")
+        main(model_name, "Cornet", "V2")

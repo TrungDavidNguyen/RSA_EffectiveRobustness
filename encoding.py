@@ -57,7 +57,11 @@ if __name__ == '__main__':
     standard = ["efficientnet_b5"]
     timm = ["convit_small", "inception_resnet_v2", "vit_large_patch16_224"]
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
-    models_list = ['efficientnet_b1', "VGG19", "VGG19_bn"]
+    models_list = ['efficientnet_b1', "VGG19", "VGG19_bn", "cornet_s", "cornet_z"]
     model_name = models_list[num]
-    features = encoding(model_name, "Standard", "V1")
-    encoding(model_name, "Standard", "V2", features)
+    if num > 2:
+        features = encoding(model_name, "Cornet", "V1")
+        encoding(model_name, "Cornet", "V2", features)
+    else:
+        features = encoding(model_name, "Standard", "V1")
+        encoding(model_name, "Standard", "V2", features)

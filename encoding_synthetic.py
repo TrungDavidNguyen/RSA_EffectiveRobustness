@@ -59,8 +59,12 @@ if __name__ == '__main__':
     timm = ['inception_resnet_v2','vit_large_patch16_224']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
-    models_list = ['VGG16']
+    models_list = ['VGG16', "cornet_s", "cornet_z"]
     model_name = models_list[num]
 
-    features = encoding(model_name, "Standard", "V1")
-    encoding(model_name, "Standard", "V2", features)
+    if num > 0:
+        features = encoding(model_name, "Cornet", "V1")
+        encoding(model_name, "Cornet", "V2", features)
+    else:
+        features = encoding(model_name, "Standard", "V1")
+        encoding(model_name, "Standard", "V2", features)

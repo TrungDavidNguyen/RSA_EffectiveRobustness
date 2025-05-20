@@ -33,8 +33,8 @@ def create_bar_plot(method, rois, model=None):
     # Add labels
     plt.xlabel('Model')
     plt.ylabel(method)
-    plt.title(f'{method} results per Model')
-    plt.legend(title='Category')  # Legend for 'a' and 'b'
+    plt.title(f'{method} {eval} results per Model')
+    plt.legend(title='ROI/Method/Dataset')  # Legend for 'a' and 'b'
     plt.tight_layout()
     plt.show()
 
