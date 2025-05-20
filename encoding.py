@@ -57,9 +57,7 @@ if __name__ == '__main__':
     standard = ["efficientnet_b5"]
     timm = ["convit_small", "inception_resnet_v2", "vit_large_patch16_224"]
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
-    models_list = ['VGG11', 'VGG11_bn', 'VGG13_bn', 'VGG16', 'VGG16_bn',
-                   'VGG19', 'VGG19_bn', 'efficientnet_b1', 'efficientnet_b2','mnasnet10',
-                   'mobilenet_v2', 'mobilenet_v3_large', 'mobilenet_v3_small']
+    models_list = ['efficientnet_b1', "VGG19", "VGG19_bn"]
     model_name = models_list[num]
     features = encoding(model_name, "Standard", "V1")
     encoding(model_name, "Standard", "V2", features)
