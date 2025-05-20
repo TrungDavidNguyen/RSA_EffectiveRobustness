@@ -5,7 +5,7 @@ from scipy.stats import linregress
 
 def create_heatmap(evaluation):
     roi_names = ["V1","V2","V4","IT"]
-    ood_datasets = pd.read_csv("results/effective_robustness.csv").columns[1:]
+    ood_datasets = pd.read_csv("results/effective_robustness.csv").columns[1:6]
     if evaluation in ["rsa", "rsa_synthetic"]:
         roi_name = f"%R2_"
     elif evaluation in ["encoding", "encoding_synthetic"]:
@@ -22,11 +22,14 @@ def create_heatmap(evaluation):
             robustness = pd.read_csv("results/effective_robustness.csv")
             df = pd.merge(brain_similarity, robustness, on='Model', how='inner')
 
+            categories = pd.read_csv("results/categories.csv")
+            df = pd.merge(df, categories, on='Model', how='inner')
             if ood_dataset == "imagenet-a":
                 df = df[df['Model'].str.lower() != "resnet50"]
                 df = df.reset_index(drop=True)
-            print(roi_name + roi)
-            print(ood_dataset)
+            #df = df[df["architecture"] != "VIT"]
+            #df = df[df["imagenet1k"] > 70]
+
             # Perform linear regression and store r-value
             slope, intercept, r_value, p_value, std_err = linregress(df[roi_name + roi], df[ood_dataset])
             r_value_matrix.loc[ood_dataset, roi] = r_value
@@ -34,11 +37,11 @@ def create_heatmap(evaluation):
 
     plt.figure(figsize=(10, 8))
     sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', center=0, fmt=".2f")
-    plt.title(f"{roi_name}values between Brain Similarity ({evaluation}) and Effective Robustness")
+    plt.title(f"Correlation between Brain Similarity ({evaluation}) and Effective Robustness")
     plt.xlabel("ROI")
     plt.ylabel("OOD Dataset")
     plt.tight_layout()
     plt.show()
 
 if __name__ == '__main__':
-    create_heatmap("rsa")
+    create_heatmap("rsa_synthetic")

@@ -40,4 +40,4 @@ def create_bar_plot(method, rois, model=None):
 
 
 if __name__ == '__main__':
-    create_bar_plot("encoding", ["V4"])
+    create_bar_plot("encoding", ["V1"])
