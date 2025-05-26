@@ -1,16 +1,12 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.stats import linregress
+from matplotlib.lines import Line2D
 
 
 def create_plot(ood_dataset, roi, evaluation):
-    if evaluation in ["rsa", "rsa_synthetic"]:
-        eval_name = f"%R2_{evaluation}"
-        roi_name = f"%R2_{roi}"
-    elif evaluation in ["encoding", "encoding_synthetic"]:
-        eval_name = f"R_{evaluation}"
-        roi_name = f"R_{roi}"
-
+    eval_name = f"%R2_{evaluation}" if evaluation in ["rsa", "rsa_synthetic"] else f"R_{evaluation}"
+    roi_name = f"%R2_{roi}" if evaluation in ["rsa", "rsa_synthetic"] else f"R_{roi}"
 
     brain_similarity = pd.read_csv(f"results/{evaluation}.csv")
     robustness = pd.read_csv("results/effective_robustness.csv")
@@ -63,7 +59,6 @@ def create_plot(ood_dataset, roi, evaluation):
              fontsize=12, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
 
     # Create custom legend entries for dataset (markers)
-    from matplotlib.lines import Line2D
     dataset_handles = [Line2D([0], [0], marker=marker_map[ds], color='w', label=ds,
                               markerfacecolor='gray', markersize=8, markeredgecolor='black')
                        for ds in datasets]
@@ -81,7 +76,7 @@ def create_plot(ood_dataset, roi, evaluation):
     plt.title(f"{roi} and {ood_dataset}")
     plt.tight_layout()
     plt.savefig(f"plots/{roi}_{ood_dataset}_{evaluation}")
-    plt.close()
+    plt.show()
 
 
 if __name__ == '__main__':

@@ -6,10 +6,7 @@ from scipy.stats import linregress
 def create_heatmap(evaluation):
     roi_names = ["V1","V2","V4","IT"]
     ood_datasets = pd.read_csv("results/accuracies.csv").columns[1:6]
-    if evaluation in ["rsa", "rsa_synthetic"]:
-        roi_name = f"%R2_"
-    elif evaluation in ["encoding", "encoding_synthetic"]:
-        roi_name = f"R_"
+    roi_name = "%R2_" if evaluation in ["rsa", "rsa_synthetic"] else "R_"
 
     # Initialize a results DataFrame
     r_value_matrix = pd.DataFrame(index=ood_datasets, columns=roi_names)

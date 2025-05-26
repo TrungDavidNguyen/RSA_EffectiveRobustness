@@ -3,12 +3,9 @@ import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
 
-def create_bar_plot(method, rois, model=None):
+def create_bar_plot_by_model(method, rois, model=None):
     df = pd.read_csv(f"results/{method}.csv")
-    if method in ["rsa", "rsa_synthetic"]:
-        eval = "%R2"
-    else:
-        eval = "R"
+    eval = "%R2" if method in ["rsa", "rsa_synthetic"] else "R"
 
     # Set model as index
     df_plot = df.set_index('Model')
@@ -32,6 +29,47 @@ def create_bar_plot(method, rois, model=None):
     plt.show()
 
 
+def create_bar_plot_by_roi(method, roi):
+    # Load data
+    df = pd.read_csv(f"results/{method}.csv")
+    categories = pd.read_csv("results/categories.csv")
+
+    # Get architecture mapping per model
+    architectures = categories["architecture"].unique()
+
+    # Create color map
+    colors = plt.cm.tab10.colors
+    color_map = {arch: colors[i % len(colors)] for i, arch in enumerate(architectures)}
+
+    # Determine which column to use for y-axis
+    eval_col = "%R2" if method in ["rsa", "rsa_synthetic"] else "R"
+    column_name = f"{eval_col}_{roi}"
+
+    # Merge to get architecture info in df
+    df = df.merge(categories[['Model', 'architecture']], left_on='Model', right_on='Model', how='left')
+
+    # Assign colors to each bar based on architecture
+    bar_colors = df['architecture'].map(color_map)
+
+    # Create bar plot
+    plt.figure(figsize=(10, 6))
+    bars = plt.bar(df['Model'], df[column_name], color=bar_colors)
+
+    # Add labels and title
+    plt.xlabel('Model')
+    plt.ylabel(f'{eval_col} value')
+    plt.title(f'Method: {method} – ROI: {roi}')
+    plt.xticks(rotation=45, ha='right')
+
+    # Create legend
+    handles = [plt.Rectangle((0, 0), 1, 1, color=color_map[arch]) for arch in architectures]
+    plt.legend(handles, architectures, title='Architecture')
+
+    # Layout adjustment
+    plt.tight_layout()
+    plt.show()
+
+
 def corr(method, rois):
     nsd = pd.read_csv(f"results/{method}.csv")
     nsd_synthetic = pd.read_csv(f"results/{method}_synthetic.csv")
@@ -48,4 +86,5 @@ def corr(method, rois):
     print(r_value)
 
 if __name__ == '__main__':
-    create_bar_plot("encoding_synthetic", ["V1","V2","V4","IT"])
+    #create_bar_plot_by_model("encoding_synthetic", ["V1","V2","V4","IT"])
+    create_bar_plot_by_roi("encoding", "V1")
