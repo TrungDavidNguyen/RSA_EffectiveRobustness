@@ -54,7 +54,7 @@ def encoding(model_name, netset, roi_name, features=None):
 if __name__ == '__main__':
     num = int(sys.argv[1])
 
-    models_list = ['convit_small']
+    models_list = ['vit_base_patch16_224']
     model_name = models_list[num]
-    features = encoding(model_name, "Timm", "V4")
-    encoding(model_name, "Timm", "IT", features)
+    features = encoding(model_name, "Timm", "V1")
+    encoding(model_name, "Timm", "V2", features)
