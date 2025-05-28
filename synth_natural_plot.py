@@ -71,9 +71,9 @@ def create_plot(roi, evaluation):
 
     plt.xlabel(evaluation)
     plt.ylabel(f"{evaluation}_synthetic")
-    plt.title(f"{evaluation} vs {evaluation}_synthetic")
+    plt.title(f"{evaluation}_synthetic vs {evaluation}")
     plt.tight_layout()
-    plt.savefig(f"plots/{evaluation} vs {evaluation}_synthetic")
+    plt.savefig(f"plots/{evaluation}_synthetic vs {evaluation}")
     plt.show()
 
 

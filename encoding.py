@@ -58,3 +58,6 @@ if __name__ == '__main__':
     model_name = models_list[num]
     features = encoding(model_name, "Timm", "V1")
     encoding(model_name, "Timm", "V2", features)
+    encoding(model_name, "Timm", "V4", features)
+    encoding(model_name, "Timm", "IT", features)
+
