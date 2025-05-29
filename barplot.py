@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 from scipy.stats import linregress
 
 
@@ -67,6 +68,8 @@ def create_bar_plot_by_roi(method, roi):
 
     # Layout adjustment
     plt.tight_layout()
+    os.makedirs("plots/barplot", exist_ok=True)
+    plt.savefig(f"plots/barplot/barplot_{roi}_{method}.png")
     plt.show()
 
 
@@ -87,4 +90,8 @@ def corr(method, rois):
 
 if __name__ == '__main__':
     #create_bar_plot_by_model("encoding_synthetic", ["V1","V2","V4","IT"])
-    create_bar_plot_by_roi("encoding", "V1")
+    for roi in ["V1","V2","V4","IT"]:
+        create_bar_plot_by_roi("rsa", roi)
+        create_bar_plot_by_roi("encoding", roi)
+        create_bar_plot_by_roi("rsa_synthetic", roi)
+        create_bar_plot_by_roi("encoding_synthetic", roi)
