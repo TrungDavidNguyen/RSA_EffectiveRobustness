@@ -54,17 +54,11 @@ def encoding(model_name, netset, roi_name, features=None):
     return features
 
 if __name__ == '__main__':
-    num = int(sys.argv[1])
-    standard = ["VGG11_bn", "VGG16_bn", "VGG19_bn"]
-    timm = ['inception_resnet_v2','vit_large_patch16_224']
-    cornet = ["cornet_s", "cornet_z", "cornet_rt"]
+    #num = int(sys.argv[1])
 
-    models_list = ['VGG16', "cornet_s", "cornet_z"]
+    num = 0
+    models_list = ["cornet_rt"]
     model_name = models_list[num]
 
-    if num > 0:
-        features = encoding(model_name, "Cornet", "V1")
-        encoding(model_name, "Cornet", "V2", features)
-    else:
-        features = encoding(model_name, "Standard", "V1")
-        encoding(model_name, "Standard", "V2", features)
+    features = encoding(model_name, "Cornet", "V1")
+    encoding(model_name, "Cornet", "V2", features)

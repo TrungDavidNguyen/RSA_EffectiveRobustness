@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
 from scipy.stats import linregress
 
 
@@ -65,18 +66,19 @@ def create_plot(roi, evaluation):
                                    linestyle='None', markersize=8)
                             for arch in architectures]
 
-    legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='upper right', fontsize=6, title_fontsize=8)
+    legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='lower left', fontsize=6, title_fontsize=8)
     plt.gca().add_artist(legend1)
     plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
 
     plt.xlabel(evaluation)
     plt.ylabel(f"{evaluation}_synthetic")
-    plt.title(f"{evaluation}_synthetic vs {evaluation}")
+    plt.title(f"{evaluation}_synthetic vs {evaluation} {roi}")
     plt.tight_layout()
-    plt.savefig(f"plots/{evaluation}_synthetic vs {evaluation}")
+    os.makedirs("plots/brain_similarity", exist_ok=True)
+    plt.savefig(f"plots/brain_similarity/{evaluation}_synthetic vs {evaluation}_{roi}")
     plt.show()
 
 
 if __name__ == '__main__':
     for roi in ["V1", "V2", "V4","IT"]:
-        create_plot(roi, "encoding")
+        create_plot(roi, "rsa")

@@ -139,10 +139,15 @@ def my_cleaner(features):
 
 if __name__ == '__main__':
     #num = int(sys.argv[1])
+    """    models_list = ['vit_base_patch16_clip_224.openai', 'efficientnet_b3.ra2_in1k', 'vit_so400m_patch14_siglip_384', 'vit_base_patch16_224.dino', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
+                       'gmlp_s16_224.ra3_in1k', 'vit_base_patch16_224.mae', 'convnext_base.fb_in22k_ft_in1k',]
+        model_name = models_list[num]
+    
+        features = encoding_custom(model_name,  "V1")
+        encoding_custom(model_name, "V2", features)"""
     num = 0
-    models_list = ['vit_base_patch16_clip_224.openai', 'efficientnet_b3.ra2_in1k', 'vit_so400m_patch14_siglip_384', 'vit_base_patch16_224.dino', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
-                   'gmlp_s16_224.ra3_in1k', 'vit_base_patch16_224.mae', 'convnext_base.fb_in22k_ft_in1k',]
+    models_list = ["cornet_rt"]
     model_name = models_list[num]
 
-    features = encoding_custom(model_name,  "V1")
-    encoding_custom(model_name, "V2", features)
+    features = encoding(model_name, "Cornet", "V1")
+    encoding(model_name, "Cornet", "V2", features)
