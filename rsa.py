@@ -8,7 +8,10 @@ from net2brain.utils.download_datasets import DatasetNSD_872
 from net2brain.feature_extraction import FeatureExtractor
 from net2brain.rdm_creation import RDMCreator
 from utils.rsa_new import RSA
-
+from timm.data import resolve_data_config
+from timm.data.transforms_factory import create_transform
+from timm import create_model
+import torchextractor as tx
 
 def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available() else "cpu"):
     # Set paths
@@ -49,9 +52,87 @@ def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available(
     RSA(save_path, brain_path,model_name,roi_name, "rsa")
 
 
+def main_custom(model_name, roi_name, device="cuda" if torch.cuda.is_available() else "cpu"):
+    # Set paths
+    dataset = "NSD Dataset"
+    images = 0
+    rdm_save_path = ""
+    if dataset == "NSD Dataset":
+        images = 872
+        rdm_save_path = "rdm"
+    elif dataset == "NSD Synthetic":
+        images = 284
+        rdm_save_path = "rdm_synthetic"
+
+
+    current_dir = os.getcwd()
+    save_path = os.path.join(current_dir, f"{model_name}_RDM")
+    rdm_path = f"{model_name}_RDM"
+    feat_path = f"{model_name}_Feat"
+    # Load dataset
+    #dataset_path = DatasetNSD_872.load_dataset()
+    #stimuli_path = dataset_path["NSD_872_images"]
+    stimuli_path = os.path.join(os.getcwd(),dataset, f"NSD_{images}_images")
+
+    if not os.path.isdir(save_path):
+        # Extract features
+        model = create_model(model_name, pretrained=True)
+        fx = FeatureExtractor(model=model, device=device, preprocessor=my_preprocessor, feature_cleaner=my_cleaner,
+                              extraction_function=my_extractor)
+        layers_to_extract = fx.get_all_layers()
+        fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=True,  layers_to_extract=layers_to_extract)
+        # Create RDM of model
+        creator = RDMCreator(verbose=True, device=device)
+        save_path = creator.create_rdms(feature_path=feat_path, save_path=rdm_path, save_format='npz')
+
+    feat_path_complete = os.path.join(current_dir, feat_path)
+    if os.path.exists(feat_path_complete):
+        shutil.rmtree(feat_path_complete)
+
+    brain_path = os.path.join(current_dir, rdm_save_path, roi_name)
+    RSA(save_path, brain_path,model_name,roi_name, "rsa")
+
+
+def my_preprocessor(image, model_name, device):
+    """
+    Args:
+        image (Union[Image.Image, List[Image.Image]]): A PIL Image or a list of PIL Images.
+        model_name (str): The name of the model, used to determine specific preprocessing if necessary.
+        device (str): The device to which the tensor should be transferred ('cuda' for GPU, 'cpu' for CPU).
+
+    Returns:
+        Union[torch.Tensor, List[torch.Tensor]]: The preprocessed image(s) as PyTorch tensor(s).
+    """
+
+    model = create_model(model_name, pretrained=True)
+    config = resolve_data_config({}, model=model)
+    transform = create_transform(**config)
+    img_tensor = transform(image).unsqueeze(0)
+    if device == 'cuda':
+        img_tensor = img_tensor.cuda()
+
+    return img_tensor
+
+
+def my_extractor(preprocessed_data, layers_to_extract, model):
+    # Create a extractor instance
+    extractor_model = tx.Extractor(model, layers_to_extract)
+
+    # Extract actual features
+    _, features = extractor_model(preprocessed_data)
+
+    return features
+
+
+def my_cleaner(features):
+    return features
+
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    models_list = ['cornet_rt','cornet_rt']
+    models_list = ['vit_base_patch16_clip_224.openai', 'efficientnet_b3.ra2_in1k', 'vit_so400m_patch14_siglip_384', 'vit_base_patch16_224.dino', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
+                   'gmlp_s16_224.ra3_in1k', 'vit_base_patch16_224.mae', 'convnext_base.fb_in22k_ft_in1k']
     model_name = models_list[num]
-    main(model_name, "Cornet", "V1")
-    main(model_name, "Cornet", "V2")
+    main_custom(model_name, "Timm", "V1")
+    main_custom(model_name, "Timm", "V2")
+    main_custom(model_name, "Timm", "V4")
+    main_custom(model_name, "Timm", "IT")

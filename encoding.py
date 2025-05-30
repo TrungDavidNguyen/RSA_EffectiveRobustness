@@ -66,7 +66,7 @@ def encoding_custom(model_name, roi_name, features=None):
     # Extract features
     if features is None:
         model = create_model(model_name, pretrained=True)
-        fx = FeatureExtractor(model=model, device='cpu', preprocessor=my_preprocessor, feature_cleaner=my_cleaner,
+        fx = FeatureExtractor(model=model, device=device, preprocessor=my_preprocessor, feature_cleaner=my_cleaner,
                               extraction_function=my_extractor)
         layers_to_extract = fx.get_all_layers()
         features = fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
@@ -138,16 +138,12 @@ def my_cleaner(features):
 
 
 if __name__ == '__main__':
-    #num = int(sys.argv[1])
-    """    models_list = ['vit_base_patch16_clip_224.openai', 'efficientnet_b3.ra2_in1k', 'vit_so400m_patch14_siglip_384', 'vit_base_patch16_224.dino', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
-                       'gmlp_s16_224.ra3_in1k', 'vit_base_patch16_224.mae', 'convnext_base.fb_in22k_ft_in1k',]
-        model_name = models_list[num]
-    
-        features = encoding_custom(model_name,  "V1")
-        encoding_custom(model_name, "V2", features)"""
-    num = 0
-    models_list = ["cornet_rt"]
+    num = int(sys.argv[1])
+    models_list = ['vit_base_patch16_clip_224.openai', 'efficientnet_b3.ra2_in1k', 'vit_so400m_patch14_siglip_384', 'vit_base_patch16_224.dino', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
+                   'gmlp_s16_224.ra3_in1k', 'vit_base_patch16_224.mae', 'convnext_base.fb_in22k_ft_in1k']
     model_name = models_list[num]
 
-    features = encoding(model_name, "Cornet", "V1")
-    encoding(model_name, "Cornet", "V2", features)
+    features = encoding_custom(model_name,  "V1")
+    encoding_custom(model_name, "V2", features)
+    encoding_custom(model_name, "V4", features)
+    encoding_custom(model_name, "IT", features)
