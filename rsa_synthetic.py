@@ -93,7 +93,7 @@ def main_custom(model_name, netset, roi_name, device="cuda" if torch.cuda.is_ava
     RSA(save_path, brain_path,model_name,roi_name, "rsa_synthetic")
 
 
-def my_preprocessor(image, model_name, device):
+def my_preprocessor(image, model, device):
     """
     Args:
         image (Union[Image.Image, List[Image.Image]]): A PIL Image or a list of PIL Images.
@@ -104,7 +104,6 @@ def my_preprocessor(image, model_name, device):
         Union[torch.Tensor, List[torch.Tensor]]: The preprocessed image(s) as PyTorch tensor(s).
     """
 
-    model = create_model(model_name, pretrained=True)
     config = resolve_data_config({}, model=model)
     transform = create_transform(**config)
     img_tensor = transform(image).unsqueeze(0)
