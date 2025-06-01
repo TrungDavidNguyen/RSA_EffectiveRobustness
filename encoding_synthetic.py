@@ -57,7 +57,7 @@ def encoding(model_name, netset, roi_name, features=None):
     df.to_csv(csv_filename, index=False)
     return features
 
-def encoding_custom(model_name, netset, roi_name, features=None):
+def encoding_custom(model_name, roi_name, features=None):
     dataset = "encoding_synthetic"
     device = "cuda" if torch.cuda.is_available() else "cpu"
     current_dir = os.getcwd()
