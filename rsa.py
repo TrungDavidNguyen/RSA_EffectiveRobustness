@@ -80,7 +80,7 @@ def main_custom(model_name, roi_name, device="cuda" if torch.cuda.is_available()
         fx = FeatureExtractor(model=model, device=device, preprocessor=my_preprocessor, feature_cleaner=my_cleaner,
                               extraction_function=my_extractor)
         layers_to_extract = fx.get_all_layers()
-        fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=True,  layers_to_extract=layers_to_extract)
+        fx.extract(data_path=stimuli_path, save_path=feat_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
         # Create RDM of model
         creator = RDMCreator(verbose=True, device=device)
         save_path = creator.create_rdms(feature_path=feat_path, save_path=rdm_path, save_format='npz')
@@ -128,7 +128,7 @@ def my_cleaner(features):
 
 if __name__ == '__main__':
     num = int(sys.argv[1])
-    models_list = ['vit_base_patch16_clip_224.openai', 'efficientnet_b3.ra2_in1k', 'vit_so400m_patch14_siglip_384', 'vit_base_patch16_224.dino', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
+    models_list = ['vit_base_patch16_clip_224.openai', 'efficientnet_b3.ra2_in1k', 'vit_base_patch16_224.dino', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
                    'gmlp_s16_224.ra3_in1k', 'vit_base_patch16_224.mae', 'convnext_base.fb_in22k_ft_in1k']
     model_name = models_list[num]
     main_custom(model_name, "Timm", "V1")
