@@ -131,7 +131,7 @@ if __name__ == '__main__':
     models_list = ['vit_base_patch16_clip_224.openai', 'efficientnet_b3.ra2_in1k', 'vit_base_patch16_224.dino', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
                    'gmlp_s16_224.ra3_in1k', 'vit_base_patch16_224.mae', 'convnext_base.fb_in22k_ft_in1k']
     model_name = models_list[num]
-    main_custom(model_name, "Timm", "V1")
-    main_custom(model_name, "Timm", "V2")
-    main_custom(model_name, "Timm", "V4")
-    main_custom(model_name, "Timm", "IT")
+    main_custom(model_name, "V1")
+    main_custom(model_name, "V2")
+    main_custom(model_name, "V4")
+    main_custom(model_name, "IT")
