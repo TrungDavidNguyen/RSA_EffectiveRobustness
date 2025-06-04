@@ -54,7 +54,155 @@ def standard(model_name):
 
     df.to_csv(csv_filename, index=False)
 
-def timm(model_name):
+def timm_1k(model_name):
+    # measure accuracy
+    # get model and transform
+    model = create_model(model_name, pretrained=True)
+    config = resolve_data_config({}, model=model)
+    transform = create_transform(**config)
+    dataset_name = "imagenet1k"
+    dataset_path = os.path.join(os.getcwd(), "imagenet-val")
+
+    df = pd.read_csv('results/accuracies.csv')
+    accuracy = measure_accuracy(model, dataset_path, transform)
+    print(model_name, " accuracy", accuracy)
+    if dataset_name not in df.columns:
+        df[dataset_name] = None
+    df.loc[df['Model'] == model_name, dataset_name] = accuracy
+
+    # Save to CSV
+
+    csv_filename = 'results/accuracies.csv'
+
+    if os.path.exists(csv_filename):
+        df = pd.read_csv(csv_filename)
+        if model_name in df['Model'].values:
+            if dataset_name not in df.columns:
+                df[dataset_name] = None
+            df.loc[df['Model'] == model_name, dataset_name] = accuracy
+        else:
+            new_row = pd.Series({col: None for col in df.columns})
+            new_row['Model'] = model_name
+            new_row[dataset_name] = accuracy
+            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        df = pd.DataFrame({"Model": [model_name], dataset_name: [accuracy]})
+
+    df.to_csv(csv_filename, index=False)
+
+
+def timm_sub_a(model_name):
+    # measure accuracy
+    # get model and transform
+    model = create_model(model_name, pretrained=True)
+    config = resolve_data_config({}, model=model)
+    transform = create_transform(**config)
+    dataset_name = "imagenet1k-subset-a"
+    dataset_path = os.path.join(os.getcwd(), "imagenet-val")
+
+    df = pd.read_csv('results/accuracies.csv')
+    accuracy = measure_accuracy_subset(model, dataset_path,"a", transform)
+    print(model_name, " accuracy", accuracy)
+    if dataset_name not in df.columns:
+        df[dataset_name] = None
+    df.loc[df['Model'] == model_name, dataset_name] = accuracy
+
+    # Save to CSV
+
+    csv_filename = 'results/accuracies.csv'
+
+    if os.path.exists(csv_filename):
+        df = pd.read_csv(csv_filename)
+        if model_name in df['Model'].values:
+            if dataset_name not in df.columns:
+                df[dataset_name] = None
+            df.loc[df['Model'] == model_name, dataset_name] = accuracy
+        else:
+            new_row = pd.Series({col: None for col in df.columns})
+            new_row['Model'] = model_name
+            new_row[dataset_name] = accuracy
+            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        df = pd.DataFrame({"Model": [model_name], dataset_name: [accuracy]})
+
+    df.to_csv(csv_filename, index=False)
+
+
+def timm_sub_r(model_name):
+    # measure accuracy
+    # get model and transform
+    model = create_model(model_name, pretrained=True)
+    config = resolve_data_config({}, model=model)
+    transform = create_transform(**config)
+    dataset_name = "imagenet1k-subset-r"
+    dataset_path = os.path.join(os.getcwd(), "imagenet-val")
+
+    df = pd.read_csv('results/accuracies.csv')
+    accuracy = measure_accuracy_subset(model, dataset_path,"r", transform)
+    print(model_name, " accuracy", accuracy)
+    if dataset_name not in df.columns:
+        df[dataset_name] = None
+    df.loc[df['Model'] == model_name, dataset_name] = accuracy
+
+    # Save to CSV
+
+    csv_filename = 'results/accuracies.csv'
+
+    if os.path.exists(csv_filename):
+        df = pd.read_csv(csv_filename)
+        if model_name in df['Model'].values:
+            if dataset_name not in df.columns:
+                df[dataset_name] = None
+            df.loc[df['Model'] == model_name, dataset_name] = accuracy
+        else:
+            new_row = pd.Series({col: None for col in df.columns})
+            new_row['Model'] = model_name
+            new_row[dataset_name] = accuracy
+            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        df = pd.DataFrame({"Model": [model_name], dataset_name: [accuracy]})
+
+    df.to_csv(csv_filename, index=False)
+
+
+def timm_r(model_name):
+    # measure accuracy
+    # get model and transform
+    model = create_model(model_name, pretrained=True)
+    config = resolve_data_config({}, model=model)
+    transform = create_transform(**config)
+    dataset_name = "imagenet-r"
+    dataset_path = os.path.join(os.getcwd(), "imagenet-r")
+
+    df = pd.read_csv('results/accuracies.csv')
+    accuracy = measure_accuracy_r(model, dataset_path, transform)
+    print(model_name, " accuracy", accuracy)
+    if dataset_name not in df.columns:
+        df[dataset_name] = None
+    df.loc[df['Model'] == model_name, dataset_name] = accuracy
+
+    # Save to CSV
+
+    csv_filename = 'results/accuracies.csv'
+
+    if os.path.exists(csv_filename):
+        df = pd.read_csv(csv_filename)
+        if model_name in df['Model'].values:
+            if dataset_name not in df.columns:
+                df[dataset_name] = None
+            df.loc[df['Model'] == model_name, dataset_name] = accuracy
+        else:
+            new_row = pd.Series({col: None for col in df.columns})
+            new_row['Model'] = model_name
+            new_row[dataset_name] = accuracy
+            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        df = pd.DataFrame({"Model": [model_name], dataset_name: [accuracy]})
+
+    df.to_csv(csv_filename, index=False)
+
+
+def timm_a(model_name):
     # measure accuracy
     # get model and transform
     model = create_model(model_name, pretrained=True)
@@ -90,6 +238,44 @@ def timm(model_name):
 
     df.to_csv(csv_filename, index=False)
 
+
+def timm_sketch(model_name):
+    # measure accuracy
+    # get model and transform
+    model = create_model(model_name, pretrained=True)
+    config = resolve_data_config({}, model=model)
+    transform = create_transform(**config)
+    dataset_name = "imagenet-sketch"
+    dataset_path = os.path.join(os.getcwd(), "sketch")
+
+    df = pd.read_csv('results/accuracies.csv')
+    accuracy = measure_accuracy(model, dataset_path, transform)
+    print(model_name, " accuracy", accuracy)
+    if dataset_name not in df.columns:
+        df[dataset_name] = None
+    df.loc[df['Model'] == model_name, dataset_name] = accuracy
+
+    # Save to CSV
+
+    csv_filename = 'results/accuracies.csv'
+
+    if os.path.exists(csv_filename):
+        df = pd.read_csv(csv_filename)
+        if model_name in df['Model'].values:
+            if dataset_name not in df.columns:
+                df[dataset_name] = None
+            df.loc[df['Model'] == model_name, dataset_name] = accuracy
+        else:
+            new_row = pd.Series({col: None for col in df.columns})
+            new_row['Model'] = model_name
+            new_row[dataset_name] = accuracy
+            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        df = pd.DataFrame({"Model": [model_name], dataset_name: [accuracy]})
+
+    df.to_csv(csv_filename, index=False)
+
+
 if __name__ == '__main__':
     num = int(sys.argv[1])
     """    models_list = ['ResNet50', 'AlexNet', 'Densenet121', 'Densenet161', 'Densenet169', 'Densenet201',
@@ -109,9 +295,13 @@ if __name__ == '__main__':
                       'coat_lite_mini','seresnet50',
                       'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
                       'wide_resnet50_2', 'convit_small']"""
-    models_list = ['inception_v3', 'xception',
-                        'resnext50_32x4d','vit_large_patch16_224']
-    #imagenetv2 = ['vit_large_patch16_224', 'wide_resnet50_2']
-    #imagenet-r = ["resnext50_32x4d"]
+    models_list = ['vit_base_patch16_clip_224.openai', 'efficientnet_b3.ra2_in1k', 'vit_base_patch16_224.dino', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
+                   'gmlp_s16_224.ra3_in1k', 'vit_base_patch16_224.mae', 'convnext_base.fb_in22k_ft_in1k']
     model_name = models_list[num]
-    timm(model_name)
+    timm_1k(model_name)
+    timm_sketch(model_name)
+    timm_sub_r(model_name)
+    timm_sub_a(model_name)
+    timm_r(model_name)
+    #timm_a(model_name)
+
