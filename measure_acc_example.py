@@ -299,7 +299,7 @@ if __name__ == '__main__':
                    'gmlp_s16_224.ra3_in1k', 'vit_base_patch16_224.mae', 'convnext_base.fb_in22k_ft_in1k']
     model_name = models_list[num]
     timm_1k(model_name)
-    timm_sketch(model_name)
+    #timm_sketch(model_name)
     timm_sub_r(model_name)
     timm_sub_a(model_name)
     timm_r(model_name)
