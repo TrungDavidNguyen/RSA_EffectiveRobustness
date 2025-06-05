@@ -101,7 +101,7 @@ def timm_sub_a(model_name):
     dataset_path = os.path.join(os.getcwd(), "imagenet-val")
 
     df = pd.read_csv('results/accuracies.csv')
-    accuracy = measure_accuracy_subset(model, dataset_path,"a", transform)
+    accuracy = measure_accuracy_subset(model, dataset_path, transform,"a")
     print(model_name, " accuracy", accuracy)
     if dataset_name not in df.columns:
         df[dataset_name] = None
@@ -138,7 +138,7 @@ def timm_sub_r(model_name):
     dataset_path = os.path.join(os.getcwd(), "imagenet-val")
 
     df = pd.read_csv('results/accuracies.csv')
-    accuracy = measure_accuracy_subset(model, dataset_path,"r", transform)
+    accuracy = measure_accuracy_subset(model, dataset_path, transform,"r")
     print(model_name, " accuracy", accuracy)
     if dataset_name not in df.columns:
         df[dataset_name] = None
