@@ -92,9 +92,10 @@ def measure_accuracy_o(model, path, transform, device="cuda" if torch.cuda.is_av
 
 
 def measure_accuracy_subset(model, path, transform, dataset, device="cuda" if torch.cuda.is_available() else "cpu"):
+    sub_wnids_path = f'wnids/imagenet_{dataset}_wnids.json'
     with open(r'wnids/wnids.json', 'r') as f:
         all_wnids = json.load(f)
-    with open(f'wnids/imagenet_{dataset}_wnids.json', 'r') as f:
+    with open(sub_wnids_path, 'r') as f:
         subset_wnids = json.load(f)
     # Mapping from wnid to index in the 1000-class output
     wnid_to_index = {wnid: idx for idx, wnid in enumerate(all_wnids)}
