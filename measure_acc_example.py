@@ -91,7 +91,7 @@ if __name__ == '__main__':
     #dataset_path = os.path.join(os.getcwd(), "sketch")
     #timm(model_name, measure_accuracy, "imagenet-sketch", dataset_path)
     dataset_path = os.path.join(os.getcwd(), "imagenet-val")
-    timm(model_name, measure_accuracy_subset_r(), "imagenet1k-subset-r", dataset_path)
+    timm(model_name, measure_accuracy_subset_r, "imagenet1k-subset-r", dataset_path)
     dataset_path = os.path.join(os.getcwd(), "imagenet-val")
     timm(model_name, measure_accuracy_subset_a, "imagenet1k-subset-a", dataset_path)
     dataset_path = os.path.join(os.getcwd(), "imagenet-r")
