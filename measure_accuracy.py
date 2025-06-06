@@ -5,24 +5,33 @@ from torch.utils.data import Subset
 from tqdm import tqdm
 
 
-def measure_accuracy(model, path, transform, device="cuda" if torch.cuda.is_available() else "cpu"):
-    dataset = datasets.ImageFolder(path, transform=transform)
-    data_loader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False)
-
+def evaluate_model(model, dataloader, device, output_mask=None, label_map=None):
     model.to(device)
     model.eval()
+    correct = total = 0
 
-    correct = 0
-    total = 0
     with torch.inference_mode():
-        for inputs, labels in tqdm(data_loader, desc="Evaluating"):
+        for inputs, labels in tqdm(dataloader, desc="Evaluating"):
             inputs, labels = inputs.to(device), labels.to(device)
-            outputs = model(inputs)  # Predictions for batch
+            outputs = model(inputs)
+            if output_mask is not None:
+                outputs = outputs[:, output_mask]
+
             predicted = torch.argmax(outputs, dim=1)
-            correct += (predicted == labels).sum().item()  # Add num of correct predictions
+
+            if label_map is not None:
+                predicted = label_map[predicted]
+
+            correct += (predicted == labels).sum().item()
             total += labels.size(0)
-    top1_accuracy = correct / total * 100
-    return top1_accuracy
+
+    return (correct / total) * 100
+
+
+def measure_accuracy(model, path, transform, device=None):
+    dataset = datasets.ImageFolder(path, transform=transform)
+    data_loader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False)
+    return evaluate_model(model, data_loader, device)
 
 
 def measure_accuracy_o(model, path, transform, device="cuda" if torch.cuda.is_available() else "cpu"):
@@ -91,7 +100,7 @@ def measure_accuracy_o(model, path, transform, device="cuda" if torch.cuda.is_av
     return correct / total * 100
 
 
-def measure_accuracy_subset(model, path, transform, dataset, device="cuda" if torch.cuda.is_available() else "cpu"):
+def get_mask_map_indices(dataset, device="cuda" if torch.cuda.is_available() else "cpu"):
     sub_wnids_path = f'wnids/imagenet_{dataset}_wnids.json'
     with open(r'wnids/wnids.json', 'r') as f:
         all_wnids = json.load(f)
@@ -108,29 +117,33 @@ def measure_accuracy_subset(model, path, transform, dataset, device="cuda" if to
 
     subset_mask = [wnid in subset_wnids for wnid in all_wnids]
 
+    return subset_mask, subset_to_imagenet_tensor, subset_indices
+
+
+def measure_accuracy_subset_r(model, path, transform, device="cuda" if torch.cuda.is_available() else "cpu"):
+    subset_mask, subset_to_imagenet_tensor, subset_indices = get_mask_map_indices("r")
+
     # Load dataset
     full_dataset = datasets.ImageFolder(path, transform=transform)
     filtered_indices = [i for i, (_, label) in enumerate(full_dataset.samples) if label in subset_indices]
-    dataset = Subset(full_dataset, filtered_indices)
 
+    dataset = Subset(full_dataset, filtered_indices)
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False)
 
-    model.to(device)
-    model.eval()
+    return evaluate_model(model, data_loader, device, subset_mask, subset_to_imagenet_tensor)
 
-    correct = 0
-    total = 0
-    with torch.inference_mode():
-        for inputs, labels in tqdm(data_loader, desc="Evaluating"):
-            inputs, labels = inputs.to(device), labels.to(device)
-            outputs = model(inputs)[:, subset_mask]  # Predictions for batch
 
-            predicted = torch.argmax(outputs, dim=1)
-            subset_preds = subset_to_imagenet_tensor[predicted]
-            correct += (subset_preds == labels).sum().item()
-            total += labels.size(0)
-    top1_accuracy = correct / total * 100
-    return top1_accuracy
+def measure_accuracy_subset_a(model, path, transform, device="cuda" if torch.cuda.is_available() else "cpu"):
+    subset_mask, subset_to_imagenet_tensor, subset_indices = get_mask_map_indices("a")
+
+    # Load dataset
+    full_dataset = datasets.ImageFolder(path, transform=transform)
+    filtered_indices = [i for i, (_, label) in enumerate(full_dataset.samples) if label in subset_indices]
+
+    dataset = Subset(full_dataset, filtered_indices)
+    data_loader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False)
+
+    return evaluate_model(model, data_loader, device, subset_mask, subset_to_imagenet_tensor)
 
 
 def measure_accuracy_a(model, path, transform, device="cuda" if torch.cuda.is_available() else "cpu"):
@@ -139,23 +152,10 @@ def measure_accuracy_a(model, path, transform, device="cuda" if torch.cuda.is_av
     with open(r'wnids/imagenet_a_wnids.json', 'r') as f:
         imagenet_a_wnids = json.load(f)
     imagenet_a_mask = [wnid in imagenet_a_wnids for wnid in all_wnids]
+
     dataset = datasets.ImageFolder(path, transform=transform)
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False)
-
-    model.to(device)
-    model.eval()
-
-    correct = 0
-    total = 0
-    with torch.inference_mode():
-        for inputs, labels in tqdm(data_loader, desc="Evaluating"):
-            inputs, labels = inputs.to(device), labels.to(device)
-            outputs = model(inputs)[:, imagenet_a_mask]  # Predictions for batch
-            predicted = torch.argmax(outputs, dim=1)
-            correct += (predicted == labels).sum().item()  # Add num of correct predictions
-            total += labels.size(0)
-    top1_accuracy = correct / total * 100
-    return top1_accuracy
+    return evaluate_model(model, data_loader, device, imagenet_a_mask)
 
 
 def measure_accuracy_r(model, path, transform, device="cuda" if torch.cuda.is_available() else "cpu"):
@@ -164,20 +164,7 @@ def measure_accuracy_r(model, path, transform, device="cuda" if torch.cuda.is_av
     with open(r'wnids/imagenet_r_wnids.json', 'r') as f:
         imagenet_r_wnids = json.load(f)
     imagenet_r_mask = [wnid in imagenet_r_wnids for wnid in all_wnids]
+
     dataset = datasets.ImageFolder(path, transform=transform)
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False)
-
-    model.to(device)
-    model.eval()
-
-    correct = 0
-    total = 0
-    with torch.inference_mode():
-        for inputs, labels in tqdm(data_loader, desc="Evaluating"):
-            inputs, labels = inputs.to(device), labels.to(device)
-            outputs = model(inputs)[:, imagenet_r_mask]  # Predictions for batch
-            predicted = torch.argmax(outputs, dim=1)
-            correct += (predicted == labels).sum().item()  # Add num of correct predictions
-            total += labels.size(0)
-    top1_accuracy = correct / total * 100
-    return top1_accuracy
+    return evaluate_model(model, data_loader, device, imagenet_r_mask)
