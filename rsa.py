@@ -1,10 +1,8 @@
 import os
 import torch
-import pandas as pd
 import shutil
 import sys
 from net2brain.evaluations.rsa import RSA
-from net2brain.utils.download_datasets import DatasetNSD_872
 from net2brain.feature_extraction import FeatureExtractor
 from net2brain.rdm_creation import RDMCreator
 from utils.rsa_new import RSA
@@ -13,28 +11,12 @@ from timm.data.transforms_factory import create_transform
 from timm import create_model
 import torchextractor as tx
 
-def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available() else "cpu"):
-    # Set paths
-    dataset = "NSD Dataset"
-    images = 0
-    rdm_save_path = ""
-    if dataset == "NSD Dataset":
-        images = 872
-        rdm_save_path = "rdm"
-    elif dataset == "NSD Synthetic":
-        images = 284
-        rdm_save_path = "rdm_synthetic"
 
-
+def main(model_name, netset, roi_name, stimuli_path, dataset, rdm_save_path, device="cuda" if torch.cuda.is_available() else "cpu"):
     current_dir = os.getcwd()
-    save_path = os.path.join(current_dir, f"{model_name}_RDM")
-    rdm_path = f"{model_name}_RDM"
-    feat_path = f"{model_name}_Feat"
-    # Load dataset
-    #dataset_path = DatasetNSD_872.load_dataset()
-    #stimuli_path = dataset_path["NSD_872_images"]
-    stimuli_path = os.path.join(os.getcwd(),dataset, f"NSD_{images}_images")
-
+    rdm_path = f"{model_name}_RDM_{dataset}"
+    save_path = os.path.join(current_dir, rdm_path)
+    feat_path = f"{model_name}_Feat_{dataset}"
     if not os.path.isdir(save_path):
         # Extract features
         fx = FeatureExtractor(model=model_name, netset=netset, device=device)
@@ -49,31 +31,14 @@ def main(model_name, netset, roi_name, device="cuda" if torch.cuda.is_available(
         shutil.rmtree(feat_path_complete)
 
     brain_path = os.path.join(current_dir, rdm_save_path, roi_name)
-    RSA(save_path, brain_path,model_name,roi_name, "rsa")
+    RSA(save_path, brain_path,model_name,roi_name, dataset)
 
 
-def main_custom(model_name, roi_name, device="cuda" if torch.cuda.is_available() else "cpu"):
-    # Set paths
-    dataset = "NSD Dataset"
-    images = 0
-    rdm_save_path = ""
-    if dataset == "NSD Dataset":
-        images = 872
-        rdm_save_path = "rdm"
-    elif dataset == "NSD Synthetic":
-        images = 284
-        rdm_save_path = "rdm_synthetic"
-
-
+def main_custom(model_name, roi_name, stimuli_path, dataset, rdm_save_path, device="cuda" if torch.cuda.is_available() else "cpu"):
     current_dir = os.getcwd()
-    save_path = os.path.join(current_dir, f"{model_name}_RDM")
-    rdm_path = f"{model_name}_RDM"
-    feat_path = f"{model_name}_Feat"
-    # Load dataset
-    #dataset_path = DatasetNSD_872.load_dataset()
-    #stimuli_path = dataset_path["NSD_872_images"]
-    stimuli_path = os.path.join(os.getcwd(),dataset, f"NSD_{images}_images")
-
+    rdm_path = f"{model_name}_RDM_{dataset}"
+    save_path = os.path.join(current_dir, rdm_path)
+    feat_path = f"{model_name}_Feat_{dataset}"
     if not os.path.isdir(save_path):
         # Extract features
         model = create_model(model_name, pretrained=True)
@@ -90,14 +55,14 @@ def main_custom(model_name, roi_name, device="cuda" if torch.cuda.is_available()
         shutil.rmtree(feat_path_complete)
 
     brain_path = os.path.join(current_dir, rdm_save_path, roi_name)
-    RSA(save_path, brain_path,model_name,roi_name, "rsa")
+    RSA(save_path, brain_path,model_name,roi_name, dataset)
 
 
 def my_preprocessor(image, model, device):
     """
     Args:
         image (Union[Image.Image, List[Image.Image]]): A PIL Image or a list of PIL Images.
-        model_name (str): The name of the model, used to determine specific preprocessing if necessary.
+        model (str): The name of the model, used to determine specific preprocessing if necessary.
         device (str): The device to which the tensor should be transferred ('cuda' for GPU, 'cpu' for CPU).
 
     Returns:
@@ -126,12 +91,17 @@ def my_extractor(preprocessed_data, layers_to_extract, model):
 def my_cleaner(features):
     return features
 
+
 if __name__ == '__main__':
     num = int(sys.argv[1])
     models_list = ['vit_base_patch16_clip_224.openai', 'efficientnet_b3.ra2_in1k', 'vit_base_patch16_224.dino', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
                    'gmlp_s16_224.ra3_in1k', 'vit_base_patch16_224.mae', 'convnext_base.fb_in22k_ft_in1k']
     model_name = models_list[num]
-    main_custom(model_name, "V1")
-    main_custom(model_name, "V2")
-    main_custom(model_name, "V4")
-    main_custom(model_name, "IT")
+
+    stimuli_path = os.path.join(os.getcwd(),"NSD Dataset", f"NSD_872_images")
+    rdm_save_path = "rdm"
+    dataset = "rsa"
+    main_custom(model_name, "V1", stimuli_path, dataset, rdm_save_path)
+    main_custom(model_name, "V2", stimuli_path, dataset, rdm_save_path)
+    main_custom(model_name, "V4", stimuli_path, dataset, rdm_save_path)
+    main_custom(model_name, "IT", stimuli_path, dataset, rdm_save_path)
