@@ -144,15 +144,15 @@ if __name__ == '__main__':
     fmri_dataset = "fmri_illusion"
     save_folder = "encoding_illusion"
     if num < len(standard):
-        features = encoding(model_name, "V1", "Standard", stimuli_path, fmri_dataset, save_folder, 6)
-        encoding(model_name, "V2", "Standard", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "V4", "Standard", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "IT", "Standard", stimuli_path, fmri_dataset, save_folder, 6, features)
+        features = encoding(model_name, "Standard","V1", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Standard","V2",  stimuli_path, fmri_dataset, save_folder, 6, features)
+        encoding(model_name, "Standard","V4",  stimuli_path, fmri_dataset, save_folder, 6, features)
+        encoding(model_name, "Standard","IT",  stimuli_path, fmri_dataset, save_folder, 6, features)
     elif num < len(timm):
-        features = encoding(model_name,"Timm", "V1", stimuli_path, fmri_dataset, save_folder, 6)
-        encoding(model_name, "V2", "Timm", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "V4", "Timm", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "IT", "Timm", stimuli_path, fmri_dataset, save_folder, 6, features)
+        features = encoding(model_name, "Timm","V1", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Timm","V2",  stimuli_path, fmri_dataset, save_folder, 6, features)
+        encoding(model_name, "Timm","V4",  stimuli_path, fmri_dataset, save_folder, 6, features)
+        encoding(model_name, "Timm","IT",  stimuli_path, fmri_dataset, save_folder, 6, features)
     else:
         features = encoding_custom(model_name,  "V1", stimuli_path, fmri_dataset, save_folder, 6)
         encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, 6, features)

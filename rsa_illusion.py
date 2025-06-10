@@ -43,7 +43,19 @@ if __name__ == '__main__':
     stimuli_path = os.path.join(os.getcwd(), "Illusion_images")
     rdm_save_path = "rdm_illusion"
     dataset = "rsa_illusion"
-    main_custom(model_name, "V1", stimuli_path, dataset, rdm_save_path)
-    main_custom(model_name, "V2", stimuli_path, dataset, rdm_save_path)
-    main_custom(model_name, "V4", stimuli_path, dataset, rdm_save_path)
-    main_custom(model_name, "IT", stimuli_path, dataset, rdm_save_path)
+
+    if num < len(standard):
+        main(model_name, "Standard", "V1", stimuli_path, dataset, rdm_save_path)
+        main(model_name, "Standard", "V2", stimuli_path, dataset, rdm_save_path)
+        main(model_name, "Standard", "V4", stimuli_path, dataset, rdm_save_path)
+        main(model_name, "Standard", "IT", stimuli_path, dataset, rdm_save_path)
+    elif num < len(timm):
+        main(model_name, "Timm", "V1", stimuli_path, dataset, rdm_save_path)
+        main(model_name, "Timm", "V2", stimuli_path, dataset, rdm_save_path)
+        main(model_name, "Timm", "V4", stimuli_path, dataset, rdm_save_path)
+        main(model_name, "Timm", "IT", stimuli_path, dataset, rdm_save_path)
+    else:
+        main_custom(model_name, "V1", stimuli_path, dataset, rdm_save_path)
+        main_custom(model_name, "V2", stimuli_path, dataset, rdm_save_path)
+        main_custom(model_name, "V4", stimuli_path, dataset, rdm_save_path)
+        main_custom(model_name, "IT", stimuli_path, dataset, rdm_save_path)
