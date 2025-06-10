@@ -18,6 +18,7 @@ def create_plot(dataset, roi, evaluation):
 
     df = pd.merge(brain_similarity, robustness, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
+    #df = df[df["architecture"] == "CNN"]
 
     # Define distinct markers for datasets
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
@@ -43,8 +44,6 @@ def create_plot(dataset, roi, evaluation):
 
     # Regression line
     slope, intercept, r_value, p_value, std_err = linregress(df[dataset], df[eval_name])
-    print("slope", slope)
-    print("intercept", intercept)
     x_vals = df[dataset]
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, color="red")
@@ -67,10 +66,10 @@ def create_plot(dataset, roi, evaluation):
     plt.gca().add_artist(legend1)
     plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
 
-    plt.xlabel("effective robustness")
-    plt.ylabel("effective brain similarity")
-    plt.title(f"{dataset}_{evaluation}_{roi}")
+    plt.xlabel(f"effective robustness {dataset}")
+    plt.ylabel(f"effective brain similarity {evaluation} {roi}")
     plt.tight_layout()
+    plt.savefig(f"plots/effectiveRobustness_vs_effectiveBrainsimilarity/{ood_dataset}_{evaluation}_{roi}")
     plt.show()
 
 

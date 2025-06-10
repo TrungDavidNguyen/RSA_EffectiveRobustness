@@ -24,7 +24,7 @@ def create_plot(roi, evaluation):
 
     df = pd.merge(brain_similarity, brain_similarity_synth_renamed, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
-    df = df[df["architecture"] == "CNN"]
+    #df = df[df["architecture"] == "CNN"]
     """    if "encoding" in evaluation:
             df[roi_name] = logit(df[roi_name]*100)
             df[f"{roi_name}_synthetic"] = logit(df[f"{roi_name}_synthetic"]*100)
@@ -66,8 +66,10 @@ def create_plot(roi, evaluation):
     plt.plot(x_vals, y_vals, color="red")
 
     # Correlation label
-    plt.text(min(df[roi_name]), max(df[f"{roi_name}_synthetic"]), f"r = {r_value:.2f}")
-
+    plt.text(0.95, 0.95, f"r = {r_value:.2f}\np = {p_value:.2f}",
+             transform=plt.gca().transAxes,
+             ha='right', va='top',
+             fontsize=12, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
     # Create custom legend entries for dataset (markers)
     from matplotlib.lines import Line2D
     dataset_handles = [Line2D([0], [0], marker=marker_map[ds], color='w', label=ds,
@@ -84,7 +86,7 @@ def create_plot(roi, evaluation):
 
     plt.xlabel(evaluation)
     plt.ylabel(f"{evaluation}_synthetic")
-    plt.title(f"{evaluation}_synthetic vs {evaluation} {roi}")
+    plt.title(f"{evaluation} vs {evaluation}_synthetic {roi}")
     plt.tight_layout()
     os.makedirs("plots/brain_similarity", exist_ok=True)
     plt.savefig(f"plots/brain_similarity/{evaluation}_synthetic vs {evaluation}_{roi}")

@@ -1,8 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import statsmodels.api as sm
-from sklearn.linear_model import LinearRegression
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 def create_plot(ood_dataset, roi, evaluation, evaluation_ood):
