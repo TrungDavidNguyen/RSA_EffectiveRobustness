@@ -66,34 +66,22 @@ def effective_brain_similarity_csv():
         base_name = key.split('_')[0]
         id_df = pd.read_csv(f"results/{base_name}.csv")
         ood_df = pd.read_csv(f"results/{key}.csv")
-
-        # Add the "Model" column once from the first file
-        if i == 0:
-            df["Model"] = ood_df["Model"]
-
-        for col in ood_df.columns:
-            if col == "Model":
-                continue
-            intercept, slope = line_fit[key][col]
-            if "encoding" in key:
-                df[f"{col}_{key}"] = [
-                    effective_robustness(id_df.loc[idx, col]*100,
-                                         ood_df.loc[idx, col]*100,
-                                         slope, intercept)
-                    for idx in range(len(ood_df))
-                ]
+        df_merged = pd.merge(id_df, ood_df, on='Model', how='inner')
+        for roi in id_df.columns:
+            if roi == "Model":
+                df["Model"] = df_merged["Model"]
+            elif "encoding" in key:
+                intercept, slope = line_fit[key][roi]
+                df[roi+f"_{key}"] = df_merged.apply(lambda row: effective_robustness(row[roi+"_x"]*100, row[roi+"_y"]*100, intercept, slope), axis=1)
             else:
-                df[f"{col}_{key}"] = [
-                    effective_robustness(id_df.loc[idx, col],
-                                         ood_df.loc[idx, col],
-                                         slope, intercept)
-                    for idx in range(len(ood_df))
-                ]
+                intercept, slope = line_fit[key][roi]
+                df[roi+f"_{key}"] = df_merged.apply(lambda row: effective_robustness(row[roi+"_x"], row[roi+"_y"], intercept, slope), axis=1)
 
     df.to_csv("results/effective_brain_similarity.csv", index=False, header=True)
 
 
 if __name__ == '__main__':
+    print(effective_robustness(13.77013826, 35.85644863, 0.07613594450436376,0.19168615725751662))
     effective_robustness_csv()
     effective_brain_similarity_csv()
 
