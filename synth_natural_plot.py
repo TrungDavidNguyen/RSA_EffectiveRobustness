@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from scipy.stats import linregress
+from effective_robustness import logit
 
 
 def create_plot(roi, evaluation):
@@ -25,6 +26,14 @@ def create_plot(roi, evaluation):
 
     df = pd.merge(brain_similarity, brain_similarity_synth_renamed, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
+    df = df[df["architecture"] == "CNN"]
+    if "encoding" in evaluation:
+        df[roi_name] = logit(df[roi_name]*100)
+        df[f"{roi_name}_synthetic"] = logit(df[f"{roi_name}_synthetic"]*100)
+    else:
+        df[roi_name] = logit(df[roi_name])
+        df[f"{roi_name}_synthetic"] = logit(df[f"{roi_name}_synthetic"])
+
     # Define distinct markers for datasets
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
     datasets = df["dataset"].unique()
@@ -49,6 +58,8 @@ def create_plot(roi, evaluation):
 
     # Regression line
     slope, intercept, r_value, p_value, std_err = linregress(df[roi_name], df[f"{roi_name}_synthetic"])
+    print("slope", slope)
+    print("intercept", intercept)
     x_vals = df[roi_name]
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, color="red")
@@ -80,5 +91,7 @@ def create_plot(roi, evaluation):
 
 
 if __name__ == '__main__':
-    for roi in ["V1", "V2", "V4","IT"]:
+    for roi in ["V1", "V2", "V4", "IT"]:
         create_plot(roi, "rsa")
+    for roi in ["V1", "V2", "V4", "IT"]:
+        create_plot(roi, "encoding")
