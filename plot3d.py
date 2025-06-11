@@ -63,6 +63,7 @@ def create_plot(ood_dataset, roi, evaluation, evaluation_ood):
     ax.set_ylabel(evaluation_ood + " " + eval_name)
     ax.set_zlabel(ood_dataset + " Effective Robustness")
     plt.title(roi)
+    plt.savefig(f"plots/3d/{ood_dataset} {evaluation} {evaluation_ood} {roi}")
 
     # Legend
     for arch in architectures:
@@ -80,3 +81,6 @@ if __name__ == '__main__':
     for ood_dataset in ["imagenet-r","imagenet-sketch", "imagenetv2-matched-frequency","imagenet-a"]:
         for roi in ["V1", "V2", "V4","IT"]:
             create_plot(ood_dataset, roi, "rsa","rsa_synthetic")
+    for ood_dataset in ["imagenet-r","imagenet-sketch", "imagenetv2-matched-frequency","imagenet-a"]:
+        for roi in ["V1", "V2", "V4","IT"]:
+            create_plot(ood_dataset, roi, "encoding","encoding_synthetic")

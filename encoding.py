@@ -11,7 +11,7 @@ from timm import create_model
 import torchextractor as tx
 
 
-def save_encoding_results(fmri_dataset, roi_name, save_folder, num_subjects):
+def save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects):
     current_dir = os.getcwd()
 
     R_sum = 0
@@ -51,7 +51,7 @@ def encoding(model_name, netset, roi_name, stimuli_path, fmri_dataset, save_fold
         fx = FeatureExtractor(model=model_name, netset=netset, device=device)
         layers_to_extract = fx.get_all_layers()
         features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
-    save_encoding_results(fmri_dataset, roi_name, save_folder, num_subjects)
+    save_encoding_results(features,fmri_dataset, roi_name, save_folder, num_subjects)
 
     return features
 
@@ -64,7 +64,7 @@ def encoding_custom(model_name, roi_name, stimuli_path, fmri_dataset, save_folde
                               extraction_function=my_extractor)
         layers_to_extract = fx.get_all_layers()
         features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
-    save_encoding_results(fmri_dataset, roi_name, save_folder, num_subjects)
+    save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects)
     return features
 
 
