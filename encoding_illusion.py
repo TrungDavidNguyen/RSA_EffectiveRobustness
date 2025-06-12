@@ -51,6 +51,7 @@ def encoding(model_name, netset, roi_name, stimuli_path, fmri_dataset, save_fold
         fx = FeatureExtractor(model=model_name, netset=netset, device=device)
         layers_to_extract = fx.get_all_layers()
         features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
+    print(features.keys())
     save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects)
 
     return features
@@ -64,6 +65,7 @@ def encoding_custom(model_name, roi_name, stimuli_path, fmri_dataset, save_folde
                               extraction_function=my_extractor)
         layers_to_extract = fx.get_all_layers()
         features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
+    print(features.keys())
     save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects)
     return features
 
