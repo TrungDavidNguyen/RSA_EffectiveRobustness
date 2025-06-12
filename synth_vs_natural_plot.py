@@ -94,7 +94,6 @@ def create_plot(roi, evaluation):
 
 
 if __name__ == '__main__':
-    for roi in ["V1", "V2", "V4", "IT"]:
-        create_plot(roi, "rsa")
+
     for roi in ["V1", "V2", "V4", "IT"]:
         create_plot(roi, "encoding")

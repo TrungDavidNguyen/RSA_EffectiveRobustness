@@ -66,7 +66,7 @@ def generate_fmri_illusion(rois, roi_name):
         fmri = None
         for roi in rois:
             current_dir = os.getcwd()
-            roi_path = os.path.join(current_dir, "fmri_illusion", roi, f"{roi}_fmri{subjects}", f"{roi}_both_subj{subjects}.npy")
+            roi_path = os.path.join(current_dir, "fmri_illusion", roi, f"{roi}_fmri_subj{subjects}", f"{roi}_both_subj{subjects}.npy")
             if fmri is None:
                 try:
                     fmri = np.load(roi_path)
@@ -77,8 +77,8 @@ def generate_fmri_illusion(rois, roi_name):
                     fmri = np.concatenate((fmri, np.load(roi_path)), axis=1)
                 except FileNotFoundError:
                     pass
-        os.makedirs(os.path.join("fmri_illusion", roi_name, f"{roi_name}_fmri{subjects}"), exist_ok=True)
-        np.save(os.path.join("fmri_illusion", roi_name, f"{roi_name}_fmri{subjects}", f"{roi_name}_both_subj{subjects}.npy"), fmri)
+        os.makedirs(os.path.join("fmri_illusion", roi_name, f"{roi_name}_fmri_subj{subjects}"), exist_ok=True)
+        np.save(os.path.join("fmri_illusion", roi_name, f"{roi_name}_fmri_subj{subjects}", f"{roi_name}_both_subj{subjects}.npy"), fmri)
 
 
 if __name__ == '__main__':
