@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     model_name = models_list[num]
 
-    stimuli_path = os.path.join(os.getcwd(), "Illusion_images")
+    stimuli_path = os.path.join(os.getcwd(), "Illusion_Images")
     rdm_save_path = "rdm_illusion"
     dataset = "rsa_illusion"
 
