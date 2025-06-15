@@ -13,7 +13,7 @@ if __name__ == '__main__':
     stimuli_path = os.path.join(os.getcwd(), "NSD Synthetic", f"NSD_284_images")
     rdm_save_path = "rdm_synthetic"
     dataset = "rsa_synthetic"
-    main_custom(model_name, "V1", stimuli_path, dataset, rdm_save_path)
-    main_custom(model_name, "V2", stimuli_path, dataset, rdm_save_path)
-    main_custom(model_name, "V4", stimuli_path, dataset, rdm_save_path)
-    main_custom(model_name, "IT", stimuli_path, dataset, rdm_save_path)
+    main_custom(model_name, "V1", stimuli_path, dataset, rdm_save_path, 8)
+    main_custom(model_name, "V2", stimuli_path, dataset, rdm_save_path, 8)
+    main_custom(model_name, "V4", stimuli_path, dataset, rdm_save_path, 8)
+    main_custom(model_name, "IT", stimuli_path, dataset, rdm_save_path, 8)

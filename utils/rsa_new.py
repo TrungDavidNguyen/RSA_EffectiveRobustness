@@ -6,7 +6,7 @@ from scipy import stats
 from net2brain.evaluations.noiseceiling import NoiseCeiling
 from net2brain.evaluations.eval_helper import natural_keys
 
-def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name, dataset):
+def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name, dataset, num_subj):
     """
     :param model_rdms_path: path to folder with rdms of all layers
     :param brain_rdms_path: path to folder with rdm npz file
@@ -25,7 +25,6 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name, dataset):
     lnc = this_nc["lnc"]
     unc = this_nc["unc"]
 
-    num_subj = 8
     all_dicts = [[] for _ in range(num_subj + 1)]
 
     for counter, layer in enumerate(model_rdms):

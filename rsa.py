@@ -12,7 +12,7 @@ from timm import create_model
 import torchextractor as tx
 
 
-def main(model_name, netset, roi_name, stimuli_path, dataset, rdm_save_path, device="cuda" if torch.cuda.is_available() else "cpu"):
+def main(model_name, netset, roi_name, stimuli_path, dataset, rdm_save_path, num_subj, device="cuda" if torch.cuda.is_available() else "cpu"):
     current_dir = os.getcwd()
     rdm_path = f"{model_name}_RDM_{dataset}"
     save_path = os.path.join(current_dir, rdm_path)
@@ -31,10 +31,10 @@ def main(model_name, netset, roi_name, stimuli_path, dataset, rdm_save_path, dev
         shutil.rmtree(feat_path_complete)
 
     brain_path = os.path.join(current_dir, rdm_save_path, roi_name)
-    RSA(save_path, brain_path,model_name,roi_name, dataset)
+    RSA(save_path, brain_path,model_name,roi_name, dataset, num_subj)
 
 
-def main_custom(model_name, roi_name, stimuli_path, dataset, rdm_save_path, device="cuda" if torch.cuda.is_available() else "cpu"):
+def main_custom(model_name, roi_name, stimuli_path, dataset, rdm_save_path, num_subj, device="cuda" if torch.cuda.is_available() else "cpu"):
     current_dir = os.getcwd()
     rdm_path = f"{model_name}_RDM_{dataset}"
     save_path = os.path.join(current_dir, rdm_path)
@@ -55,7 +55,7 @@ def main_custom(model_name, roi_name, stimuli_path, dataset, rdm_save_path, devi
         shutil.rmtree(feat_path_complete)
 
     brain_path = os.path.join(current_dir, rdm_save_path, roi_name)
-    RSA(save_path, brain_path,model_name,roi_name, dataset)
+    RSA(save_path, brain_path,model_name,roi_name, dataset, num_subj)
 
 
 def my_preprocessor(image, model, device):
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     stimuli_path = os.path.join(os.getcwd(),"NSD Dataset", f"NSD_872_images")
     rdm_save_path = "rdm"
     dataset = "rsa"
-    main_custom(model_name, "V1", stimuli_path, dataset, rdm_save_path)
-    main_custom(model_name, "V2", stimuli_path, dataset, rdm_save_path)
-    main_custom(model_name, "V4", stimuli_path, dataset, rdm_save_path)
-    main_custom(model_name, "IT", stimuli_path, dataset, rdm_save_path)
+    main_custom(model_name, "V1", stimuli_path, dataset, rdm_save_path, 8)
+    main_custom(model_name, "V2", stimuli_path, dataset, rdm_save_path, 8)
+    main_custom(model_name, "V4", stimuli_path, dataset, rdm_save_path, 8)
+    main_custom(model_name, "IT", stimuli_path, dataset, rdm_save_path, 8)
