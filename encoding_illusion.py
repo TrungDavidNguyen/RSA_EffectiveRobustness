@@ -17,14 +17,15 @@ def save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_sub
     R_sum = 0
     for subj in [1, 2, 3, 5, 6, 7]:
         roi_path = os.path.join(current_dir, f"{fmri_dataset}/{roi_name}/{roi_name}_fmri_subj{subj}")
-        df = RidgeCV_Encoding(features, roi_path, model_name, np.logspace(-3, 3, 10), save_path=f"{save_folder}/{roi_name}/encoding_{roi_name}_subj{subj}")
+        df = RidgeCV_Encoding(features, roi_path, model_name, np.logspace(-3, 3, 10),
+                              save_path=f"{save_folder}/{roi_name}/encoding_{roi_name}_subj{subj}")
         df = df[['ROI', 'Layer', 'Model', 'R']]
         df = df.loc[[df['R'].idxmax()]]
         R_sum += df.loc[df.index[0], "R"]
         csv_filename = f'{save_folder}/{roi_name}/encoding_{roi_name}_subj{subj}/results-encoding-{roi_name}.csv'
         file_exists = os.path.isfile(csv_filename)
         df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
-    R_mean = R_sum/num_subjects
+    R_mean = R_sum / num_subjects
 
     csv_filename = f'results/{save_folder}.csv'
 
@@ -45,25 +46,27 @@ def save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_sub
     df.to_csv(csv_filename, index=False)
 
 
-def encoding(model_name, netset, roi_name, stimuli_path, fmri_dataset, save_folder, num_subjects, features=None, device="cuda" if torch.cuda.is_available() else "cpu"):
+def encoding(model_name, netset, roi_name, stimuli_path, fmri_dataset, save_folder, num_subjects, features=None,
+             device="cuda" if torch.cuda.is_available() else "cpu"):
     # Extract features
     if features is None:
         fx = FeatureExtractor(model=model_name, netset=netset, device=device)
         layers_to_extract = fx.get_all_layers()
-        features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
+        features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False, layers_to_extract=layers_to_extract)
     save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects)
 
     return features
 
 
-def encoding_custom(model_name, roi_name, stimuli_path, fmri_dataset, save_folder, num_subjects, features=None, device="cuda" if torch.cuda.is_available() else "cpu"):
+def encoding_custom(model_name, roi_name, stimuli_path, fmri_dataset, save_folder, num_subjects, features=None,
+                    device="cuda" if torch.cuda.is_available() else "cpu"):
     # Extract features
     if features is None:
         model = create_model(model_name, pretrained=True)
         fx = FeatureExtractor(model=model, device=device, preprocessor=my_preprocessor, feature_cleaner=my_cleaner,
                               extraction_function=my_extractor)
         layers_to_extract = fx.get_all_layers()
-        features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
+        features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False, layers_to_extract=layers_to_extract)
     save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects)
     return features
 
@@ -113,30 +116,22 @@ if __name__ == '__main__':
                 'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5', 'mnasnet05',
                 'mnasnet10', 'mobilenet_v2', 'mobilenet_v3_large', 'mobilenet_v3_small']
     timm = ['inception_v3', 'inception_resnet_v2', 'xception', 'tf_efficientnet_b2_ns', 'tf_efficientnet_b4_ns',
-            'resnext50_32x4d', 'resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224', 'deit_base_patch16_224',
+            'resnext50_32x4d', 'resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224',
+            'deit_base_patch16_224',
             'swin_base_patch4_window7_224', 'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
-            'regnety_080', 'coat_lite_mini','seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
+            'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
             'wide_resnet50_2', 'convit_small']
-    timm_custom = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k', 'convnext_base.fb_in22k_ft_in1k']
-    models_list = ['ResNet50', 'AlexNet', 'Densenet121', 'Densenet161', 'Densenet169',
-                   'Densenet201', 'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18',
-                   'ResNet34', 'ShuffleNetV2x05', 'ShuffleNetV2x10', 'Squeezenet1_0', 'Squeezenet1_1',
-                   'VGG11', 'VGG11_bn', 'VGG13', 'VGG13_bn', 'VGG16',
-                   'VGG16_bn', 'VGG19', 'VGG19_bn', 'efficientnet_b0', 'efficientnet_b1',
-                   'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5', 'mnasnet05',
-                   'mnasnet10', 'mobilenet_v2', 'mobilenet_v3_large', 'mobilenet_v3_small',
-                   'inception_v3', 'inception_resnet_v2', 'xception', 'tf_efficientnet_b2_ns', 'tf_efficientnet_b4_ns',
-                   'resnext50_32x4d', 'resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224',
-                   'deit_base_patch16_224',
-                   'swin_base_patch4_window7_224', 'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
-                   'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
-                   'wide_resnet50_2', 'convit_small',
-                   'inception_v3', 'inception_resnet_v2', 'xception', 'tf_efficientnet_b2_ns', 'tf_efficientnet_b4_ns',
-                   'resnext50_32x4d', 'resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224',
-                   'deit_base_patch16_224',
-                   'swin_base_patch4_window7_224', 'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
-                   'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
-                   'wide_resnet50_2', 'convit_small']
+    timm_custom = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k',
+                   'convnext_base.fb_in22k_ft_in1k']
+    cornet = ["cornet_s", "cornet_z"]
+
+    models_list = ['Densenet121', 'ResNet152', 'VGG11_bn', 'VGG13', 'VGG13_bn',
+                   'efficientnet_b1', 'efficientnet_b2', 'mobilenet_v3_large', 'xception', 'tf_efficientnet_b2_ns',
+                   'tf_efficientnet_b4_ns', 'resnext50_32x4d', 'resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224',
+                   'deit_base_patch16_224', 'swin_base_patch4_window7_224', 'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0',
+                   'regnety_032', 'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c',
+                   'gluon_resnext101_64x4d', 'wide_resnet50_2', 'convit_small', 'efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
+                   'gmlp_s16_224.ra3_in1k', 'convnext_base.fb_in22k_ft_in1k', "cornet_s", "cornet_z"]
 
     model_name = models_list[num]
 
@@ -144,17 +139,17 @@ if __name__ == '__main__':
     fmri_dataset = "fmri_illusion"
     save_folder = "encoding_illusion"
     if num < len(standard):
-        features = encoding(model_name, "Standard","V1", stimuli_path, fmri_dataset, save_folder, 6)
-        encoding(model_name, "Standard","V2",  stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "Standard","V4",  stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "Standard","IT",  stimuli_path, fmri_dataset, save_folder, 6, features)
+        features = encoding(model_name, "Standard", "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Standard", "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
+        encoding(model_name, "Standard", "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
+        encoding(model_name, "Standard", "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
     elif num < len(timm):
-        features = encoding(model_name, "Timm","V1", stimuli_path, fmri_dataset, save_folder, 6)
-        encoding(model_name, "Timm","V2",  stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "Timm","V4",  stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "Timm","IT",  stimuli_path, fmri_dataset, save_folder, 6, features)
+        features = encoding(model_name, "Timm", "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Timm", "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
+        encoding(model_name, "Timm", "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
+        encoding(model_name, "Timm", "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
     else:
-        features = encoding_custom(model_name,  "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, 6)
         encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
         encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
         encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, 6, features)

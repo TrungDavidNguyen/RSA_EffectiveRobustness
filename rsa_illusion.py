@@ -13,23 +13,16 @@ if __name__ == '__main__':
                 'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5', 'mnasnet05',
                 'mnasnet10', 'mobilenet_v2', 'mobilenet_v3_large', 'mobilenet_v3_small']
     timm = ['inception_v3', 'inception_resnet_v2', 'xception', 'tf_efficientnet_b2_ns', 'tf_efficientnet_b4_ns',
-            'resnext50_32x4d', 'resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224', 'deit_base_patch16_224',
+            'resnext50_32x4d', 'resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224',
+            'deit_base_patch16_224',
             'swin_base_patch4_window7_224', 'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
-            'regnety_080', 'coat_lite_mini','seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
+            'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
             'wide_resnet50_2', 'convit_small']
-    timm_custom = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k', 'convnext_base.fb_in22k_ft_in1k']
-    models_list = ['resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224',
-                   'deit_base_patch16_224',
-                   'swin_base_patch4_window7_224', 'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
-                   'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
-                   'wide_resnet50_2', 'convit_small',
-                   'inception_v3', 'inception_resnet_v2', 'xception', 'tf_efficientnet_b2_ns', 'tf_efficientnet_b4_ns',
-                   'resnext50_32x4d', 'resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224',
-                   'deit_base_patch16_224',
-                   'swin_base_patch4_window7_224', 'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
-                   'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
-                   'wide_resnet50_2', 'convit_small',
-                   'efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k', 'convnext_base.fb_in22k_ft_in1k']
+    timm_custom = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k',
+                   'convnext_base.fb_in22k_ft_in1k']
+    cornet = ["cornet_s", "cornet_z"]
+
+    models_list = ['gmlp_s16_224.ra3_in1k', 'convnext_base.fb_in22k_ft_in1k', "cornet_s", "cornet_z"]
 
     model_name = models_list[num]
 
@@ -47,6 +40,11 @@ if __name__ == '__main__':
         main(model_name, "Timm", "V2", stimuli_path, dataset, rdm_save_path, 6)
         main(model_name, "Timm", "V4", stimuli_path, dataset, rdm_save_path, 6)
         main(model_name, "Timm", "IT", stimuli_path, dataset, rdm_save_path, 6)
+    elif model_name in cornet:
+        main(model_name, "Cornet", "V1", stimuli_path, dataset, rdm_save_path, 6)
+        main(model_name, "Cornet", "V2", stimuli_path, dataset, rdm_save_path, 6)
+        main(model_name, "Cornet", "V4", stimuli_path, dataset, rdm_save_path, 6)
+        main(model_name, "Cornet", "IT", stimuli_path, dataset, rdm_save_path, 6)
     else:
         main_custom(model_name, "V1", stimuli_path, dataset, rdm_save_path, 6)
         main_custom(model_name, "V2", stimuli_path, dataset, rdm_save_path, 6)
