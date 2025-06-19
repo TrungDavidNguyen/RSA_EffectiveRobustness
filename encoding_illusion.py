@@ -11,7 +11,7 @@ from timm import create_model
 import torchextractor as tx
 
 
-def save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects):
+def save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects, model_name):
     current_dir = os.getcwd()
 
     R_sum = 0
@@ -53,7 +53,7 @@ def encoding(model_name, netset, roi_name, stimuli_path, fmri_dataset, save_fold
         fx = FeatureExtractor(model=model_name, netset=netset, device=device)
         layers_to_extract = fx.get_all_layers()
         features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False, layers_to_extract=layers_to_extract)
-    save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects)
+    save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects, model_name)
 
     return features
 
@@ -67,7 +67,7 @@ def encoding_custom(model_name, roi_name, stimuli_path, fmri_dataset, save_folde
                               extraction_function=my_extractor)
         layers_to_extract = fx.get_all_layers()
         features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False, layers_to_extract=layers_to_extract)
-    save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects)
+    save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_subjects, model_name)
     return features
 
 
@@ -138,16 +138,21 @@ if __name__ == '__main__':
     stimuli_path = os.path.join(os.getcwd(), "Illusion_Images")
     fmri_dataset = "fmri_illusion"
     save_folder = "encoding_illusion"
-    if num < len(standard):
-        features = encoding(model_name, "Standard", "V1", stimuli_path, fmri_dataset, save_folder, 6)
-        encoding(model_name, "Standard", "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "Standard", "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "Standard", "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
-    elif num < len(timm):
-        features = encoding(model_name, "Timm", "V1", stimuli_path, fmri_dataset, save_folder, 6)
-        encoding(model_name, "Timm", "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "Timm", "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "Timm", "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
+    if model_name in standard:
+        encoding(model_name, "Standard", "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Standard", "V2", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Standard", "V4", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Standard", "IT", stimuli_path, fmri_dataset, save_folder, 6)
+    elif model_name in timm:
+        encoding(model_name, "Timm", "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Timm", "V2", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Timm", "V4", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Timm", "IT", stimuli_path, fmri_dataset, save_folder, 6)
+    elif model_name in cornet:
+        encoding(model_name, "Cornet", "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Cornet", "V2", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Cornet", "V4", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Cornet", "IT", stimuli_path, fmri_dataset, save_folder, 6)
     else:
         features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, 6)
         encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, 6, features)

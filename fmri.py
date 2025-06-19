@@ -91,13 +91,13 @@ def generate_fmri_things(rois, roi_name):
                 try:
                     temp = np.load(roi_path)
                     # average each 10 cols and transpose
-                    fmri = temp.reshape(temp.shape[0], -1, 10).mean(axis=2).T
+                    fmri = temp.reshape(temp.shape[0], -1, 12).mean(axis=2).T
                 except FileNotFoundError:
                     pass
             else:
                 try:
                     temp = np.load(roi_path)
-                    fmri = np.concatenate((fmri, temp.reshape(temp.shape[0], -1, 10).mean(axis=2).T), axis=1)
+                    fmri = np.concatenate((fmri, temp.reshape(temp.shape[0], -1, 12).mean(axis=2).T), axis=1)
                 except FileNotFoundError:
                     pass
         os.makedirs(os.path.join("fmri_things", roi_name, f"{roi_name}_fmri_subj{subjects}"), exist_ok=True)
@@ -105,6 +105,6 @@ def generate_fmri_things(rois, roi_name):
 
 
 if __name__ == '__main__':
-    rois = ["rFFA","lFFA","rPPA","lPPA"]
-    roi_name = "IT"
+    rois = ["V2"]
+    roi_name = "V2"
     generate_fmri_things(rois, roi_name)
