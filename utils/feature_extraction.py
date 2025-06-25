@@ -128,7 +128,8 @@ class FeatureExtractor:
         with torch.no_grad():
             for imgs, names in loader:
                 imgs = imgs.to(self.device)
-                
+                if self.preprocessor is not None:
+                    imgs = self.preprocessor(imgs,self.model_name, self.device)
                 with torch.amp.autocast(enabled=self.use_mixed_precision, device_type='cuda'):
                     if self.extraction_function is None:
                         features = self.netset.extraction_function(imgs, layers_to_extract)

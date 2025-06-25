@@ -51,7 +51,7 @@ def generate_RDMs_illusion(rois, roi_name):
         fmri = None
         for roi in rois:
             current_dir = os.getcwd()
-            roi_path = os.path.join(current_dir, "fmri_illusion", roi, f"{roi}_fmri_subj{subjects}",f'{roi}_both_subj{subjects}.npy')
+            roi_path = os.path.join(current_dir, "fmri_data/fmri_illusion", roi, f"{roi}_fmri_subj{subjects}", f'{roi}_both_subj{subjects}.npy')
             if fmri is None:
                 try:
                     fmri = np.load(roi_path).astype(np.float64)
@@ -73,7 +73,7 @@ def generate_RDMs_things(rois, roi_name):
         fmri = None
         for roi in rois:
             current_dir = os.getcwd()
-            roi_path = os.path.join(current_dir, "fmri_things", roi, f"{roi}_fmri_subj{subjects}",
+            roi_path = os.path.join(current_dir, "fmri_data/fmri_things", roi, f"{roi}_fmri_subj{subjects}",
                                     f'{roi}_both_subj{subjects}.npy')
             if fmri is None:
                 try:
@@ -106,8 +106,8 @@ def copy_RDM(roi):
         src = os.path.join(current_dir, "NSD Dataset", "NSD_872_RDMs", group,
                            f"subject_{subj}_merged_{roi}_both.npz")
         all_rdms.append(np.load(src)["rdm"])
-    os.makedirs(f"rdm/{roi}", exist_ok=True)
-    np.savez(f"rdm/{roi}/{roi}_both_fmri.npz", rdm=np.stack(all_rdms))
+    os.makedirs(f"rdms/rdm/{roi}", exist_ok=True)
+    np.savez(f"rdms/rdm/{roi}/{roi}_both_fmri.npz", rdm=np.stack(all_rdms))
 
 
 if __name__ == '__main__':

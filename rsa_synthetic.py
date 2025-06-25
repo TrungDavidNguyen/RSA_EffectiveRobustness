@@ -11,7 +11,7 @@ if __name__ == '__main__':
     model_name = models_list[num]
 
     stimuli_path = os.path.join(os.getcwd(), "NSD Synthetic", f"NSD_284_images")
-    rdm_save_path = "rdm_synthetic"
+    rdm_save_path = os.path.join("rdms", "rdm_synthetic")
     dataset = "rsa_synthetic"
     main_custom(model_name, "V1", stimuli_path, dataset, rdm_save_path, 8)
     main_custom(model_name, "V2", stimuli_path, dataset, rdm_save_path, 8)

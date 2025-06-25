@@ -21,7 +21,7 @@ if __name__ == '__main__':
             'wide_resnet50_2', 'convit_small']
     timm_custom = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k',
                    'convnext_base.fb_in22k_ft_in1k']
-    cornet = ["cornet_s", "cornet_z"]
+    cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
     models_list = ['ResNet50', 'AlexNet', 'Densenet121', 'Densenet161', 'Densenet169',
                     'Densenet201', 'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18',

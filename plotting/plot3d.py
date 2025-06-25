@@ -1,18 +1,21 @@
+import os
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import statsmodels.api as sm
 import numpy as np
 
+
 def create_plot(ood_dataset, roi, evaluation, evaluation_ood):
     eval_name = "%R2" if evaluation in ["rsa", "rsa_synthetic"] else "R"
     roi_name = f"%R2_{roi}" if evaluation in ["rsa", "rsa_synthetic"] else f"R_{roi}"
 
-    brain_similarity = pd.read_csv(f"results/{evaluation}.csv")
-    brain_similarity_ood = pd.read_csv(f"results/{evaluation_ood}.csv")
+    brain_similarity = pd.read_csv(f"../results/{evaluation}.csv")
+    brain_similarity_ood = pd.read_csv(f"../results/{evaluation_ood}.csv")
     brain_similarity_ood = brain_similarity_ood.rename(columns={roi_name: f"{roi_name}_ood"})
 
-    robustness = pd.read_csv("results/effective_robustness.csv")
-    categories = pd.read_csv("results/categories.csv")
+    robustness = pd.read_csv("../results/effective_robustness.csv")
+    categories = pd.read_csv("../results/categories.csv")
 
     # Drop missing values
     brain_similarity = brain_similarity.dropna(subset=[roi_name])
@@ -63,7 +66,8 @@ def create_plot(ood_dataset, roi, evaluation, evaluation_ood):
     ax.set_ylabel(evaluation_ood + " " + eval_name)
     ax.set_zlabel(ood_dataset + " Effective Robustness")
     plt.title(roi)
-    plt.savefig(f"plots/3d/{ood_dataset} {evaluation} {evaluation_ood} {roi}")
+    os.makedirs(f"../plots/3d",exist_ok=True)
+    plt.savefig(f"../plots/3d/{ood_dataset} {evaluation} {evaluation_ood} {roi}")
 
     # Legend
     for arch in architectures:
@@ -74,7 +78,6 @@ def create_plot(ood_dataset, roi, evaluation, evaluation_ood):
 
     # Print regression stats
     print(model.summary())
-
 
 
 if __name__ == '__main__':

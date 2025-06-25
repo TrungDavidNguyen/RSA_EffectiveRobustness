@@ -16,7 +16,7 @@ def save_encoding_results(features, fmri_dataset, roi_name, save_folder, num_sub
 
     R_sum = 0
     for subj in range(1, num_subjects+1):
-        roi_path = os.path.join(current_dir, f"{fmri_dataset}/{roi_name}/{roi_name}_fmri_subj{subj}")
+        roi_path = os.path.join(current_dir, fmri_dataset, roi_name, f"{roi_name}_fmri_subj{subj}")
         df = RidgeCV_Encoding(features, roi_path, model_name, np.logspace(-3, 3, 10), save_path=f"{save_folder}/{roi_name}/encoding_{roi_name}_subj{subj}")
         df = df[['ROI', 'Layer', 'Model', 'R']]
         df = df.loc[[df['R'].idxmax()]]
@@ -56,11 +56,11 @@ def encoding(model_name, netset, roi_name, stimuli_path, fmri_dataset, save_fold
     return features
 
 
-def encoding_custom(model_name, roi_name, stimuli_path, fmri_dataset, save_folder, num_subjects, features=None, device="cuda" if torch.cuda.is_available() else "cpu"):
+def encoding_custom(model_name, roi_name, stimuli_path, fmri_dataset, save_folder, num_subjects, features=None):
     # Extract features
     if features is None:
         model = create_model(model_name, pretrained=True)
-        fx = FeatureExtractor(model=model, device=device, preprocessor=my_preprocessor, feature_cleaner=my_cleaner,
+        fx = FeatureExtractor(model=model, device="cpu", preprocessor=my_preprocessor, feature_cleaner=my_cleaner,
                               extraction_function=my_extractor)
         layers_to_extract = fx.get_all_layers()
         features = fx.extract(data_path=stimuli_path, consolidate_per_layer=False,  layers_to_extract=layers_to_extract)
@@ -68,31 +68,26 @@ def encoding_custom(model_name, roi_name, stimuli_path, fmri_dataset, save_folde
     return features
 
 
-def my_preprocessor(image, model_name, device):
+def my_preprocessor(image, model, device):
     """
     Args:
         image (Union[Image.Image, List[Image.Image]]): A PIL Image or a list of PIL Images.
-        model_name (str): The name of the model, used to determine specific preprocessing if necessary.
+        model (str): The model
         device (str): The device to which the tensor should be transferred ('cuda' for GPU, 'cpu' for CPU).
 
     Returns:
         Union[torch.Tensor, List[torch.Tensor]]: The preprocessed image(s) as PyTorch tensor(s).
     """
-
-    model = create_model(model_name, pretrained=True)
     config = resolve_data_config({}, model=model)
     transform = create_transform(**config)
-    img_tensor = transform(image).unsqueeze(0)
-    if device == 'cuda':
-        img_tensor = img_tensor.cuda()
-
+    img_tensor = transform(image)
     return img_tensor
 
 
 def my_extractor(preprocessed_data, layers_to_extract, model):
     # Create a extractor instance
     extractor_model = tx.Extractor(model, layers_to_extract)
-
+    print(preprocessed_data.dtype)
     # Extract actual features
     _, features = extractor_model(preprocessed_data)
 
@@ -110,7 +105,7 @@ if __name__ == '__main__':
     model_name = models_list[num]
 
     stimuli_path = os.path.join(os.getcwd(), "NSD Dataset", "NSD_872_images")
-    fmri_dataset = "fmri"
+    fmri_dataset = os.path.join("fmri_data", "fmri")
     save_folder = "encoding"
 
     features = encoding_custom(model_name,  "V1", stimuli_path, fmri_dataset, save_folder, 8)
