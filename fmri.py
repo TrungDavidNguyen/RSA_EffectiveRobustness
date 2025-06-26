@@ -105,6 +105,15 @@ def generate_fmri_things(rois, roi_name):
 
 
 if __name__ == '__main__':
+    rois = ["V1"]
+    roi_name = "V1"
+    generate_fmri_things(rois, roi_name)
+    rois = ["V2"]
+    roi_name = "V2"
+    generate_fmri_things(rois, roi_name)
+    rois = ["V4"]
+    roi_name = "V4"
+    generate_fmri_things(rois, roi_name)
     rois = ["rFFA","lFFA","rPPA","lPPA"]
     roi_name = "IT"
     generate_fmri_things(rois, roi_name)
