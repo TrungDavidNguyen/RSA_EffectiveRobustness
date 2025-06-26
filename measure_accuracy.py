@@ -28,7 +28,7 @@ def evaluate_model(model, dataloader, device, output_mask=None, label_map=None):
     return (correct / total) * 100
 
 
-def measure_accuracy(model, path, transform, device=None):
+def measure_accuracy(model, path, transform, device="cuda" if torch.cuda.is_available() else "cpu"):
     dataset = datasets.ImageFolder(path, transform=transform)
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False)
     return evaluate_model(model, data_loader, device)

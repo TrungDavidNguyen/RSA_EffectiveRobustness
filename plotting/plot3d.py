@@ -7,8 +7,8 @@ import numpy as np
 
 
 def create_plot(ood_dataset, roi, evaluation, evaluation_ood):
-    eval_name = "%R2" if evaluation in ["rsa", "rsa_synthetic"] else "R"
-    roi_name = f"%R2_{roi}" if evaluation in ["rsa", "rsa_synthetic"] else f"R_{roi}"
+    eval_name = "%R2" if "rsa" in evaluation else "R"
+    roi_name = f"%R2_{roi}" if "rsa" in evaluation else f"R_{roi}"
 
     brain_similarity = pd.read_csv(f"../results/{evaluation}.csv")
     brain_similarity_ood = pd.read_csv(f"../results/{evaluation_ood}.csv")
@@ -83,7 +83,7 @@ def create_plot(ood_dataset, roi, evaluation, evaluation_ood):
 if __name__ == '__main__':
     for ood_dataset in ["imagenet-r","imagenet-sketch", "imagenetv2-matched-frequency","imagenet-a"]:
         for roi in ["V1", "V2", "V4","IT"]:
-            create_plot(ood_dataset, roi, "rsa","rsa_synthetic")
+            create_plot(ood_dataset, roi, "rsa","rsa_illusion")
     for ood_dataset in ["imagenet-r","imagenet-sketch", "imagenetv2-matched-frequency","imagenet-a"]:
         for roi in ["V1", "V2", "V4","IT"]:
-            create_plot(ood_dataset, roi, "encoding","encoding_synthetic")
+            create_plot(ood_dataset, roi, "encoding","encoding_illusion")

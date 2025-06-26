@@ -5,8 +5,8 @@ from matplotlib.lines import Line2D
 
 
 def create_plot(ood_dataset, roi, evaluation):
-    eval_name = f"%R2_{evaluation}" if evaluation in ["rsa", "rsa_synthetic"] else f"R_{evaluation}"
-    roi_name = f"%R2_{roi}" if evaluation in ["rsa", "rsa_synthetic"] else f"R_{roi}"
+    eval_name = f"%R2_{evaluation}" if "rsa" in evaluation else f"R_{evaluation}"
+    roi_name = f"%R2_{roi}" if "rsa" in evaluation else f"R_{roi}"
 
     brain_similarity = pd.read_csv(f"../results/{evaluation}.csv")
     robustness = pd.read_csv("../results/effective_robustness.csv")
@@ -82,8 +82,9 @@ def create_plot(ood_dataset, roi, evaluation):
 if __name__ == '__main__':
     for ood_dataset in ["imagenet-r","imagenet-sketch", "imagenetv2-matched-frequency","imagenet-a"]:
         for roi in ["V1", "V2", "V4","IT"]:
-            create_plot(ood_dataset, roi, "encoding_synthetic")
-            create_plot(ood_dataset, roi, "encoding")
-            create_plot(ood_dataset, roi, "rsa")
-            create_plot(ood_dataset, roi, "rsa_synthetic")
-
+            create_plot(ood_dataset, roi, "encoding_illusion")
+            #create_plot(ood_dataset, roi, "encoding_synthetic")
+            #create_plot(ood_dataset, roi, "encoding")
+            #create_plot(ood_dataset, roi, "rsa_illusion")
+            #create_plot(ood_dataset, roi, "rsa_synthetic")
+            #create_plot(ood_dataset, roi, "rsa")

@@ -32,8 +32,8 @@ def create_bar_plot_by_model(method, rois, model=None):
 
 def create_bar_plot_by_roi(method, roi):
     # Load data
-    df = pd.read_csv(f"results/{method}.csv")
-    categories = pd.read_csv("results/categories.csv")
+    df = pd.read_csv(f"../results/{method}.csv")
+    categories = pd.read_csv("../results/categories.csv")
 
     # Get architecture mapping per model
     architectures = categories["architecture"].unique()
@@ -68,14 +68,14 @@ def create_bar_plot_by_roi(method, roi):
 
     # Layout adjustment
     plt.tight_layout()
-    os.makedirs("plots/barplot", exist_ok=True)
-    plt.savefig(f"plots/barplot/barplot_{roi}_{method}.png")
+    os.makedirs("../plots/barplot", exist_ok=True)
+    plt.savefig(f"../plots/barplot/barplot_{roi}_{method}.png")
     plt.show()
 
 
 def corr(method, rois):
-    nsd = pd.read_csv(f"results/{method}.csv")
-    nsd_synthetic = pd.read_csv(f"results/{method}_synthetic.csv")
+    nsd = pd.read_csv(f"../results/{method}.csv")
+    nsd_synthetic = pd.read_csv(f"../results/{method}_synthetic.csv")
 
     df = pd.merge(nsd, nsd_synthetic, on='Model', how='inner', suffixes=(f' {method}', f' {method}_synthetic'))
 
@@ -95,3 +95,5 @@ if __name__ == '__main__':
         create_bar_plot_by_roi("encoding", roi)
         create_bar_plot_by_roi("rsa_synthetic", roi)
         create_bar_plot_by_roi("encoding_synthetic", roi)
+        create_bar_plot_by_roi("rsa_illusion", roi)
+        create_bar_plot_by_roi("encoding_illusion", roi)

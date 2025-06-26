@@ -122,6 +122,9 @@ class FeatureExtractor:
         )
 
         self.model.eval()
+        # Make sure model is on GPU
+        self.model = self.model.to('cuda')
+
         batch_features = defaultdict(list)
         self.data_type = "image"
         

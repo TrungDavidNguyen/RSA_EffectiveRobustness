@@ -6,20 +6,19 @@ from effective_robustness import logit
 
 
 def create_plot(dataset, roi, evaluation):
-    if evaluation in ["rsa", "rsa_synthetic"]:
+    if "rsa" in evaluation:
         eval_name = f"%R2_{roi}_{evaluation}"
-    elif evaluation in ["encoding", "encoding_synthetic"]:
+    elif "encoding" in evaluation:
         eval_name = f"R_{roi}_{evaluation}"
 
-
-    brain_similarity = pd.read_csv(f"results/effective_brain_similarity.csv")
-    robustness = pd.read_csv(f"results/effective_robustness.csv")
-    categories = pd.read_csv("results/categories.csv")
+    brain_similarity = pd.read_csv(f"../results/effective_brain_similarity.csv")
+    robustness = pd.read_csv(f"../results/effective_robustness.csv")
+    categories = pd.read_csv("../results/categories.csv")
 
     df = pd.merge(brain_similarity, robustness, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
     #df = df[df["architecture"] == "CNN"]
-
+    df = df.dropna()
     # Define distinct markers for datasets
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
     datasets = df["dataset"].unique()
@@ -31,7 +30,6 @@ def create_plot(dataset, roi, evaluation):
     color_map = {arch: colors[i % len(colors)] for i, arch in enumerate(architectures)}
 
     # Plot points with marker by dataset and color by architecture
-    print(df.columns)
     for _, row in df.iterrows():
         plt.scatter(row[dataset], row[eval_name],
                     marker=marker_map[row["dataset"]],
@@ -70,11 +68,11 @@ def create_plot(dataset, roi, evaluation):
     plt.xlabel(f"effective robustness {dataset}")
     plt.ylabel(f"effective brain similarity {evaluation} {roi}")
     plt.tight_layout()
-    plt.savefig(f"plots/effectiveRobustness_vs_effectiveBrainsimilarity/{ood_dataset}_{evaluation}_{roi}")
+    plt.savefig(f"../plots/effectiveRobustness_vs_effectiveBrainsimilarity/{ood_dataset}_{evaluation}_{roi}")
     plt.show()
 
 
 if __name__ == '__main__':
     for ood_dataset in ["imagenet-r","imagenet-sketch", "imagenetv2-matched-frequency","imagenet-a"]:
         for roi in ["V1", "V2", "V4","IT"]:
-            create_plot(ood_dataset, roi, "encoding_synthetic")
+            create_plot(ood_dataset, roi, "encoding_illusion")

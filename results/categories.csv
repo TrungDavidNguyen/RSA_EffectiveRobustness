@@ -44,8 +44,8 @@ ShuffleNetV2x10,CNN,ImageNet1K
 Squeezenet1_0,CNN,ImageNet1K
 Squeezenet1_1,CNN,ImageNet1K
 swin_base_patch4_window7_224,VIT,more data
-tf_efficientnet_b2_ns,Rob.Intervention,more data
-tf_efficientnet_b4_ns,Rob.Intervention,more data
+tf_efficientnet_b2_ns,semi-supervised,more data
+tf_efficientnet_b4_ns,semi-supervised,more data
 VGG11,CNN,ImageNet1K
 VGG11_bn,CNN,ImageNet1K
 VGG13,CNN,ImageNet1K
