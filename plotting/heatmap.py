@@ -25,7 +25,7 @@ def create_heatmap(evaluation):
             if ood_dataset == "imagenet-a":
                 df = df[df['Model'].str.lower() != "resnet50"]
                 df = df.reset_index(drop=True)
-            #df = df[df["dataset"] != "more data"]
+            df = df[df["dataset"] != "more data"]
             df = df[df["architecture"] == "CNN"]
             # df = df[df["imagenet1k"] > 70]
 

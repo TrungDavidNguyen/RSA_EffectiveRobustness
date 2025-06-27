@@ -62,11 +62,11 @@ def generate_fmri_synthetic(rois, roi_name):
 
 
 def generate_fmri_illusion(rois, roi_name):
-    for subjects in [1,2,3,5,6,7]:
+    for subjects in [1,2,3,4,5,7]:
         fmri = None
         for roi in rois:
             current_dir = os.getcwd()
-            roi_path = os.path.join(current_dir, "fmri_data/fmri_illusion", roi, f"{roi}_fmri_subj{subjects}", f"{roi}_both_subj{subjects}.npy")
+            roi_path = os.path.join(current_dir, "fmri_data/fmri_imagenet", roi, f"{roi}_fmri_subj{subjects}", f"{roi}_both_subj{subjects}.npy")
             if fmri is None:
                 try:
                     fmri = np.load(roi_path)
@@ -77,8 +77,8 @@ def generate_fmri_illusion(rois, roi_name):
                     fmri = np.concatenate((fmri, np.load(roi_path)), axis=1)
                 except FileNotFoundError:
                     pass
-        os.makedirs(os.path.join("fmri_data/fmri_illusion", roi_name, f"{roi_name}_fmri_subj{subjects}"), exist_ok=True)
-        np.save(os.path.join("fmri_data/fmri_illusion", roi_name, f"{roi_name}_fmri_subj{subjects}", f"{roi_name}_both_subj{subjects}.npy"), fmri)
+        os.makedirs(os.path.join("fmri_data/fmri_imagenet", roi_name, f"{roi_name}_fmri_subj{subjects}"), exist_ok=True)
+        np.save(os.path.join("fmri_data/fmri_imagenet", roi_name, f"{roi_name}_fmri_subj{subjects}", f"{roi_name}_both_subj{subjects}.npy"), fmri)
 
 
 def generate_fmri_things(rois, roi_name):
@@ -117,3 +117,4 @@ if __name__ == '__main__':
     rois = ["rFFA","lFFA","rPPA","lPPA"]
     roi_name = "IT"
     generate_fmri_things(rois, roi_name)
+    generate_fmri_illusion(["FFA","PPA"], "IT")

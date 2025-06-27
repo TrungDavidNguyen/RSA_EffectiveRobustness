@@ -18,13 +18,12 @@ def create_plot(ood_dataset, roi, evaluation):
     df = pd.merge(brain_similarity, robustness, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
     #df = df[df["dataset"] != "more data"]
+    #df = df[df["architecture"] == "CNN"]
 
     if ood_dataset == "imagenet-a":
         df = df[df['Model'].str.lower() != "resnet50"]
         df = df.reset_index(drop=True)
 
-    #df = df[df["dataset"] != "more data"]
-    #df = df[df["architecture"] != "VIT"]
 
     # Define distinct markers for datasets
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']

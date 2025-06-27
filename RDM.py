@@ -47,14 +47,14 @@ def generate_RDMs(rois, roi_name, dataset):
 
 def generate_RDMs_illusion(rois, roi_name):
     all_rdms = []
-    for subjects in [1,2,3,5,6,7]:
+    for subjects in [1,2,3,4,5,7]:
         fmri = None
         for roi in rois:
             current_dir = os.getcwd()
-            roi_path = os.path.join(current_dir, "fmri_data/fmri_illusion", roi, f"{roi}_fmri_subj{subjects}", f'{roi}_both_subj{subjects}.npy')
+            roi_path = os.path.join(current_dir, "fmri_data/fmri_imagenet", roi, f"{roi}_fmri_subj{subjects}", f'{roi}_both_subj{subjects}.npy')
             if fmri is None:
                 try:
-                    fmri = np.load(roi_path).astype(np.float64)
+                   fmri = np.load(roi_path).astype(np.float64)
                 except FileNotFoundError:
                     pass
             else:
@@ -63,8 +63,8 @@ def generate_RDMs_illusion(rois, roi_name):
                 except FileNotFoundError:
                     pass
         all_rdms.append(squareform(pdist(torch.from_numpy(fmri), metric='correlation')))
-    os.makedirs(f"rdm_illusion/{roi_name}", exist_ok=True)
-    np.savez(f"rdm_illusion/{roi_name}/{roi_name}_both_fmri.npz", rdm=np.stack(all_rdms))
+    os.makedirs(f"rdm_imagenet/{roi_name}", exist_ok=True)
+    np.savez(f"rdm_imagenet/{roi_name}/{roi_name}_both_fmri.npz", rdm=np.stack(all_rdms))
 
 
 def generate_RDMs_things(rois, roi_name):
@@ -111,12 +111,7 @@ def copy_RDM(roi):
 
 
 if __name__ == '__main__':
-    #copy_RDM("V1")
-    #copy_RDM("V2")
-    #copy_RDM("V4")
-    #generate_RDMs(["EBA", "FFA-1", "FFA-2", "FBA-1", "FBA-2", "PPA"], "IT", "NSD Dataset")
-    generate_RDMs_things(["V1"],"V1")
-    generate_RDMs_things(["V2"],"V2")
-    generate_RDMs_things(["V4"],"V4")
-    generate_RDMs_things(["IT"],"IT")
-
+    generate_RDMs_illusion(["IT"], "IT")
+    generate_RDMs_illusion(["V1"], "V1")
+    generate_RDMs_illusion(["V2"], "V2")
+    generate_RDMs_illusion(["V4"], "V4")
