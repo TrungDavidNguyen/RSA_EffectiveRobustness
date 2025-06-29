@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 from scipy.stats import linregress
 
 
@@ -37,17 +38,24 @@ def logit_fit(id_dataset, ood_dataset):
 
         plt.text(row[id_dataset], row[ood_dataset], row["Model"],
                  fontsize=7, ha='right', va='bottom')    # Regression line
-    result = linregress(logit(df[id_dataset]), logit(df[ood_dataset]))
+    slope, intercept, r_value, p_value, std_err = linregress(logit(df[id_dataset]), logit(df[ood_dataset]))
+    plt.text(0.05, 0.95, f"r = {r_value:.2f}\np = {p_value:.2f}",
+             transform=plt.gca().transAxes,
+             ha='left', va='top',
+             fontsize=12, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
     # Create a smooth range of x values within the valid (0,1) interval
     x_vals = np.linspace(df[id_dataset].min(), df[id_dataset].max(), 100)
     x_logit = logit(x_vals)
-    y_vals = inv_logit(result.slope * x_logit + result.intercept)
+    y_vals = inv_logit(slope * x_logit + intercept)
+    plt.title("ID vs OOD-Accuracy")
     plt.xlabel(id_dataset)
     plt.ylabel(ood_dataset)
     plt.plot(x_vals, y_vals, color="red", linewidth=2)
-
+    output_dir = f"../plots/id_vs_ood"
+    os.makedirs(output_dir, exist_ok=True)
+    plt.savefig(f"{output_dir}/{id_dataset}_vs_{ood_dataset}.png")
     plt.show()
-    return result.slope, result.intercept
+    return slope, intercept
 
 def linear_fit(id_dataset, ood_dataset):
     accuracies = pd.read_csv("../results/accuracies.csv")
@@ -75,16 +83,23 @@ def linear_fit(id_dataset, ood_dataset):
 
         plt.text(row[id_dataset], row[ood_dataset], row["Model"],
                  fontsize=7, ha='right', va='bottom')    # Regression line
-    result = linregress(df[id_dataset], df[ood_dataset])
+    slope, intercept, r_value, p_value, std_err = linregress(df[id_dataset], df[ood_dataset])
+    plt.text(0.05, 0.95, f"r = {r_value:.2f}\np = {p_value:.2f}",
+             transform=plt.gca().transAxes,
+             ha='left', va='top',
+             fontsize=12, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
     # Create a smooth range of x values within the valid (0,1) interval
     x_vals = np.linspace(df[id_dataset].min(), df[id_dataset].max(), 100)
-    y_vals = result.slope * x_vals + result.intercept
+    y_vals = slope * x_vals + intercept
+    plt.title("ID vs OOD-Accuracy")
     plt.xlabel(id_dataset)
     plt.ylabel(ood_dataset)
     plt.plot(x_vals, y_vals, color="red", linewidth=2)
 
     plt.show()
-    return result.slope, result.intercept
+    return slope, intercept
+
+
 if __name__ == '__main__':
     datasets = {"imagenet-r": "imagenet1k-subset-r",
                 "imagenet-sketch": "imagenet1k",

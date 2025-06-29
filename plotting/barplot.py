@@ -88,6 +88,7 @@ def corr(method, rois):
     slope, intercept, r_value, p_value, std_err = linregress(df[f"{eval}_{rois[0]} {method}_synthetic"], df[f"{eval}_{rois[0]} {method}"])
     print(r_value)
 
+
 if __name__ == '__main__':
     #create_bar_plot_by_model("encoding_synthetic", ["V1","V2","V4","IT"])
     for roi in ["V1","V2","V4","IT"]:

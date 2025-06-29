@@ -5,31 +5,30 @@ from scipy.stats import linregress
 from effective_robustness import logit
 
 
-def create_plot(roi, evaluation, ood):
-    if "rsa" in evaluation:
-        roi_name = f"%R2_{roi}"
-    elif "encoding" in evaluation:
-        roi_name = f"R_{roi}"
+def create_plot(roi, id, ood, all_models=False):
+    roi_name = f"%R2_{roi}" if "rsa" in id else f"R_{roi}"
 
-    brain_similarity = pd.read_csv(f"../results/{evaluation}.csv")
-    brain_similarity = brain_similarity.dropna(subset=[roi_name])
+    df_id = pd.read_csv(f"../results/{id}.csv")
+    df_id = df_id.dropna(subset=[roi_name])
 
-    brain_similarity_synth = pd.read_csv(f"../results/{evaluation}_{ood}.csv")
+    df_ood = pd.read_csv(f"../results/{ood}.csv")
 
-    cols_to_rename = {col: f"{col}_{ood}" for col in brain_similarity_synth.columns if
-                      col != 'Model' and col in brain_similarity.columns}
-    brain_similarity_synth_renamed = brain_similarity_synth.rename(columns=cols_to_rename)
+    cols_to_rename = {col: f"{col}_{ood}" for col in df_ood.columns if
+                      col != 'Model' and col in df_id.columns}
+    brain_similarity_synth_renamed = df_ood.rename(columns=cols_to_rename)
     categories = pd.read_csv("../results/categories.csv")
 
-    df = pd.merge(brain_similarity, brain_similarity_synth_renamed, on='Model', how='inner')
+    df = pd.merge(df_id, brain_similarity_synth_renamed, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
-    df = df[df["architecture"] == "CNN"]
-    if "encoding" in evaluation:
-        df[roi_name] = logit(df[roi_name]*100)
-        df[f"{roi_name}_{ood}"] = logit(df[f"{roi_name}_{ood}"]*100)
-    else:
-        df[roi_name] = logit(df[roi_name])
-        df[f"{roi_name}_{ood}"] = logit(df[f"{roi_name}_{ood}"])
+    if not all_models:
+        df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
+
+    """    if "encoding" in id:
+            df[roi_name] = logit(df[roi_name]*100)
+            df[f"{roi_name}_{ood}"] = logit(df[f"{roi_name}_{ood}"]*100)
+        else:
+            df[roi_name] = logit(df[roi_name])
+            df[f"{roi_name}_{ood}"] = logit(df[f"{roi_name}_{ood}"])"""
 
     # Define distinct markers for datasets
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
@@ -80,15 +79,17 @@ def create_plot(roi, evaluation, ood):
     plt.gca().add_artist(legend1)
     plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
 
-    plt.xlabel(evaluation)
-    plt.ylabel(f"{evaluation}_{ood}")
-    plt.title(f"{evaluation} vs {evaluation}_{ood} {roi}")
+    plt.xlabel(f"{id} {roi_name}")
+    plt.ylabel(f"{ood} {roi_name}")
+    plt.title(f"{id}_vs_{ood}_{roi}")
     plt.tight_layout()
     os.makedirs("../plots/brain_similarity", exist_ok=True)
-    plt.savefig(f"../plots/brain_similarity/{evaluation}_{ood} vs {evaluation}_{roi}")
+    plt.savefig(f"../plots/brain_similarity/{id}_vs_{ood}_{roi}")
     plt.show()
 
 
 if __name__ == '__main__':
     for roi in ["V1", "V2", "V4", "IT"]:
-        create_plot(roi, "encoding", "illusion")
+        create_plot(roi, "encoding", "encoding_illusion")
+        create_plot(roi, "encoding", "encoding_illusion", True)
+

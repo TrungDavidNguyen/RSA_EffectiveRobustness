@@ -119,8 +119,7 @@ if __name__ == '__main__':
                    'convnext_base.fb_in22k_ft_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
-    models_list = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k',
-                   'convnext_base.fb_in22k_ft_in1k', "cornet_rt", "wide_resnet50_2", "xception"]
+    models_list = ['convit_small']
 
     #model_name = models_list[num]
     for model_name in models_list:

@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
 from scipy.stats import linregress
 from matplotlib.lines import Line2D
 
 
-def create_plot(ood_dataset, roi, evaluation):
+def create_plot(ood_dataset, roi, evaluation, all_models = False):
     eval_name = f"%R2_{evaluation}" if "rsa" in evaluation else f"R_{evaluation}"
     roi_name = f"%R2_{roi}" if "rsa" in evaluation else f"R_{roi}"
 
@@ -17,13 +18,12 @@ def create_plot(ood_dataset, roi, evaluation):
 
     df = pd.merge(brain_similarity, robustness, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
-    #df = df[df["dataset"] != "more data"]
-    #df = df[df["architecture"] == "CNN"]
+    if not all_models:
+        df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
 
     if ood_dataset == "imagenet-a":
         df = df[df['Model'].str.lower() != "resnet50"]
         df = df.reset_index(drop=True)
-
 
     # Define distinct markers for datasets
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
@@ -52,9 +52,9 @@ def create_plot(ood_dataset, roi, evaluation):
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, color="red")
 
-    plt.text(0.95, 0.95, f"r = {r_value:.2f}\np = {p_value:.2f}",
+    plt.text(0.05, 0.95, f"r = {r_value:.2f}\np = {p_value:.2f}",
              transform=plt.gca().transAxes,
-             ha='right', va='top',
+             ha='left', va='top',
              fontsize=12, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
 
     # Create custom legend entries for dataset (markers)
@@ -66,24 +66,32 @@ def create_plot(ood_dataset, roi, evaluation):
                                    linestyle='None', markersize=8)
                             for arch in architectures]
 
-    #legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='upper right', fontsize=6, title_fontsize=8)
-    #plt.gca().add_artist(legend1)
-    #plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
+    legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='upper right', fontsize=6, title_fontsize=8)
+    plt.gca().add_artist(legend1)
+    plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
+    model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
 
     plt.xlabel(eval_name)
     plt.ylabel("Effective Robustness")
     plt.title(f"{roi} and {ood_dataset}")
     plt.tight_layout()
-    plt.savefig(f"../plots/{roi}_{ood_dataset}_{evaluation}")
-    plt.show()
+    output_dir = f"../plots/brain_vs_rob/{evaluation}/{model_type}"
+    os.makedirs(output_dir, exist_ok=True)
+    plt.savefig(f"{output_dir}/{roi}_{ood_dataset}_{evaluation}.png")
+    #plt.show()
+    plt.close()
 
 
 if __name__ == '__main__':
-    for ood_dataset in ["imagenet-r","imagenet-sketch", "imagenetv2-matched-frequency","imagenet-a"]:
-        for roi in ["V1", "V2", "V4","IT"]:
-            create_plot(ood_dataset, roi, "encoding_illusion")
-            #create_plot(ood_dataset, roi, "encoding_synthetic")
-            #create_plot(ood_dataset, roi, "encoding")
-            #create_plot(ood_dataset, roi, "rsa_illusion")
-            #create_plot(ood_dataset, roi, "rsa_synthetic")
-            #create_plot(ood_dataset, roi, "rsa")
+    evaluations = [
+        "encoding", "rsa",
+        "encoding_synthetic", "rsa_synthetic",
+        "encoding_illusion", "rsa_illusion"
+    ]
+    ood_datasets = ["imagenet-r", "imagenet-sketch", "imagenetv2-matched-frequency", "imagenet-a"]
+    rois = ["V1", "V2", "V4", "IT"]
+    for ood_dataset in ood_datasets:
+        for roi in rois:
+            for evaluation in evaluations:
+                create_plot(ood_dataset, roi, evaluation)
+                create_plot(ood_dataset, roi, evaluation, True)
