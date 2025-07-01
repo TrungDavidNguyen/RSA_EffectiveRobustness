@@ -6,19 +6,20 @@ from effective_robustness import logit
 
 
 def create_plot(roi, id, ood, all_models=False):
-    roi_name = f"%R2_{roi}" if "rsa" in id else f"R_{roi}"
+    roi_name_id = f"%R2_{roi}" if "rsa" in id else f"R_{roi}"
+    roi_name_ood = f"%R2_{roi}" if "rsa" in ood else f"R_{roi}"
 
     df_id = pd.read_csv(f"../results/{id}.csv")
-    df_id = df_id.dropna(subset=[roi_name])
+    df_id = df_id.dropna(subset=[roi_name_id])
 
     df_ood = pd.read_csv(f"../results/{ood}.csv")
-
     cols_to_rename = {col: f"{col}_{ood}" for col in df_ood.columns if
-                      col != 'Model' and col in df_id.columns}
-    brain_similarity_synth_renamed = df_ood.rename(columns=cols_to_rename)
+                      col != 'Model'}
+    df_ood = df_ood.rename(columns=cols_to_rename)
+
     categories = pd.read_csv("../results/categories.csv")
 
-    df = pd.merge(df_id, brain_similarity_synth_renamed, on='Model', how='inner')
+    df = pd.merge(df_id, df_ood, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
     if not all_models:
         df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
@@ -39,24 +40,23 @@ def create_plot(roi, id, ood, all_models=False):
     architectures = df["architecture"].unique()
     colors = plt.cm.tab10.colors
     color_map = {arch: colors[i % len(colors)] for i, arch in enumerate(architectures)}
-
     # Plot points with marker by dataset and color by architecture
     for _, row in df.iterrows():
-        plt.scatter(row[roi_name], row[f"{roi_name}_{ood}"],
+        plt.scatter(row[roi_name_id], row[f"{roi_name_ood}_{ood}"],
                     marker=marker_map[row["dataset"]],
                     color=color_map[row["architecture"]],
                     edgecolor='black',
                     s=50,
                     label=f'{row["dataset"]}_{row["architecture"]}')  # Temporary for deduplication
 
-        plt.text(row[roi_name], row[f"{roi_name}_{ood}"], row["Model"],
+        plt.text(row[roi_name_id], row[f"{roi_name_ood}_{ood}"], row["Model"],
                  fontsize=7, ha='right', va='bottom')
 
     # Regression line
-    slope, intercept, r_value, p_value, std_err = linregress(df[roi_name], df[f"{roi_name}_{ood}"])
+    slope, intercept, r_value, p_value, std_err = linregress(df[roi_name_id], df[f"{roi_name_ood}_{ood}"])
     print("slope", slope)
     print("intercept", intercept)
-    x_vals = df[roi_name]
+    x_vals = df[roi_name_id]
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, color="red")
 
@@ -79,8 +79,8 @@ def create_plot(roi, id, ood, all_models=False):
     plt.gca().add_artist(legend1)
     plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
 
-    plt.xlabel(f"{id} {roi_name}")
-    plt.ylabel(f"{ood} {roi_name}")
+    plt.xlabel(f"{id} {roi_name_id}")
+    plt.ylabel(f"{ood} {roi_name_ood}")
     plt.title(f"{id}_vs_{ood}_{roi}")
     plt.tight_layout()
     os.makedirs("../plots/brain_similarity", exist_ok=True)
@@ -90,6 +90,10 @@ def create_plot(roi, id, ood, all_models=False):
 
 if __name__ == '__main__':
     for roi in ["V1", "V2", "V4", "IT"]:
-        create_plot(roi, "encoding_natural", "encoding_illusion")
-        create_plot(roi, "encoding_natural", "encoding_illusion", True)
+        create_plot(roi, "rsa_natural", "encoding_natural")
+    for roi in ["V1", "V2", "V4", "IT"]:
+        create_plot(roi, "rsa_illusion", "encoding_illusion")
+    for roi in ["V1", "V2", "V4", "IT"]:
+        create_plot(roi, "rsa_synthetic", "encoding_synthetic")
+        #create_plot(roi, "encoding_natural", "encoding_illusion", True)
 
