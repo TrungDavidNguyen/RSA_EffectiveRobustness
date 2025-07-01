@@ -58,7 +58,7 @@ vit_base_patch16_224,VIT,more data
 vit_large_patch16_224,VIT,more data
 wide_resnet50_2,CNN,ImageNet1K
 xception,CNN,ImageNet1K
-efficientnet_b3.ra2_in1k,Rand-augment,ImageNet1K
+efficientnet_b3.ra2_in1k,CNN,ImageNet1K
 beit_base_patch16_224.in22k_ft_in22k_in1k,VIT,more data
 gmlp_s16_224.ra3_in1k,MLP,ImageNet1K
 convnext_base.fb_in22k_ft_in1k,CNN,more data

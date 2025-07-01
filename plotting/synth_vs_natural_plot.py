@@ -90,6 +90,6 @@ def create_plot(roi, id, ood, all_models=False):
 
 if __name__ == '__main__':
     for roi in ["V1", "V2", "V4", "IT"]:
-        create_plot(roi, "encoding", "encoding_illusion")
-        create_plot(roi, "encoding", "encoding_illusion", True)
+        create_plot(roi, "encoding_natural", "encoding_illusion")
+        create_plot(roi, "encoding_natural", "encoding_illusion", True)
 

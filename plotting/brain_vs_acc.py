@@ -5,7 +5,7 @@ from scipy.stats import linregress
 from matplotlib.lines import Line2D
 
 
-def create_plot(ood_dataset, roi, evaluation, all_models = False):
+def create_plot(dataset, roi, evaluation, all_models = False):
     eval_name = f"%R2_{evaluation}" if "rsa" in evaluation else f"R_{evaluation}"
     roi_name = f"%R2_{roi}" if "rsa" in evaluation else f"R_{roi}"
 
@@ -21,9 +21,10 @@ def create_plot(ood_dataset, roi, evaluation, all_models = False):
     if not all_models:
         df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
 
-    if ood_dataset == "imagenet-a":
+    if dataset == "imagenet-a":
         df = df[df['Model'].str.lower() != "resnet50"]
         df = df.reset_index(drop=True)
+    #df = df[df["imagenet1k"]>=70]
 
 
     # Define distinct markers for datasets
@@ -37,18 +38,18 @@ def create_plot(ood_dataset, roi, evaluation, all_models = False):
 
     # Plot points with marker by dataset and color by architecture
     for _, row in df.iterrows():
-        plt.scatter(row[roi_name], row[ood_dataset],
+        plt.scatter(row[roi_name], row[dataset],
                     marker=marker_map[row["dataset"]],
                     color=color_map[row["architecture"]],
                     edgecolor='black',
                     s=50,
                     label=f'{row["dataset"]}_{row["architecture"]}')  # Temporary for deduplication
 
-        plt.text(row[roi_name], row[ood_dataset], row["Model"],
-                 fontsize=7, ha='right', va='bottom')
+    """        plt.text(row[roi_name], row[dataset], row["Model"],
+                     fontsize=7, ha='right', va='bottom')"""
 
     # Regression line
-    slope, intercept, r_value, p_value, std_err = linregress(df[roi_name], df[ood_dataset])
+    slope, intercept, r_value, p_value, std_err = linregress(df[roi_name], df[dataset])
     x_vals = df[roi_name]
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, color="red")
@@ -58,39 +59,39 @@ def create_plot(ood_dataset, roi, evaluation, all_models = False):
              ha='left', va='top',
              fontsize=12, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
 
-    # Create custom legend entries for dataset (markers)
-    dataset_handles = [Line2D([0], [0], marker=marker_map[ds], color='w', label=ds,
-                              markerfacecolor='gray', markersize=8, markeredgecolor='black')
-                       for ds in datasets]
-
-    architecture_handles = [Line2D([0], [0], marker='o', color=color_map[arch], label=arch,
-                                   linestyle='None', markersize=8)
-                            for arch in architectures]
-
-    legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='upper right', fontsize=6, title_fontsize=8)
-    plt.gca().add_artist(legend1)
-    plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
+    """    # Create custom legend entries for dataset (markers)
+        dataset_handles = [Line2D([0], [0], marker=marker_map[ds], color='w', label=ds,
+                                  markerfacecolor='gray', markersize=8, markeredgecolor='black')
+                           for ds in datasets]
+    
+        architecture_handles = [Line2D([0], [0], marker='o', color=color_map[arch], label=arch,
+                                       linestyle='None', markersize=8)
+                                for arch in architectures]
+    
+        legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='upper right', fontsize=6, title_fontsize=8)
+        plt.gca().add_artist(legend1)
+        plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)"""
     model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
 
     plt.xlabel(eval_name)
-    plt.ylabel("Accuracy")
-    plt.title(f"{roi} and {ood_dataset}")
+    plt.ylabel(f"Accuracy on {dataset}")
+    plt.title(f"{roi}")
     plt.tight_layout()
 
     output_dir = f"../plots/brain_vs_acc/{evaluation}/{model_type}"
     os.makedirs(output_dir, exist_ok=True)
-    plt.savefig(f"{output_dir}/{roi}_{ood_dataset}_{evaluation}.png")
+    plt.savefig(f"{output_dir}/{roi}_{dataset}_{evaluation}.png")
     #plt.show()
     plt.close()
 
 
 if __name__ == '__main__':
     evaluations = [
-        "encoding", "rsa",
+        "encoding_natural", "rsa_natural",
         "encoding_synthetic", "rsa_synthetic",
         "encoding_illusion", "rsa_illusion"
     ]
-    ood_datasets = ["imagenet1k", "imagenet-r", "imagenet-sketch", "imagenetv2-matched-frequency", "imagenet-a"]
+    ood_datasets = ["imagenet1k"]
     rois = ["V1", "V2", "V4", "IT"]
     for ood_dataset in ood_datasets:
         for roi in rois:
