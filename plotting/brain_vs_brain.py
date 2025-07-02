@@ -97,4 +97,5 @@ if __name__ == '__main__':
     for roi in ["V1", "V2", "V4", "IT"]:
         for i, eval in enumerate(evaluations):
             for eval_2 in evaluations[i+1:]:
+                create_plot(roi, eval, eval_2)
                 create_plot(roi, eval, eval_2, True)
