@@ -84,7 +84,7 @@ def create_plot(ood_dataset, roi, evaluation, all_models = False):
 
 if __name__ == '__main__':
     evaluations = [
-        "encoding", "rsa",
+        "encoding_natural", "rsa_natural",
         "encoding_synthetic", "rsa_synthetic",
         "encoding_illusion", "rsa_illusion"
     ]

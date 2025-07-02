@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
 
-def create_heatmap(evaluation, all_models=False):
+def create_heatmap_different_stimuli(evaluation, all_models=False):
     """
     Create a heatmap showing correlation (r-value) between brain similarity scores and model accuracy.
 
@@ -72,7 +72,73 @@ def create_heatmap(evaluation, all_models=False):
     plt.close()
 
 
+def create_heatmap_same_stimuli(all_models=False):
+    """
+    Create a heatmap showing correlation (r-value) between brain similarity scores and model accuracy.
+
+    Parameters:
+        evaluation (str): The evaluation type ('encoding' or 'rsa')
+        all_models (bool): Whether to include all models or only CNNs trained on imagenet1k
+    """
+    roi_names = ["V1", "V2", "V4", "IT"]
+    evaluations = {
+        "encoding_natural": "rsa_natural",
+        "encoding_synthetic": "rsa_synthetic",
+        "encoding_illusion": "rsa_illusion"
+    }
+
+    # Load shared datasets
+    categories_df = pd.read_csv("../results/categories.csv")
+
+    # Prepare index labels for rows in r_value_matrix
+    index_labels = []
+    for eval_x, eval_y in evaluations.items():
+        label = f"{eval_x} vs {eval_y}"
+        index_labels.append(label)
+
+    r_value_matrix = pd.DataFrame(index=index_labels, columns=roi_names)
+
+    # Fill r_value_matrix with r-values
+    label_idx = 0
+    for eval_x, eval_y in evaluations.items():
+        roi_prefix_x = "%R2_" if "rsa" in eval_x else "R_"
+        brain_similarity_df_x = pd.read_csv(f"../results/{eval_x}.csv").dropna(
+            subset=[roi_prefix_x + roi for roi in roi_names])
+        roi_prefix_y = "%R2_" if "rsa" in eval_y else "R_"
+        brain_similarity_df_y = pd.read_csv(f"../results/{eval_y}.csv").dropna(
+            subset=[roi_prefix_y + roi for roi in roi_names])
+
+        df = pd.merge(brain_similarity_df_x, brain_similarity_df_y, on='Model', how='inner')
+        df = pd.merge(df, categories_df, on='Model', how='inner')
+
+        if not all_models:
+            df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
+
+        for roi in roi_names:
+            r_value = linregress(df[roi_prefix_x + roi], df[roi_prefix_y + roi]).rvalue
+            r_value_matrix.loc[index_labels[label_idx], roi] = r_value
+        label_idx += 1
+
+    r_value_matrix = r_value_matrix.astype(float)
+
+    # Plot heatmap
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
+    model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
+    plt.title(f"Correlation between scores between datasets ({model_type})")
+    plt.xlabel("ROI")
+    plt.ylabel("fmri datasets")
+    plt.tight_layout()
+
+    # Save figure
+    output_dir = f"../plots/heatmap_brain_vs_brain/{model_type}"
+    os.makedirs(output_dir, exist_ok=True)
+    plt.savefig(f"{output_dir}/heatmap_same_stimuli.png")
+    plt.close()
+
 if __name__ == '__main__':
     for evaluation in ["encoding", "rsa"]:
-        create_heatmap(evaluation)
-        create_heatmap(evaluation, all_models=True)
+        create_heatmap_different_stimuli(evaluation)
+        create_heatmap_different_stimuli(evaluation, all_models=True)
+    create_heatmap_same_stimuli()
+    create_heatmap_same_stimuli(True)

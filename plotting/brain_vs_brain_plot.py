@@ -54,8 +54,6 @@ def create_plot(roi, id, ood, all_models=False):
 
     # Regression line
     slope, intercept, r_value, p_value, std_err = linregress(df[roi_name_id], df[f"{roi_name_ood}_{ood}"])
-    print("slope", slope)
-    print("intercept", intercept)
     x_vals = df[roi_name_id]
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, color="red")
@@ -78,22 +76,25 @@ def create_plot(roi, id, ood, all_models=False):
     legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='lower left', fontsize=6, title_fontsize=8)
     plt.gca().add_artist(legend1)
     plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
+    model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
 
     plt.xlabel(f"{id} {roi_name_id}")
     plt.ylabel(f"{ood} {roi_name_ood}")
-    plt.title(f"{id}_vs_{ood}_{roi}")
+    plt.title(f"{id}_vs_{ood}_{roi} {model_type}")
     plt.tight_layout()
-    os.makedirs("../plots/brain_similarity", exist_ok=True)
-    plt.savefig(f"../plots/brain_similarity/{id}_vs_{ood}_{roi}")
-    plt.show()
+    output_dir = f"../plots/brain_vs_brain/{model_type}/{roi}"
+    os.makedirs(output_dir, exist_ok=True)
+    plt.savefig(os.path.join(output_dir, f"{id}_vs_{ood}_{roi}"))
+    plt.close()
 
 
 if __name__ == '__main__':
+    evaluations = [
+        "encoding_natural", "rsa_natural",
+        "encoding_synthetic", "rsa_synthetic",
+        "encoding_illusion", "rsa_illusion"
+    ]
     for roi in ["V1", "V2", "V4", "IT"]:
-        create_plot(roi, "rsa_natural", "encoding_natural")
-    for roi in ["V1", "V2", "V4", "IT"]:
-        create_plot(roi, "rsa_illusion", "encoding_illusion")
-    for roi in ["V1", "V2", "V4", "IT"]:
-        create_plot(roi, "rsa_synthetic", "encoding_synthetic")
-        #create_plot(roi, "encoding_natural", "encoding_illusion", True)
-
+        for i, eval in enumerate(evaluations):
+            for eval_2 in evaluations[i+1:]:
+                create_plot(roi, eval, eval_2, True)
