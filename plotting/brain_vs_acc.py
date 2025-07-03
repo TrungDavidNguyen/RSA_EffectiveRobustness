@@ -24,31 +24,25 @@ def create_plot(dataset, roi, evaluation, all_models = False):
     if dataset == "imagenet-a":
         df = df[df['Model'].str.lower() != "resnet50"]
         df = df.reset_index(drop=True)
-    #df = df[df["imagenet1k"]>=70]
 
-
-    # Define distinct markers for datasets
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
     datasets = df["dataset"].unique()
     marker_map = {ds: markers[i % len(markers)] for i, ds in enumerate(datasets)}
 
-    # Define a color map for architecture (optional)
     colors = plt.cm.tab10.colors
     color_map = {arch: colors[i % len(colors)] for i, arch in enumerate(architectures)}
 
-    # Plot points with marker by dataset and color by architecture
     for _, row in df.iterrows():
         plt.scatter(row[roi_name], row[dataset],
                     marker=marker_map[row["dataset"]],
                     color=color_map[row["architecture"]],
                     edgecolor='black',
                     s=50,
-                    label=f'{row["dataset"]}_{row["architecture"]}')  # Temporary for deduplication
+                    label=f'{row["dataset"]}_{row["architecture"]}')
 
     """        plt.text(row[roi_name], row[dataset], row["Model"],
                      fontsize=7, ha='right', va='bottom')"""
 
-    # Regression line
     slope, intercept, r_value, p_value, std_err = linregress(df[roi_name], df[dataset])
     x_vals = df[roi_name]
     y_vals = intercept + slope * x_vals

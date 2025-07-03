@@ -25,16 +25,13 @@ def create_plot(ood_dataset, roi, evaluation, all_models = False):
         df = df[df['Model'].str.lower() != "resnet50"]
         df = df.reset_index(drop=True)
 
-    # Define distinct markers for datasets
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
     datasets = df["dataset"].unique()
     marker_map = {ds: markers[i % len(markers)] for i, ds in enumerate(datasets)}
 
-    # Define a color map for architecture (optional)
     colors = plt.cm.tab10.colors
     color_map = {arch: colors[i % len(colors)] for i, arch in enumerate(architectures)}
 
-    # Plot points with marker by dataset and color by architecture
     for _, row in df.iterrows():
         plt.scatter(row[roi_name], row[ood_dataset],
                     marker=marker_map[row["dataset"]],
@@ -46,7 +43,6 @@ def create_plot(ood_dataset, roi, evaluation, all_models = False):
         plt.text(row[roi_name], row[ood_dataset], row["Model"],
                  fontsize=7, ha='right', va='bottom')
 
-    # Regression line
     slope, intercept, r_value, p_value, std_err = linregress(df[roi_name], df[ood_dataset])
     x_vals = df[roi_name]
     y_vals = intercept + slope * x_vals
@@ -57,7 +53,6 @@ def create_plot(ood_dataset, roi, evaluation, all_models = False):
              ha='left', va='top',
              fontsize=12, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
 
-    # Create custom legend entries for dataset (markers)
     dataset_handles = [Line2D([0], [0], marker=marker_map[ds], color='w', label=ds,
                               markerfacecolor='gray', markersize=8, markeredgecolor='black')
                        for ds in datasets]

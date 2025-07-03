@@ -6,13 +6,6 @@ from scipy.stats import linregress
 
 
 def create_heatmap(evaluation, all_models=False):
-    """
-    Create a heatmap showing correlation (r-value) between brain similarity scores and model accuracy.
-
-    Parameters:
-        evaluation (str): The evaluation type ('encoding' or 'rsa'-)
-        all_models (bool): Whether to include all models or only CNNs trained on imagenet1k
-    """
     roi_names = ["V1", "V2", "V4", "IT"]
     roi_prefix = "%R2_" if "rsa" in evaluation else "R_"
     evaluations = {

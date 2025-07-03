@@ -42,8 +42,7 @@ def create_bar_plot_by_roi(method, roi):
 
     # Merge and sort by architecture
     df = df.merge(categories[['Model', 'architecture']], on='Model', how='left')
-    df = df.sort_values(by=['architecture', 'Model'])  # Sort by architecture (then model for consistent order)
-
+    df = df.sort_values(by=['architecture', 'Model'])
     bar_colors = df['architecture'].map(color_map)
 
     plt.figure(figsize=(10, 6))

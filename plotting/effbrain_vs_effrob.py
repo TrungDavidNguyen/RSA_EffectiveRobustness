@@ -2,10 +2,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from scipy.stats import linregress
-from effective_robustness import logit
+from matplotlib.lines import Line2D
 
 
-def create_plot(dataset, roi, evaluation):
+def create_plot(dataset, roi, evaluation, all_models=False):
     if "rsa" in evaluation:
         eval_name = f"%R2_{roi}_{evaluation}"
     elif "encoding" in evaluation:
@@ -17,32 +17,30 @@ def create_plot(dataset, roi, evaluation):
 
     df = pd.merge(brain_similarity, robustness, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
-    #df = df[df["architecture"] == "CNN"]
+    if not all_models:
+        df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
     df = df.dropna()
-    # Define distinct markers for datasets
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
     datasets = df["dataset"].unique()
     marker_map = {ds: markers[i % len(markers)] for i, ds in enumerate(datasets)}
 
-    # Define a color map for architecture (optional)
     architectures = df["architecture"].unique()
     colors = plt.cm.tab10.colors
     color_map = {arch: colors[i % len(colors)] for i, arch in enumerate(architectures)}
 
-    # Plot points with marker by dataset and color by architecture
     for _, row in df.iterrows():
-        plt.scatter(row[dataset], row[eval_name],
+        plt.scatter(row[eval_name], row[dataset],
                     marker=marker_map[row["dataset"]],
                     color=color_map[row["architecture"]],
                     edgecolor='black',
                     s=50,
-                    label=f'{row["dataset"]}_{row["architecture"]}')  # Temporary for deduplication
+                    label=f'{row["dataset"]}_{row["architecture"]}')
 
-        plt.text(row[dataset], row[eval_name], row["Model"],
+        plt.text(row[eval_name], row[dataset], row["Model"],
                  fontsize=7, ha='right', va='bottom')
 
     # Regression line
-    slope, intercept, r_value, p_value, std_err = linregress(df[dataset], df[eval_name])
+    slope, intercept, r_value, p_value, std_err = linregress(df[eval_name], df[dataset])
     x_vals = df[dataset]
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, color="red")
@@ -52,7 +50,6 @@ def create_plot(dataset, roi, evaluation):
              ha='right', va='top',
              fontsize=12, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
     # Create custom legend entries for dataset (markers)
-    from matplotlib.lines import Line2D
     dataset_handles = [Line2D([0], [0], marker=marker_map[ds], color='w', label=ds,
                               markerfacecolor='gray', markersize=8, markeredgecolor='black')
                        for ds in datasets]
@@ -64,15 +61,20 @@ def create_plot(dataset, roi, evaluation):
     legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='lower left', fontsize=6, title_fontsize=8)
     plt.gca().add_artist(legend1)
     plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
-
-    plt.xlabel(f"effective robustness {dataset}")
-    plt.ylabel(f"effective brain similarity {evaluation} {roi}")
+    model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
+    plt.title(model_type)
+    plt.xlabel(f"effective brain similarity {evaluation} {roi}")
+    plt.ylabel(f"effective robustness {dataset}")
     plt.tight_layout()
-    plt.savefig(f"../plots/effectiveRobustness_vs_effectiveBrainsimilarity/{ood_dataset}_{evaluation}_{roi}")
-    plt.show()
+    output_dir = f"../plots/effbrain_vs_effrob/{evaluation}/{model_type}"
+    os.makedirs(output_dir, exist_ok=True)
+    plt.savefig(os.path.join(output_dir,f"{ood_dataset}_{evaluation}_{roi}"))
+    plt.close()
 
 
 if __name__ == '__main__':
     for ood_dataset in ["imagenet-r","imagenet-sketch", "imagenetv2-matched-frequency","imagenet-a"]:
         for roi in ["V1", "V2", "V4","IT"]:
-            create_plot(ood_dataset, roi, "encoding_illusion")
+            for eval in ["encoding_synthetic","encoding_illusion","rsa_synthetic","rsa_illusion"]:
+                create_plot(ood_dataset, roi, eval)
+                create_plot(ood_dataset, roi, eval, True)

@@ -6,13 +6,6 @@ from scipy.stats import linregress
 
 
 def create_heatmap_different_stimuli(evaluation, all_models=False):
-    """
-    Create a heatmap showing correlation (r-value) between brain similarity scores and model accuracy.
-
-    Parameters:
-        evaluation (str): The evaluation type ('encoding' or 'rsa')
-        all_models (bool): Whether to include all models or only CNNs trained on imagenet1k
-    """
     roi_names = ["V1", "V2", "V4", "IT"]
     roi_prefix = "%R2_" if "rsa" in evaluation else "R_"
     evaluations = {
@@ -20,10 +13,8 @@ def create_heatmap_different_stimuli(evaluation, all_models=False):
         "rsa": ["rsa_natural", "rsa_synthetic", "rsa_illusion"]
     }
 
-    # Load shared datasets
     categories_df = pd.read_csv("../results/categories.csv")
 
-    # Prepare index labels for rows in r_value_matrix
     index_labels = []
     for i, eval_x in enumerate(evaluations[evaluation]):
         for eval_y in evaluations[evaluation][i + 1:]:
@@ -35,7 +26,6 @@ def create_heatmap_different_stimuli(evaluation, all_models=False):
 
     r_value_matrix = pd.DataFrame(index=index_labels, columns=roi_names)
 
-    # Fill r_value_matrix with r-values
     label_idx = 0
     for i, eval_x in enumerate(evaluations[evaluation]):
         brain_similarity_df_x = pd.read_csv(f"../results/{eval_x}.csv").dropna(
@@ -56,7 +46,6 @@ def create_heatmap_different_stimuli(evaluation, all_models=False):
 
     r_value_matrix = r_value_matrix.astype(float)
 
-    # Plot heatmap
     plt.figure(figsize=(10, 8))
     sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
     model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
@@ -65,7 +54,6 @@ def create_heatmap_different_stimuli(evaluation, all_models=False):
     plt.ylabel("fmri datasets")
     plt.tight_layout()
 
-    # Save figure
     output_dir = f"../plots/heatmap_brain_vs_brain/{model_type}"
     os.makedirs(output_dir, exist_ok=True)
     plt.savefig(f"{output_dir}/heatmap_{evaluation}.png")
@@ -73,13 +61,6 @@ def create_heatmap_different_stimuli(evaluation, all_models=False):
 
 
 def create_heatmap_same_stimuli(all_models=False):
-    """
-    Create a heatmap showing correlation (r-value) between brain similarity scores and model accuracy.
-
-    Parameters:
-        evaluation (str): The evaluation type ('encoding' or 'rsa')
-        all_models (bool): Whether to include all models or only CNNs trained on imagenet1k
-    """
     roi_names = ["V1", "V2", "V4", "IT"]
     evaluations = {
         "encoding_natural": "rsa_natural",
@@ -87,10 +68,8 @@ def create_heatmap_same_stimuli(all_models=False):
         "encoding_illusion": "rsa_illusion"
     }
 
-    # Load shared datasets
     categories_df = pd.read_csv("../results/categories.csv")
 
-    # Prepare index labels for rows in r_value_matrix
     index_labels = []
     for eval_x, eval_y in evaluations.items():
         label = f"{eval_x} vs {eval_y}"
@@ -98,7 +77,6 @@ def create_heatmap_same_stimuli(all_models=False):
 
     r_value_matrix = pd.DataFrame(index=index_labels, columns=roi_names)
 
-    # Fill r_value_matrix with r-values
     label_idx = 0
     for eval_x, eval_y in evaluations.items():
         roi_prefix_x = "%R2_" if "rsa" in eval_x else "R_"
@@ -121,7 +99,6 @@ def create_heatmap_same_stimuli(all_models=False):
 
     r_value_matrix = r_value_matrix.astype(float)
 
-    # Plot heatmap
     plt.figure(figsize=(10, 8))
     sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
     model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
@@ -130,7 +107,6 @@ def create_heatmap_same_stimuli(all_models=False):
     plt.ylabel("fmri datasets")
     plt.tight_layout()
 
-    # Save figure
     output_dir = f"../plots/heatmap_brain_vs_brain/{model_type}"
     os.makedirs(output_dir, exist_ok=True)
     plt.savefig(f"{output_dir}/heatmap_same_stimuli.png")

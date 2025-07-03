@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from scipy.stats import linregress
-from effective_robustness import logit
+from matplotlib.lines import Line2D
 
 
 def create_plot(roi, id, ood, all_models=False):
@@ -31,40 +31,33 @@ def create_plot(roi, id, ood, all_models=False):
             df[roi_name] = logit(df[roi_name])
             df[f"{roi_name}_{ood}"] = logit(df[f"{roi_name}_{ood}"])"""
 
-    # Define distinct markers for datasets
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
     datasets = df["dataset"].unique()
     marker_map = {ds: markers[i % len(markers)] for i, ds in enumerate(datasets)}
 
-    # Define a color map for architecture (optional)
     architectures = df["architecture"].unique()
     colors = plt.cm.tab10.colors
     color_map = {arch: colors[i % len(colors)] for i, arch in enumerate(architectures)}
-    # Plot points with marker by dataset and color by architecture
     for _, row in df.iterrows():
         plt.scatter(row[roi_name_id], row[f"{roi_name_ood}_{ood}"],
                     marker=marker_map[row["dataset"]],
                     color=color_map[row["architecture"]],
                     edgecolor='black',
                     s=50,
-                    label=f'{row["dataset"]}_{row["architecture"]}')  # Temporary for deduplication
+                    label=f'{row["dataset"]}_{row["architecture"]}')
 
         plt.text(row[roi_name_id], row[f"{roi_name_ood}_{ood}"], row["Model"],
                  fontsize=7, ha='right', va='bottom')
 
-    # Regression line
     slope, intercept, r_value, p_value, std_err = linregress(df[roi_name_id], df[f"{roi_name_ood}_{ood}"])
     x_vals = df[roi_name_id]
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, color="red")
 
-    # Correlation label
     plt.text(0.95, 0.95, f"r = {r_value:.2f}\np = {p_value:.2f}",
              transform=plt.gca().transAxes,
              ha='right', va='top',
              fontsize=12, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
-    # Create custom legend entries for dataset (markers)
-    from matplotlib.lines import Line2D
     dataset_handles = [Line2D([0], [0], marker=marker_map[ds], color='w', label=ds,
                               markerfacecolor='gray', markersize=8, markeredgecolor='black')
                        for ds in datasets]
