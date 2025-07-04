@@ -80,15 +80,18 @@ def effective_brain_similarity_csv():
         for j in evaluations[i]:
             ood_df = pd.read_csv(f"results/{j}.csv")
             df_merged = pd.merge(id_df, ood_df, on='Model', how='inner')
+            categories = pd.read_csv(f"results/categories.csv")
+            df_fit = pd.merge(df_merged, categories, on='Model', how='inner')
+            df_fit = df_fit[(df_fit["dataset"] != "more data") & (df_fit["architecture"] == "CNN")]
             for roi in id_df.columns:
                 if roi == "Model":
                     df["Model"] = df_merged["Model"]
                 elif "encoding" in i:
-                    intercept, slope, _, _, _ = linregress(logit(df_merged[roi + "_x"]*100), logit(df_merged[roi + "_y"]*100))
+                    intercept, slope, _, _, _ = linregress(logit(df_fit[roi + "_x"]*100), logit(df_fit[roi + "_y"]*100))
                     df[roi + f"_{j}"] = df_merged.apply(
                         lambda row: effective_robustness(row[roi + "_x"] * 100, row[roi + "_y"] * 100, intercept, slope), axis=1)
-                else:
-                    intercept, slope, _, _, _ = linregress(logit(df_merged[roi + "_x"]), logit(df_merged[roi + "_y"]))
+                elif "rsa" in i:
+                    intercept, slope, _, _, _ = linregress(logit(df_fit[roi + "_x"]), logit(df_fit[roi + "_y"]))
                     df[roi + f"_{j}"] = df_merged.apply(
                         lambda row: effective_robustness(row[roi + "_x"], row[roi + "_y"], intercept, slope), axis=1)
 
