@@ -87,6 +87,7 @@ def effective_brain_similarity_csv():
                 if roi == "Model":
                     df["Model"] = df_merged["Model"]
                 elif "encoding" in i:
+                    # _x is id and _y is ood_score
                     intercept, slope, _, _, _ = linregress(logit(df_fit[roi + "_x"]*100), logit(df_fit[roi + "_y"]*100))
                     df[roi + f"_{j}"] = df_merged.apply(
                         lambda row: effective_robustness(row[roi + "_x"] * 100, row[roi + "_y"] * 100, intercept, slope), axis=1)
