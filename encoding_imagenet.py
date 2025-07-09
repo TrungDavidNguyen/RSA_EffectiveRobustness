@@ -120,20 +120,13 @@ if __name__ == '__main__':
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
     models_list = [
-                    'Densenet201','ResNet34', 'ShuffleNetV2x05',
-                    'VGG11', 'VGG11_bn', 'VGG13', 'VGG13_bn', 'VGG16',
-                    'VGG16_bn', 'VGG19', 'VGG19_bn', 'efficientnet_b0',
-                    'efficientnet_b2', 'efficientnet_b4', 'efficientnet_b5', 'mobilenet_v3_large', 'mobilenet_v3_small',
-                    'inception_v3', 'inception_resnet_v2', 'xception',
-                    'resnext50_32x4d',
-                    'resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224',
                     'deit_base_patch16_224',
-                    'swin_base_patch4_window7_224', 'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
+                    'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
                     'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
                     'wide_resnet50_2', 'convit_small',
                     'efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k',
                     'convnext_base.fb_in22k_ft_in1k',
-                    "cornet_s", "cornet_z", "cornet_rt"]
+                    "cornet_s", "cornet_z", "cornet_rt", 'Densenet201', 'efficientnet_b5', 'inception_resnet_v2']
 
     model_name = models_list[num]
     stimuli_path = os.path.join(os.getcwd(), "imagenet_stimuli")
