@@ -33,9 +33,6 @@ def main(model_name, netset, roi_name, stimuli_path, dataset, rdm_save_path, num
 
     brain_path = os.path.join(current_dir, rdm_save_path, roi_name)
     RSA(save_path, brain_path,model_name,roi_name, dataset, num_subj)
-    feat_path_complete = os.path.join(current_dir, save_path)
-    if os.path.exists(feat_path_complete):
-        shutil.rmtree(feat_path_complete)
 
 
 def main_custom(model_name, roi_name, stimuli_path, dataset, rdm_save_path, num_subj, device="cuda" if torch.cuda.is_available() else "cpu"):
@@ -60,8 +57,7 @@ def main_custom(model_name, roi_name, stimuli_path, dataset, rdm_save_path, num_
 
     brain_path = os.path.join(current_dir, rdm_save_path, roi_name)
     RSA(save_path, brain_path,model_name,roi_name, dataset, num_subj)
-    if os.path.exists(feat_path_complete):
-        shutil.rmtree(feat_path_complete)
+
 
 def my_preprocessor(image, model, device):
     """
