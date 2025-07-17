@@ -9,8 +9,8 @@ def create_heatmap_different_stimuli(evaluation, all_models=False):
     roi_names = ["V1", "V2", "V4", "IT"]
     roi_prefix = "%R2_" if "rsa" in evaluation else "R_"
     evaluations = {
-        "encoding": ["encoding_natural", "encoding_synthetic", "encoding_illusion"],
-        "rsa": ["rsa_natural", "rsa_synthetic", "rsa_illusion"]
+        "encoding": ["encoding_natural", "encoding_synthetic", "encoding_illusion", "encoding_imagenet"],
+        "rsa": ["rsa_natural", "rsa_synthetic", "rsa_illusion", "rsa_imagenet"]
     }
 
     categories_df = pd.read_csv("../results/categories.csv")
@@ -65,7 +65,8 @@ def create_heatmap_same_stimuli(all_models=False):
     evaluations = {
         "encoding_natural": "rsa_natural",
         "encoding_synthetic": "rsa_synthetic",
-        "encoding_illusion": "rsa_illusion"
+        "encoding_illusion": "rsa_illusion",
+        "encoding_imagenet": "rsa_imagenet"
     }
 
     categories_df = pd.read_csv("../results/categories.csv")

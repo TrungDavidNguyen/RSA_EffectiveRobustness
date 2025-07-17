@@ -52,7 +52,8 @@ if __name__ == '__main__':
     evaluations = [
         "encoding_natural", "rsa_natural",
         "encoding_synthetic", "rsa_synthetic",
-        "encoding_illusion", "rsa_illusion"
+        "encoding_illusion", "rsa_illusion",
+        "encoding_imagenet", "rsa_imagenet"
     ]
     for evaluation in evaluations:
         create_heatmap(evaluation)

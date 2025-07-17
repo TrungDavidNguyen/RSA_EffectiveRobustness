@@ -83,7 +83,8 @@ if __name__ == '__main__':
     evaluations = [
         "encoding_natural", "rsa_natural",
         "encoding_synthetic", "rsa_synthetic",
-        "encoding_illusion", "rsa_illusion"
+        "encoding_illusion", "rsa_illusion",
+        "encoding_imagenet", "rsa_imagenet"
     ]
     ood_datasets = ["imagenet1k"]
     rois = ["V1", "V2", "V4", "IT"]

@@ -69,8 +69,8 @@ def effective_robustness_csv():
 
 def effective_brain_similarity_csv():
     evaluations = {
-        "encoding_natural": ["encoding_synthetic", "encoding_illusion"],
-        "rsa_natural": ["rsa_synthetic", "rsa_illusion"]
+        "encoding_natural": ["encoding_synthetic", "encoding_illusion", "rsa_imagenet"],
+        "rsa_natural": ["rsa_synthetic", "rsa_illusion", "rsa_imagenet"]
     }
 
     df = pd.DataFrame()
