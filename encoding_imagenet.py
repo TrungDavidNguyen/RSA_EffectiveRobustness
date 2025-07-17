@@ -119,14 +119,7 @@ if __name__ == '__main__':
                    'convnext_base.fb_in22k_ft_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
-    models_list = [
-                    'deit_base_patch16_224',
-                    'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
-                    'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
-                    'wide_resnet50_2', 'convit_small',
-                    'efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k',
-                    'convnext_base.fb_in22k_ft_in1k',
-                    "cornet_s", "cornet_z", "cornet_rt", 'Densenet201', 'efficientnet_b5', 'inception_resnet_v2']
+    models_list = ['Densenet201', 'efficientnet_b5', 'inception_resnet_v2', 'regnety_032', 'efficientnet_b3.ra2_in1k', 'convnext_base.fb_in22k_ft_in1k']
 
     model_name = models_list[num]
     stimuli_path = os.path.join(os.getcwd(), "imagenet_stimuli")
