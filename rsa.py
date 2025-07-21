@@ -89,7 +89,7 @@ def my_cleaner(features):
 
 
 if __name__ == '__main__':
-    num = 0
+    num = int(sys.argv[1])
     standard = ['ResNet50', 'AlexNet', 'Densenet121', 'Densenet161', 'Densenet169',
                 'Densenet201', 'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18',
                 'ResNet34', 'ShuffleNetV2x05', 'ShuffleNetV2x10', 'Squeezenet1_0', 'Squeezenet1_1',
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     model_name = models_list[num]
 
     stimuli_path = os.path.join(os.getcwd(),"NSD Dataset", f"NSD_872_images")
-    rdm_save_path = os.path.join("rdms", "rdm")
+    rdm_save_path = os.path.join("rdms", "rdm_natural")
     dataset = "rsa"
 
     if model_name in standard:

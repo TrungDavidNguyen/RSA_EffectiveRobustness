@@ -11,7 +11,7 @@ if __name__ == '__main__':
     model_name = models_list[num]
 
     stimuli_path = os.path.join(os.getcwd(), "NSD Synthetic", "NSD_284_images")
-    fmri_dataset = os.path.join("fmri_data", "fmri_data/fmri_synthetic")
+    fmri_dataset = os.path.join("fmri_data", "fmri_synthetic")
     save_folder = "encoding_synthetic"
 
     features = encoding_custom(model_name,  "V1", stimuli_path, fmri_dataset, save_folder, 8)

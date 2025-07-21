@@ -121,7 +121,7 @@ if __name__ == '__main__':
                    'gmlp_s16_224.ra3_in1k', 'convnext_base.fb_in22k_ft_in1k']
     model_name = models_list[num]
     stimuli_path = os.path.join(os.getcwd(), "NSD Dataset", "NSD_872_images")
-    fmri_dataset = os.path.join("fmri_data", "fmri")
+    fmri_dataset = os.path.join("fmri_data", "fmri_natural")
     save_folder = "encoding"
     num_subjects = 8
     if model_name in standard:
