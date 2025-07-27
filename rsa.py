@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
     stimuli_path = os.path.join(os.getcwd(),"NSD Dataset", f"NSD_872_images")
     rdm_save_path = os.path.join("rdms", "rdm_natural")
-    dataset = "rsa"
+    dataset = "rsa_natural"
 
     if model_name in standard:
         main(model_name, "Standard", "V1", stimuli_path, dataset, rdm_save_path, 8)

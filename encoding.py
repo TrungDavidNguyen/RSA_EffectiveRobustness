@@ -117,8 +117,7 @@ if __name__ == '__main__':
                    'convnext_base.fb_in22k_ft_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
-    models_list = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
-                   'gmlp_s16_224.ra3_in1k', 'convnext_base.fb_in22k_ft_in1k']
+    models_list = ['efficientnet_b3.ra2_in1k', 'convnext_base.fb_in22k_ft_in1k']
     model_name = models_list[num]
     stimuli_path = os.path.join(os.getcwd(), "NSD Dataset", "NSD_872_images")
     fmri_dataset = os.path.join("fmri_data", "fmri_natural")
@@ -140,7 +139,7 @@ if __name__ == '__main__':
         encoding(model_name, "Cornet", "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
         encoding(model_name, "Cornet", "IT", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
     else:
-        features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, num_subjects)
-        encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
-        encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
-        encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
+        #features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, num_subjects)
+        #encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
+        #encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
+        encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects)

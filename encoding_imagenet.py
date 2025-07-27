@@ -128,14 +128,14 @@ if __name__ == '__main__':
     fmri_dataset = os.path.join("fmri_data", "fmri_imagenet")
     save_folder = "encoding_imagenet"
     if model_name in standard:
-        features = encoding(model_name, "Standard", "V1", stimuli_path, fmri_dataset, save_folder, 6)
-        encoding(model_name, "Standard", "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "Standard", "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
+        #features = encoding(model_name, "Standard", "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        #encoding(model_name, "Standard", "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
+        features = encoding(model_name, "Standard", "V4", stimuli_path, fmri_dataset, save_folder, 6)
         encoding(model_name, "Standard", "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
     elif model_name in timm:
-        features = encoding(model_name, "Timm", "V1", stimuli_path, fmri_dataset, save_folder, 6)
-        encoding(model_name, "Timm", "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding(model_name, "Timm", "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
+        #features = encoding(model_name, "Timm", "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        #encoding(model_name, "Timm", "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
+        features = encoding(model_name, "Timm", "V4", stimuli_path, fmri_dataset, save_folder, 6)
         encoding(model_name, "Timm", "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
     elif model_name in cornet:
         features = encoding(model_name, "Cornet", "V1", stimuli_path, fmri_dataset, save_folder, 6)
@@ -143,7 +143,7 @@ if __name__ == '__main__':
         encoding(model_name, "Cornet", "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
         encoding(model_name, "Cornet", "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
     else:
-        features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, 6)
-        encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
-        encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
+        #features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        #encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
+        features = encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, 6)
         encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, 6, features)

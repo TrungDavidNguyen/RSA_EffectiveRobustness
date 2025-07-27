@@ -21,7 +21,7 @@ if __name__ == '__main__':
     timm_custom = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k',
                    'convnext_base.fb_in22k_ft_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
-    models_list = ['convnext_base.fb_in22k_ft_in1k', "cornet_rt", "efficientnet_b3.ra2_in1k", "gluon_resnext101_64x4d", 'gmlp_s16_224.ra3_in1k']
+    models_list = ['cornet_rt']
     model_name = models_list[num]
 
     stimuli_path = os.path.join(os.getcwd(), "imagenet_stimuli")
