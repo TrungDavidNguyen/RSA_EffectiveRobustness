@@ -40,8 +40,8 @@ def create_plot(dataset, roi, evaluation, all_models = False):
                     s=50,
                     label=f'{row["dataset"]}_{row["architecture"]}')
 
-    """        plt.text(row[roi_name], row[dataset], row["Model"],
-                     fontsize=7, ha='right', va='bottom')"""
+        plt.text(row[roi_name], row[dataset], row["Model"],
+                 fontsize=7, ha='right', va='bottom')
 
     slope, intercept, r_value, p_value, std_err = linregress(df[roi_name], df[dataset])
     x_vals = df[roi_name]

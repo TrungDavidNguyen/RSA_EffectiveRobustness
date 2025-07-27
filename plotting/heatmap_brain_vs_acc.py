@@ -9,8 +9,8 @@ def create_heatmap(evaluation, all_models=False):
     roi_names = ["V1", "V2", "V4", "IT"]
     roi_prefix = "%R2_" if "rsa" in evaluation else "R_"
     evaluations = {
-        "encoding": ["encoding_natural", "encoding_synthetic", "encoding_illusion", "encoding_imagenet"],
-        "rsa": ["rsa_natural", "rsa_synthetic", "rsa_illusion", "rsa_imagenet"]
+        "encoding": ["encoding_natural", "encoding_imagenet", "encoding_synthetic", "encoding_illusion"],
+        "rsa": ["rsa_natural", "rsa_imagenet", "rsa_synthetic", "rsa_illusion"]
     }
 
     # Load shared datasets

@@ -64,9 +64,9 @@ def create_heatmap_same_stimuli(all_models=False):
     roi_names = ["V1", "V2", "V4", "IT"]
     evaluations = {
         "encoding_natural": "rsa_natural",
+        "encoding_imagenet": "rsa_imagenet",
         "encoding_synthetic": "rsa_synthetic",
-        "encoding_illusion": "rsa_illusion",
-        "encoding_imagenet": "rsa_imagenet"
+        "encoding_illusion": "rsa_illusion"
     }
 
     categories_df = pd.read_csv("../results/categories.csv")

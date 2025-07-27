@@ -61,9 +61,9 @@ def create_plot(ood_dataset, roi, evaluation, all_models = False):
                                    linestyle='None', markersize=8)
                             for arch in architectures]
 
-    legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='upper right', fontsize=6, title_fontsize=8)
-    plt.gca().add_artist(legend1)
-    plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
+    """    legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='upper right', fontsize=6, title_fontsize=8)
+        plt.gca().add_artist(legend1)
+        plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)"""
     model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
 
     plt.xlabel(eval_name)
