@@ -69,20 +69,24 @@ def effective_robustness_csv():
 
 def effective_brain_similarity_csv():
     evaluations = {
-        "encoding_natural": ["encoding_synthetic", "encoding_illusion", "rsa_imagenet"],
-        "rsa_natural": ["rsa_synthetic", "rsa_illusion", "rsa_imagenet"]
+        "encoding_imagenet": ["encoding_synthetic", "encoding_illusion", "encoding_natural"],
+        "rsa_imagenet": ["rsa_synthetic", "rsa_illusion", "rsa_natural"]
     }
 
     df = pd.DataFrame()
 
-    for i in ["encoding_natural", "rsa_natural"]:
+    for i in ["encoding_imagenet", "rsa_imagenet"]:
         id_df = pd.read_csv(f"results/{i}.csv")
+        id_df = id_df[~id_df['Model'].isin(
+            ['Densenet201', 'efficientnet_b5', 'inception_resnet_v2', 'regnety_032', 'efficientnet_b3.ra2_in1k',
+             'convnext_base.fb_in22k_ft_in1k', 'cornet_rt'])]
         for j in evaluations[i]:
             ood_df = pd.read_csv(f"results/{j}.csv")
             df_merged = pd.merge(id_df, ood_df, on='Model', how='inner')
             categories = pd.read_csv(f"results/categories.csv")
             df_fit = pd.merge(df_merged, categories, on='Model', how='inner')
-            df_fit = df_fit[(df_fit["dataset"] != "more data") & (df_fit["architecture"] == "CNN")]
+            df_fit = df_fit[(df_fit["dataset"] == "ImageNet1K") & (df_fit["architecture"] == "CNN")]
+
             for roi in id_df.columns:
                 if roi == "Model":
                     df["Model"] = df_merged["Model"]

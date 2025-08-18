@@ -14,6 +14,7 @@ def create_heatmap(evaluation, all_models = False):
     categories_df = pd.read_csv("../results/categories.csv")
     brain_similarity_df = pd.read_csv(f"../results/effective_brain_similarity.csv")
     r_value_matrix = pd.DataFrame(index=ood_datasets, columns=roi_names)
+    p_value_matrix = pd.DataFrame(index=ood_datasets, columns=roi_names)
 
     for ood_dataset in ood_datasets:
         for roi in roi_names:
@@ -24,16 +25,26 @@ def create_heatmap(evaluation, all_models = False):
                 df = df[df['Model'].str.lower() != "resnet50"]
 
             if not all_models:
-                df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
+                df = df[df["architecture"] == "CNN"]
 
-            r_value = linregress(df[f"{roi_prefix}_{roi}_{evaluation}"], df[ood_dataset]).rvalue
-            r_value_matrix.loc[ood_dataset, roi] = r_value
+            result = linregress(df[f"{roi_prefix}_{roi}_{evaluation}"], df[ood_dataset])
+            r_value_matrix.loc[ood_dataset, roi] = result.rvalue
+            p_value_matrix.loc[ood_dataset, roi] = result.pvalue
+
 
     r_value_matrix = r_value_matrix.astype(float)
+    p_value_matrix = p_value_matrix.astype(float)
 
     plt.figure(figsize=(10, 8))
     sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.6, vmax=0.6, center=0, fmt=".2f")
-    model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
+    for i in range(len(p_value_matrix.columns)):
+        for j in range(len(p_value_matrix.columns)):
+            p = p_value_matrix.iloc[i, j]
+            text_color = 'black' if r_value_matrix.iloc[i, j] < 0.37 else 'white'
+            plt.text(j + 0.5, i + 0.7, f"\n(p={p:.2f})",
+                     ha='center', va='center', fontsize=10, color=text_color)
+
+    model_type = "all models" if all_models else "only CNNs"
     plt.title(f"Correlation between effective brain similarity and effective robustness {evaluation} ({model_type})")
     plt.xlabel("ROI")
     plt.ylabel("OOD Dataset")
@@ -49,7 +60,8 @@ def create_heatmap(evaluation, all_models = False):
 if __name__ == '__main__':
     evaluations = [
         "encoding_synthetic", "rsa_synthetic",
-        "encoding_illusion", "rsa_illusion"
+        "encoding_illusion", "rsa_illusion",
+        "encoding_natural", "rsa_natural"
     ]
     for evaluation in evaluations:
         create_heatmap(evaluation)

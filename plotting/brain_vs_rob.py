@@ -19,14 +19,14 @@ def create_plot(ood_dataset, roi, evaluation, all_models = False):
     df = pd.merge(brain_similarity, robustness, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
     if not all_models:
-        df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
+        df = df[df["architecture"] == "CNN"]
 
     if ood_dataset == "imagenet-a":
         df = df[df['Model'].str.lower() != "resnet50"]
         df = df.reset_index(drop=True)
 
     markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
-    datasets = df["dataset"].unique()
+    datasets = categories["dataset"].unique()
     marker_map = {ds: markers[i % len(markers)] for i, ds in enumerate(datasets)}
 
     colors = plt.cm.tab10.colors
@@ -61,14 +61,14 @@ def create_plot(ood_dataset, roi, evaluation, all_models = False):
                                    linestyle='None', markersize=8)
                             for arch in architectures]
 
-    legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='upper right', fontsize=6, title_fontsize=8)
-    plt.gca().add_artist(legend1)
-    plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
-    model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
+    """    legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='upper right', fontsize=6, title_fontsize=8)
+        plt.gca().add_artist(legend1)
+        plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)"""
+    model_type = "all models" if all_models else "only CNNs"
 
     plt.xlabel(eval_name)
-    plt.ylabel("Effective Robustness")
-    plt.title(f"{roi} and {ood_dataset}")
+    plt.ylabel(f"Effective Robustness to {ood_dataset}")
+    plt.title(f"{roi}")
     plt.tight_layout()
     output_dir = f"../plots/brain_vs_rob/{evaluation}/{model_type}"
     os.makedirs(output_dir, exist_ok=True)

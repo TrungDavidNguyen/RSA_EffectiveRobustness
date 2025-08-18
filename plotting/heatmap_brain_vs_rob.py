@@ -16,6 +16,7 @@ def create_heatmap(evaluation, all_models = False):
         subset=[roi_prefix + roi for roi in roi_names])
 
     r_value_matrix = pd.DataFrame(index=ood_datasets, columns=roi_names)
+    p_value_matrix = pd.DataFrame(index=ood_datasets, columns=roi_names)
 
     for ood_dataset in ood_datasets:
         for roi in roi_names:
@@ -26,16 +27,23 @@ def create_heatmap(evaluation, all_models = False):
                 df = df[df['Model'].str.lower() != "resnet50"]
 
             if not all_models:
-                df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
+                df = df[df["architecture"] == "CNN"]
 
-            r_value = linregress(df[roi_prefix + roi], df[ood_dataset]).rvalue
-            r_value_matrix.loc[ood_dataset, roi] = r_value
+            result = linregress(df[roi_prefix + roi], df[ood_dataset])
+            r_value_matrix.loc[ood_dataset, roi] = result.rvalue
+            p_value_matrix.loc[ood_dataset, roi] = result.pvalue
 
     r_value_matrix = r_value_matrix.astype(float)
 
     plt.figure(figsize=(10, 8))
     sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.6, vmax=0.6, center=0, fmt=".2f")
-    model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
+    for i in range(len(p_value_matrix.columns)):
+        for j in range(len(p_value_matrix.columns)):
+            p = p_value_matrix.iloc[i, j]
+            text_color = 'black' if r_value_matrix.iloc[i, j] < 0.37 else 'white'
+            plt.text(j + 0.5, i + 0.7, f"\n(p={p:.2f})",
+                     ha='center', va='center', fontsize=10, color=text_color)
+    model_type = "all models" if all_models else "only CNNs"
     plt.title(f"Correlation between {evaluation} and effective robustness ({model_type})")
     plt.xlabel("ROI")
     plt.ylabel("OOD Dataset")

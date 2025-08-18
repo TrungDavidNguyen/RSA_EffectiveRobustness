@@ -1,10 +1,12 @@
 Model,architecture,dataset
 AlexNet,CNN,ImageNet1K
+beit_base_patch16_224.in22k_ft_in22k_in1k,VIT,ImageNet22K
 coat_lite_mini,VIT,ImageNet1K
 convit_small,VIT,ImageNet1K
-cornet_rt,Cornet,ImageNet1K
-cornet_s,Cornet,ImageNet1K
-cornet_z,Cornet,ImageNet1K
+convnext_base.fb_in22k_ft_in1k,CNN,ImageNet22K
+cornet_rt,RNN,ImageNet1K
+cornet_s,CNN,ImageNet1K
+cornet_z,CNN,ImageNet1K
 deit_base_patch16_224,VIT,ImageNet1K
 Densenet121,CNN,ImageNet1K
 Densenet161,CNN,ImageNet1K
@@ -15,10 +17,12 @@ efficientnet_b0,CNN,ImageNet1K
 efficientnet_b1,CNN,ImageNet1K
 efficientnet_b2,CNN,ImageNet1K
 efficientnet_b3,CNN,ImageNet1K
+efficientnet_b3.ra2_in1k,CNN,ImageNet1K
 efficientnet_b4,CNN,ImageNet1K
 efficientnet_b5,CNN,ImageNet1K
 gluon_resnet50_v1c,CNN,ImageNet1K
 gluon_resnext101_64x4d,CNN,ImageNet1K
+gmlp_s16_224.ra3_in1k,MLP,ImageNet1K
 GoogleNet,CNN,ImageNet1K
 inception_resnet_v2,CNN,ImageNet1K
 inception_v3,CNN,ImageNet1K
@@ -43,9 +47,9 @@ ShuffleNetV2x05,CNN,ImageNet1K
 ShuffleNetV2x10,CNN,ImageNet1K
 Squeezenet1_0,CNN,ImageNet1K
 Squeezenet1_1,CNN,ImageNet1K
-swin_base_patch4_window7_224,VIT,more data
-tf_efficientnet_b2_ns,semi-supervised,more data
-tf_efficientnet_b4_ns,semi-supervised,more data
+swin_base_patch4_window7_224,VIT,ImageNet22K
+tf_efficientnet_b2_ns,CNN,JFT-300m
+tf_efficientnet_b4_ns,CNN,JFT-300m
 VGG11,CNN,ImageNet1K
 VGG11_bn,CNN,ImageNet1K
 VGG13,CNN,ImageNet1K
@@ -54,11 +58,7 @@ VGG16,CNN,ImageNet1K
 VGG16_bn,CNN,ImageNet1K
 VGG19,CNN,ImageNet1K
 VGG19_bn,CNN,ImageNet1K
-vit_base_patch16_224,VIT,more data
-vit_large_patch16_224,VIT,more data
+vit_base_patch16_224,VIT,ImageNet22K
+vit_large_patch16_224,VIT,ImageNet22K
 wide_resnet50_2,CNN,ImageNet1K
 xception,CNN,ImageNet1K
-efficientnet_b3.ra2_in1k,CNN,more data
-beit_base_patch16_224.in22k_ft_in22k_in1k,VIT,more data
-gmlp_s16_224.ra3_in1k,MLP,ImageNet1K
-convnext_base.fb_in22k_ft_in1k,CNN,more data

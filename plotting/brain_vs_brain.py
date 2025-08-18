@@ -10,7 +10,6 @@ def create_plot(roi, id, ood, all_models=False):
     roi_name_ood = f"%R2_{roi}" if "rsa" in ood else f"R_{roi}"
 
     df_id = pd.read_csv(f"../results/{id}.csv")
-    df_id = df_id.dropna(subset=[roi_name_id])
 
     df_ood = pd.read_csv(f"../results/{ood}.csv")
     cols_to_rename = {col: f"{col}_{ood}" for col in df_ood.columns if
@@ -21,8 +20,9 @@ def create_plot(roi, id, ood, all_models=False):
 
     df = pd.merge(df_id, df_ood, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
+    df.dropna()
     if not all_models:
-        df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
+        df = df[df["architecture"] == "CNN"]
 
     """    if "encoding" in id:
             df[roi_name] = logit(df[roi_name]*100)
@@ -69,7 +69,7 @@ def create_plot(roi, id, ood, all_models=False):
     legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)", loc='lower left', fontsize=6, title_fontsize=8)
     plt.gca().add_artist(legend1)
     plt.legend(handles=architecture_handles, title="Architecture (Color)", loc='lower right', fontsize=6, title_fontsize=8)
-    model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
+    model_type = "all models" if all_models else "only CNNs"
 
     plt.xlabel(f"{id} {roi_name_id}")
     plt.ylabel(f"{ood} {roi_name_ood}")
@@ -78,16 +78,18 @@ def create_plot(roi, id, ood, all_models=False):
     output_dir = f"../plots/brain_vs_brain/{model_type}/{roi}"
     os.makedirs(output_dir, exist_ok=True)
     plt.savefig(os.path.join(output_dir, f"{id}_vs_{ood}_{roi}"))
-    plt.close()
+    plt.show()
 
 
 if __name__ == '__main__':
     evaluations = [
+        "encoding_imagenet", "rsa_imagenet",
         "encoding_natural", "rsa_natural",
         "encoding_synthetic", "rsa_synthetic",
-        "encoding_illusion", "rsa_illusion",
-        "encoding_imagenet", "rsa_imagenet"
+        "encoding_illusion", "rsa_illusion"
     ]
+    create_plot("IT", "rsa_imagenet", "rsa_illusion")
+
     for roi in ["V1", "V2", "V4", "IT"]:
         for i, eval in enumerate(evaluations):
             for eval_2 in evaluations[i+1:]:
