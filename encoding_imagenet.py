@@ -119,18 +119,16 @@ if __name__ == '__main__':
                    'convnext_base.fb_in22k_ft_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
-    models_list = ['regnety_032',
-                    'efficientnet_b3.ra2_in1k',
-                    'convnext_base.fb_in22k_ft_in1k', 'Densenet201', 'efficientnet_b5', 'inception_resnet_v2']
+    models_list = ['inception_resnet_v2']
 
     model_name = models_list[num]
     stimuli_path = os.path.join(os.getcwd(), "imagenet_stimuli")
     fmri_dataset = os.path.join("fmri_data", "fmri_imagenet")
     save_folder = "encoding_imagenet"
     if model_name in standard:
-        #features = encoding(model_name, "Standard", "V1", stimuli_path, fmri_dataset, save_folder, 6)
-        #encoding(model_name, "Standard", "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
-        features = encoding(model_name, "Standard", "V4", stimuli_path, fmri_dataset, save_folder, 6)
+        features = encoding(model_name, "Standard", "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding(model_name, "Standard", "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
+        encoding(model_name, "Standard", "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
         encoding(model_name, "Standard", "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
     elif model_name in timm:
         #features = encoding(model_name, "Timm", "V1", stimuli_path, fmri_dataset, save_folder, 6)
@@ -143,7 +141,7 @@ if __name__ == '__main__':
         encoding(model_name, "Cornet", "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
         encoding(model_name, "Cornet", "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
     else:
-        #features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, 6)
-        #encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
-        features = encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, 6)
+        features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, 6)
+        encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, 6, features)
+        encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
         encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, 6, features)

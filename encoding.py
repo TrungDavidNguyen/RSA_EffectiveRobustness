@@ -113,8 +113,7 @@ if __name__ == '__main__':
             'swin_base_patch4_window7_224', 'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
             'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
             'wide_resnet50_2', 'convit_small']
-    timm_custom = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k',
-                   'convnext_base.fb_in22k_ft_in1k']
+    timm_custom = ['convnext_base.fb_in22k_ft_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
     models_list = ['efficientnet_b3.ra2_in1k', 'convnext_base.fb_in22k_ft_in1k']
@@ -140,6 +139,6 @@ if __name__ == '__main__':
         encoding(model_name, "Cornet", "IT", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
     else:
         #features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, num_subjects)
-        #encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
+        encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, num_subjects)
         #encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
-        encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects)
+        #encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects)
