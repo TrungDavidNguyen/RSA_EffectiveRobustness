@@ -78,16 +78,18 @@ def create_plot(roi, id, ood, all_models=False):
     output_dir = f"../plots/brain_vs_brain/{model_type}/{roi}"
     os.makedirs(output_dir, exist_ok=True)
     plt.savefig(os.path.join(output_dir, f"{id}_vs_{ood}_{roi}"))
-    plt.close()
+    plt.show()
 
 
 if __name__ == '__main__':
     evaluations = [
+        "encoding_imagenet", "rsa_imagenet",
         "encoding_natural", "rsa_natural",
         "encoding_synthetic", "rsa_synthetic",
-        "encoding_illusion", "rsa_illusion",
-        "encoding_imagenet", "rsa_imagenet"
+        "encoding_illusion", "rsa_illusion"
     ]
+    create_plot("IT", "rsa_imagenet", "rsa_illusion")
+
     for roi in ["V1", "V2", "V4", "IT"]:
         for i, eval in enumerate(evaluations):
             for eval_2 in evaluations[i+1:]:
