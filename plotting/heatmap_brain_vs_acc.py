@@ -42,7 +42,7 @@ def create_heatmap(evaluation, all_models=False):
 
     # Plot heatmap
     plt.figure(figsize=(10, 8))
-    sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
+    sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.8, vmax=0.8, center=0, fmt=".2f")
     for i in range(len(p_value_matrix.columns)):
         for j in range(len(p_value_matrix.columns)):
             p = p_value_matrix.iloc[i, j]
@@ -60,8 +60,8 @@ def create_heatmap(evaluation, all_models=False):
     output_dir = f"../plots/heatmap_brain_vs_acc/{model_type}"
     os.makedirs(output_dir, exist_ok=True)
     plt.savefig(f"{output_dir}/heatmap_{evaluation}.png")
-    #plt.show()
-    plt.close()
+    plt.show()
+    #plt.close()
 
 
 if __name__ == '__main__':

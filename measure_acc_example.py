@@ -65,7 +65,7 @@ def timm(model_name, measure_acc_fn, dataset_name, dataset_path):
 
 
 if __name__ == '__main__':
-    num = int(sys.argv[1])
+    #num = int(sys.argv[1])
     """    models_list = ['ResNet50', 'AlexNet', 'Densenet121', 'Densenet161', 'Densenet169', 'Densenet201',
                        'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18', 'ResNet34',
                        'ShuffleNetV2x05', 'ShuffleNetV2x10', 'Squeezenet1_0', 'Squeezenet1_1',
@@ -83,18 +83,24 @@ if __name__ == '__main__':
                       'coat_lite_mini','seresnet50',
                       'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
                       'wide_resnet50_2', 'convit_small']"""
-    models_list = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
-                   'gmlp_s16_224.ra3_in1k', 'convnext_base.fb_in22k_ft_in1k']
-    model_name = models_list[num]
-    #dataset_path = os.path.join(os.getcwd(), "imagenet-val")
-    #timm(model_name, measure_accuracy, "imagenet1k", dataset_path)
-    #dataset_path = os.path.join(os.getcwd(), "sketch")
-    #timm(model_name, measure_accuracy, "imagenet-sketch", dataset_path)
-    #dataset_path = os.path.join(os.getcwd(), "imagenet-val")
-    #timm(model_name, measure_accuracy_subset_r, "imagenet1k-subset-r", dataset_path)
-    #dataset_path = os.path.join(os.getcwd(), "imagenet-val")
-    #timm(model_name, measure_accuracy_subset_a, "imagenet1k-subset-a", dataset_path)
-    #dataset_path = os.path.join(os.getcwd(), "imagenet-r")
-    #timm(model_name, measure_accuracy_r, "imagenet-r", dataset_path)
-    dataset_path = os.path.join(os.getcwd(), "sketch")
-    timm(model_name, measure_accuracy, "imagenet-sketch", dataset_path)
+    """    models_list = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k',
+                       'gmlp_s16_224.ra3_in1k', 'convnext_base.fb_in22k_ft_in1k']"""
+    models_list = ['resnetv2_50x1_bit.goog_in21k_ft_in1k',
+                   'mixer_b16_224.goog_in21k_ft_in1k','mobilenetv3_large_100.miil_in21k_ft_in1k',
+                   'fastvit_t8.apple_dist_in1k','mobilevit_s.cvnets_in1k','maxvit_nano_rw_256.sw_in1k']
+    #model_name = models_list[num]
+    for model_name in models_list:
+        dataset_path = os.path.join(os.getcwd(), "imagenet-val")
+        timm(model_name, measure_accuracy, "imagenet1k", dataset_path)
+        dataset_path = os.path.join(os.getcwd(), "sketch")
+        timm(model_name, measure_accuracy, "imagenet-sketch", dataset_path)
+        dataset_path = os.path.join(os.getcwd(), "imagenet-val")
+        timm(model_name, measure_accuracy_subset_r, "imagenet1k-subset-r", dataset_path)
+        dataset_path = os.path.join(os.getcwd(), "imagenet-val")
+        timm(model_name, measure_accuracy_subset_a, "imagenet1k-subset-a", dataset_path)
+        dataset_path = os.path.join(os.getcwd(), "imagenet-r")
+        timm(model_name, measure_accuracy_r, "imagenet-r", dataset_path)
+        dataset_path = os.path.join(os.getcwd(), "imagenet-a")
+        timm(model_name, measure_accuracy_a, "imagenet-a", dataset_path)
+        dataset_path = os.path.join(os.getcwd(), "imagenetv2-matched-frequency-format-val")
+        timm(model_name, measure_accuracy, "imagenetv2-matched-frequency", dataset_path)

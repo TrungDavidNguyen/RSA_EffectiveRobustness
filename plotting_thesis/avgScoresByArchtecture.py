@@ -15,7 +15,7 @@ def load_and_average_by_architecture_and_region(categories_path, evaluations, ar
 
         data = [
             [
-                merged_df.loc[merged_df["architecture"] == arch, f"R_{region}"].mean(skipna=True)
+                merged_df.loc[merged_df["architecture"] == arch, f"%R2_{region}"].mean(skipna=True)
                 for region in regions
             ]
             for arch in architectures
@@ -86,8 +86,8 @@ def plot_evaluation_overlap_per_region(all_avg_scores, regions, architectures, e
 def main():
     results_dir = "../results"
 
-    evaluations = ["encoding_natural", "encoding_imagenet", "encoding_synthetic", "encoding_illusion"]
-    #evaluations = ["rsa_natural", "rsa_imagenet", "rsa_synthetic", "rsa_illusion"]
+    #evaluations = ["encoding_natural", "encoding_imagenet", "encoding_synthetic", "encoding_illusion"]
+    evaluations = ["rsa_natural", "rsa_imagenet", "rsa_synthetic", "rsa_illusion"]
 
     architectures = ["CNN", "VIT"]
     regions = ["V1", "V2", "V4", "IT"]

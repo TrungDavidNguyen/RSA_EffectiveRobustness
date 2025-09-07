@@ -2,30 +2,29 @@ import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from scipy.stats import linregress
+from scipy.stats import spearmanr
 
 
 def compute_r_p_matrices(df_x, df_y, roi_names, roi_prefix_x, roi_prefix_y):
     """
-    Compute r-values and p-values matrices for given ROI dataframes.
+    Compute r-values and p-values matrices for given ROI dataframes using Spearman correlation.
     """
     r_matrix = pd.DataFrame(index=roi_names, columns=roi_names, dtype=float)
     p_matrix = pd.DataFrame(index=roi_names, columns=roi_names, dtype=float)
 
     for roi in roi_names:
-        result = linregress(df_x[f"{roi_prefix_x}{roi}"], df_y[f"{roi_prefix_y}{roi}"])
-        r_matrix.loc[roi, roi] = result.rvalue
-        p_matrix.loc[roi, roi] = result.pvalue
+        r, p = spearmanr(df_x[f"{roi_prefix_x}{roi}"], df_y[f"{roi_prefix_y}{roi}"])
+        r_matrix.loc[roi, roi] = r
+        p_matrix.loc[roi, roi] = p
 
     return r_matrix, p_matrix
-
 
 def plot_heatmap(r_matrix, p_matrix, title, output_path):
     """
     Plot heatmap with r-values and p-values annotated.
     """
     plt.figure(figsize=(10, 8))
-    sns.heatmap(r_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
+    sns.heatmap(r_matrix, annot=True, cmap='coolwarm', vmin=-0.8, vmax=0.8, center=0, fmt=".2f")
 
     for i in range(r_matrix.shape[0]):
         for j in range(r_matrix.shape[1]):
@@ -41,7 +40,7 @@ def plot_heatmap(r_matrix, p_matrix, title, output_path):
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     plt.savefig(output_path)
-    plt.close()
+    plt.show()
 
 
 def load_and_merge_data(eval_id, eval_ood, roi, categories, all_models):
@@ -61,6 +60,8 @@ def load_and_merge_data(eval_id, eval_ood, roi, categories, all_models):
 
     if not all_models:
         df = df[df["architecture"] == "CNN"]
+    else:
+        df = df[df["architecture"] == "VIT"]
 
     return df, f"{roi_id_name}_id", f"{roi_ood_name}_ood"
 
@@ -72,7 +73,7 @@ def compute_heatmap_for_pairs(evaluations, roi_names, categories, all_models=Fal
     index_labels = []
     for i, eval_x in enumerate(evaluations):
         for eval_y in evaluations[i + 1:]:
-            label = f"{eval_x} vs {eval_y[9:]}" if "encoding" in eval_x else f"{eval_x} vs {eval_y}"
+            label = f"{eval_x[9:]} vs {eval_y[9:]}" if "encoding" in eval_x else f"{eval_x[4:]} vs {eval_y[4:]}"
             index_labels.append(label)
 
     r_matrix = pd.DataFrame(index=index_labels, columns=roi_names, dtype=float)
@@ -84,9 +85,9 @@ def compute_heatmap_for_pairs(evaluations, roi_names, categories, all_models=Fal
             label = index_labels[label_idx]
             for roi in roi_names:
                 df, x_col, y_col = load_and_merge_data(eval_x, eval_y, roi, categories, all_models)
-                result = linregress(df[x_col], df[y_col])
-                r_matrix.loc[label, roi] = result.rvalue
-                p_matrix.loc[label, roi] = result.pvalue
+                r, p = spearmanr(df[x_col], df[y_col])
+                r_matrix.loc[label, roi] = r
+                p_matrix.loc[label, roi] = p
             label_idx += 1
 
     return r_matrix, p_matrix
@@ -127,9 +128,9 @@ def create_heatmap_same_stimuli(all_models=False):
         label = index_labels[idx]
         for roi in roi_names:
             df, x_col, y_col = load_and_merge_data(eval_id, eval_ood, roi, categories, all_models)
-            result = linregress(df[x_col], df[y_col])
-            r_matrix.loc[label, roi] = result.rvalue
-            p_matrix.loc[label, roi] = result.pvalue
+            r, p = spearmanr(df[x_col], df[y_col])
+            r_matrix.loc[label, roi] = r
+            p_matrix.loc[label, roi] = p
 
     model_type = "all models" if all_models else "only CNNs"
     title = f"Correlation between scores ({model_type})"

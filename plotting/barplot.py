@@ -29,7 +29,7 @@ def create_bar_plot_by_model(method, rois, model=None):
     plt.show()
 
 
-def create_bar_plot_by_roi(method, roi):
+def create_bar_plot_by_roi(method, roi, models=None):
     df = pd.read_csv(f"../results/{method}.csv")
     categories = pd.read_csv("../results/categories.csv")
 
@@ -40,9 +40,15 @@ def create_bar_plot_by_roi(method, roi):
     metric = "%R2" if method.startswith("rsa") else "R"
     column_name = f"{metric}_{roi}"
 
-    # Merge and sort by architecture, then by score within architecture
+    # Merge with architecture info
     df = df.merge(categories[['Model', 'architecture']], on='Model', how='left')
-    df = df.sort_values(by=['architecture', column_name], ascending=[True, False])
+
+    # Filter for specific models if provided
+    if models is not None:
+        df = df[df['Model'].isin(models)]
+
+    # Sort by architecture and score
+    #df = df.sort_values(by=['architecture', column_name], ascending=[True, False])
     bar_colors = df['architecture'].map(color_map)
 
     plt.figure(figsize=(10, 6))
@@ -60,6 +66,7 @@ def create_bar_plot_by_roi(method, roi):
     os.makedirs("../plots/barplot", exist_ok=True)
     plt.savefig(f"../plots/barplot/barplot_{roi}_{method}.png")
     plt.show()
+
 
 def corr(method, rois):
     df_nat = pd.read_csv(f"../results/{method}.csv")
@@ -85,8 +92,10 @@ if __name__ == '__main__':
     # Example usage:
     #create_bar_plot_by_model("rsa_synthetic", ["V1", "V2", "V4", "IT"])
     datasets = [
-            "rsa_natural", "rsa_synthetic", "rsa_illusion",
-            "encoding_natural", "encoding_synthetic", "encoding_illusion"]
+            "rsa_natural","rsa_imagenet", "rsa_synthetic", "rsa_illusion",]
+    models = ["Densenet121", "Densenet161", "Densenet169", "Densenet201"]
+    models = ["ResNet18", "ResNet34", "ResNet50", "ResNet101","ResNet152"]
+
     for roi in ["V1", "V2", "V4", "IT"]:
         for method in datasets:
-            create_bar_plot_by_roi(method, roi)
+            create_bar_plot_by_roi(method, roi, models=models)
