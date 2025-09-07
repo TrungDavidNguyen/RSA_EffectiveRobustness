@@ -40,9 +40,9 @@ def create_bar_plot_by_roi(method, roi):
     metric = "%R2" if method.startswith("rsa") else "R"
     column_name = f"{metric}_{roi}"
 
-    # Merge and sort by architecture
+    # Merge and sort by architecture, then by score within architecture
     df = df.merge(categories[['Model', 'architecture']], on='Model', how='left')
-    df = df.sort_values(by=['architecture', 'Model'])
+    df = df.sort_values(by=['architecture', column_name], ascending=[True, False])
     bar_colors = df['architecture'].map(color_map)
 
     plt.figure(figsize=(10, 6))
@@ -60,7 +60,6 @@ def create_bar_plot_by_roi(method, roi):
     os.makedirs("../plots/barplot", exist_ok=True)
     plt.savefig(f"../plots/barplot/barplot_{roi}_{method}.png")
     plt.show()
-
 
 def corr(method, rois):
     df_nat = pd.read_csv(f"../results/{method}.csv")

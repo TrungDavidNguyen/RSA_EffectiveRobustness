@@ -35,13 +35,13 @@ def logit_fit(id_dataset, ood_dataset):
         if label not in plotted_labels:
             plt.scatter(row[id_dataset], row[ood_dataset],
                         color=color_map[row["architecture"]],
-                        edgecolor='black', s=70,
+                        s=70,
                         label=label)
             plotted_labels.add(label)
         else:
             plt.scatter(row[id_dataset], row[ood_dataset],
                         color=color_map[row["architecture"]],
-                        edgecolor='black', s=70)
+                        s=70)
 
         plt.text(row[id_dataset], row[ood_dataset], row["Model"],
                  fontsize=8, ha='right', va='bottom', alpha=0.7)
@@ -87,7 +87,7 @@ def linear_fit(id_dataset, ood_dataset):
     palette = sns.color_palette("tab10", n_colors=len(architectures))
     color_map = {arch: palette[i] for i, arch in enumerate(architectures)}
 
-    plt.figure(figsize=(10, 7))
+    plt.figure(figsize=(10, 6))
     plotted_labels = set()
 
     for _, row in df.iterrows():
@@ -95,13 +95,13 @@ def linear_fit(id_dataset, ood_dataset):
         if label not in plotted_labels:
             plt.scatter(row[id_dataset], row[ood_dataset],
                         color=color_map[row["architecture"]],
-                        edgecolor='black', s=70,
+                        s=70,
                         label=label)
             plotted_labels.add(label)
         else:
             plt.scatter(row[id_dataset], row[ood_dataset],
                         color=color_map[row["architecture"]],
-                        edgecolor='black', s=70)
+                        s=70)
 
     slope, intercept, r_value, p_value, std_err = linregress(df[id_dataset], df[ood_dataset])
 

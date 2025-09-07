@@ -6,7 +6,7 @@ convit_small,VIT,ImageNet1K
 convnext_base.fb_in22k_ft_in1k,CNN,ImageNet22K
 cornet_rt,RNN,ImageNet1K
 cornet_s,CNN,ImageNet1K
-cornet_z,CNN,ImageNet1K
+cornet_z,s,ImageNet1K
 deit_base_patch16_224,VIT,ImageNet1K
 Densenet121,CNN,ImageNet1K
 Densenet161,CNN,ImageNet1K

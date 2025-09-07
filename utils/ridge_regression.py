@@ -12,8 +12,6 @@ from scipy.stats import pearsonr, ttest_1samp, sem
 import warnings
 
 
-
-
 def aggregate_df_by_layer(df):
     """
     Aggregates a single DataFrame by layer, averaging R values and computing combined significance,

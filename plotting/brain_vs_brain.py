@@ -78,7 +78,7 @@ def create_plot(roi, id, ood, all_models=False):
     output_dir = f"../plots/brain_vs_brain/{model_type}/{roi}"
     os.makedirs(output_dir, exist_ok=True)
     plt.savefig(os.path.join(output_dir, f"{id}_vs_{ood}_{roi}"))
-    plt.show()
+    plt.close()
 
 
 if __name__ == '__main__':

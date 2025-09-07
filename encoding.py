@@ -139,7 +139,7 @@ if __name__ == '__main__':
         encoding(model_name, "Cornet", "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
         encoding(model_name, "Cornet", "IT", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
     else:
-        #features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, num_subjects)
-        encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, num_subjects)
+        features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, num_subjects)
+        #encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, num_subjects)
         #encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
         #encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects)

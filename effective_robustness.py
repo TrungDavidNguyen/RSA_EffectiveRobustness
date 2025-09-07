@@ -105,5 +105,5 @@ def effective_brain_similarity_csv():
 
 if __name__ == '__main__':
     effective_robustness_csv()
-    effective_brain_similarity_csv()
+    #effective_brain_similarity_csv()
 
