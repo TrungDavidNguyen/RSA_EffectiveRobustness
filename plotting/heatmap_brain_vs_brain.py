@@ -24,7 +24,7 @@ def plot_heatmap(r_matrix, p_matrix, title, output_path):
     Plot heatmap with r-values and p-values annotated.
     """
     plt.figure(figsize=(10, 8))
-    sns.heatmap(r_matrix, annot=True, cmap='coolwarm', vmin=-0.8, vmax=0.8, center=0, fmt=".2f")
+    sns.heatmap(r_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
 
     for i in range(r_matrix.shape[0]):
         for j in range(r_matrix.shape[1]):

@@ -119,8 +119,7 @@ if __name__ == '__main__':
                    'fastvit_t8.apple_dist_in1k','mobilevit_s.cvnets_in1k','maxvit_nano_rw_256.sw_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
-    models_list = ["tf_efficientnetv2_s.in21k_ft_in1k", 'resnetv2_50x1_bit.goog_in21k_ft_in1k',
-                   'mixer_b16_224.goog_in21k_ft_in1k','mobilenetv3_large_100.miil_in21k_ft_in1k',
+    models_list = ['convnext_base.fb_in22k_ft_in1k', "tf_efficientnetv2_s.in21k_ft_in1k", 'resnetv2_50x1_bit.goog_in21k_ft_in1k',
                    'fastvit_t8.apple_dist_in1k','mobilevit_s.cvnets_in1k','maxvit_nano_rw_256.sw_in1k']
     model_name = models_list[num]
     stimuli_path = os.path.join(os.getcwd(), "NSD Dataset", "NSD_872_images")
@@ -143,7 +142,10 @@ if __name__ == '__main__':
         encoding(model_name, "Cornet", "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
         encoding(model_name, "Cornet", "IT", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
     else:
-        features = encoding_custom(model_name, "V1", stimuli_path, fmri_dataset, save_folder, num_subjects)
-        encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, num_subjects)
-        encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
-        encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects)
+        if model_name == 'resnetv2_50x1_bit.goog_in21k_ft_in1k':
+            features = encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, num_subjects)
+            encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
+            encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects)
+        else:
+            features = encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects)
+

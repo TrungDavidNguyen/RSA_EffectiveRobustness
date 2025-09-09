@@ -29,6 +29,7 @@ def create_heatmap(evaluation, all_models = False):
             if not all_models:
                 df = df[df["architecture"] == "CNN"]
 
+
             result = linregress(df[roi_prefix + roi], df[ood_dataset])
             r_value_matrix.loc[ood_dataset, roi] = result.rvalue
             p_value_matrix.loc[ood_dataset, roi] = result.pvalue
@@ -36,7 +37,7 @@ def create_heatmap(evaluation, all_models = False):
     r_value_matrix = r_value_matrix.astype(float)
 
     plt.figure(figsize=(10, 8))
-    sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.6, vmax=0.6, center=0, fmt=".2f")
+    sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
     for i in range(len(p_value_matrix.columns)):
         for j in range(len(p_value_matrix.columns)):
             p = p_value_matrix.iloc[i, j]
@@ -52,8 +53,8 @@ def create_heatmap(evaluation, all_models = False):
     output_dir = f"../plots/heatmap_brain_vs_rob/{model_type}"
     os.makedirs(output_dir, exist_ok=True)
     plt.savefig(f"{output_dir}/heatmap_{evaluation}.png")
-    #plt.show()
-    plt.close()
+    plt.show()
+    #plt.close()
 
 
 if __name__ == '__main__':

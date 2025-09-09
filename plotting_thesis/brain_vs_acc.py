@@ -11,7 +11,6 @@ def create_plot(dataset, roi, evaluation, all_models=False):
     brain_similarity = pd.read_csv(f"../results/{evaluation}.csv")
     robustness = pd.read_csv("../results/accuracies.csv")
     categories = pd.read_csv("../results/categories.csv")
-
     # --- global stable lists ---
     all_architectures = sorted(categories["architecture"].unique())
     all_datasets = sorted(categories["dataset"].unique())
@@ -53,27 +52,22 @@ def create_plot(dataset, roi, evaluation, all_models=False):
     plt.text(0.05, 0.95, f"r = {r_value:.2f}\np = {p_value:.2f}",
              transform=plt.gca().transAxes,
              ha='left', va='top',
-             fontsize=12, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
+             fontsize=15, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
 
-    dataset_handles = [Line2D([0], [0], marker=marker_map[ds], color='w', label=ds,
-                              markerfacecolor='gray', markersize=8, markeredgecolor='black')
-                       for ds in all_datasets]
 
     architecture_handles = [Line2D([0], [0], marker='o', color=color_map[arch], label=arch,
                                    linestyle='None', markersize=8)
                             for arch in all_architectures]
 
-    """    legend1 = plt.legend(handles=dataset_handles, title="Dataset (Shape)",
-                             loc='upper right', fontsize=6, title_fontsize=8)
-        plt.gca().add_artist(legend1)
-        plt.legend(handles=architecture_handles, title="Architecture (Color)",
-                   loc='lower right', fontsize=6, title_fontsize=8)
-"""
+
+    plt.legend(handles=architecture_handles, title="Architecture (Color)",
+               loc='lower left', fontsize=10, title_fontsize=12)
+
     model_type = "all_models" if all_models else "only_CNNs_imagenet1k"
 
-    plt.xlabel(eval_name)
-    plt.ylabel(f"Accuracy on {dataset}")
-    plt.title(f"{roi}")
+    plt.xlabel("Encoding R on V1 of Illusion dataset",fontsize=17)
+    plt.ylabel(f"Accuracy on ImageNet-1K", fontsize=17)
+    plt.title(f"Only CNNs",fontsize=22)
     plt.tight_layout()
 
     output_dir = f"../plots/brain_vs_acc/{evaluation}/{model_type}"
@@ -82,12 +76,10 @@ def create_plot(dataset, roi, evaluation, all_models=False):
     plt.close()
 
 
+
 if __name__ == '__main__':
     evaluations = [
-        "encoding_natural", "rsa_natural",
-        "encoding_synthetic", "rsa_synthetic",
         "encoding_illusion", "rsa_illusion",
-        "encoding_imagenet", "rsa_imagenet"
     ]
     ood_datasets = ["imagenet1k"]
     rois = ["V1", "V2", "V4", "IT"]
