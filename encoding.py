@@ -141,10 +141,5 @@ if __name__ == '__main__':
         encoding(model_name, "Cornet", "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
         encoding(model_name, "Cornet", "IT", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
     else:
-        if model_name == 'resnetv2_50x1_bit.goog_in21k_ft_in1k':
-            features = encoding_custom(model_name, "V2", stimuli_path, fmri_dataset, save_folder, num_subjects)
-            encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, num_subjects, features)
-            encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects)
-        else:
-            features = encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects)
+        features = encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, num_subjects)
 
