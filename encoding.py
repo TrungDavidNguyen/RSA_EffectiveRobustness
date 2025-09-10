@@ -119,8 +119,7 @@ if __name__ == '__main__':
                    'fastvit_t8.apple_dist_in1k','mobilevit_s.cvnets_in1k','maxvit_nano_rw_256.sw_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
-    models_list = ['convnext_base.fb_in22k_ft_in1k', "tf_efficientnetv2_s.in21k_ft_in1k", 'resnetv2_50x1_bit.goog_in21k_ft_in1k',
-                   'fastvit_t8.apple_dist_in1k','mobilevit_s.cvnets_in1k','maxvit_nano_rw_256.sw_in1k']
+    models_list = ['resnetv2_50x1_bit.goog_in21k_ft_in1k']
     model_name = models_list[num]
     stimuli_path = os.path.join(os.getcwd(), "NSD Dataset", "NSD_872_images")
     fmri_dataset = os.path.join("fmri_data", "fmri_natural")
