@@ -91,10 +91,13 @@ def corr(method, rois):
 if __name__ == '__main__':
     # Example usage:
     #create_bar_plot_by_model("rsa_synthetic", ["V1", "V2", "V4", "IT"])
-    datasets = [
-            "rsa_natural","rsa_imagenet", "rsa_synthetic", "rsa_illusion",]
+    datasets = ["rsa_natural","rsa_imagenet", "rsa_synthetic", "rsa_illusion"]
+    #datasets = ["encoding_natural","encoding_imagenet", "encoding_synthetic", "encoding_illusion"]
+
     models = ["Densenet121", "Densenet161", "Densenet169", "Densenet201"]
-    models = ["ResNet18", "ResNet34", "ResNet50", "ResNet101","ResNet152"]
+    #models = ["ResNet18", "ResNet34", "ResNet50", "ResNet101","ResNet152"]
+    #models = ["VGG11", "VGG13", "VGG16", "VGG19"]
+    models = ["efficientnet_b0", "efficientnet_b1", "efficientnet_b2", "efficientnet_b3", "efficientnet_b4", "efficientnet_b5"]
 
     for roi in ["V1", "V2", "V4", "IT"]:
         for method in datasets:

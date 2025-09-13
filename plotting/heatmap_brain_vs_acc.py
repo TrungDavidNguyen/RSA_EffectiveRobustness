@@ -18,8 +18,13 @@ def create_heatmap(evaluation, all_models=False):
     imagenet_acc = accuracies_df.columns[1]
     categories_df = pd.read_csv("../results/categories.csv")
 
-    r_value_matrix = pd.DataFrame(index=evaluations[evaluation], columns=roi_names)
-    p_value_matrix = pd.DataFrame(index=evaluations[evaluation], columns=roi_names)
+    if "rsa" in evaluation:
+        eval_clean = [x[4:] for x in evaluations[evaluation]]
+    else:
+        eval_clean = [x[9:] for x in evaluations[evaluation]]
+
+    r_value_matrix = pd.DataFrame(index=eval_clean, columns=roi_names)
+    p_value_matrix = pd.DataFrame(index=eval_clean, columns=roi_names)
 
     for eval in evaluations[evaluation]:
         brain_similarity_df = pd.read_csv(f"../results/{eval}.csv").dropna(
@@ -34,30 +39,33 @@ def create_heatmap(evaluation, all_models=False):
 
         for roi in roi_names:
             result = linregress(df[roi_prefix + roi], df[imagenet_acc])
-            r_value_matrix.loc[eval, roi] = result.rvalue
-            p_value_matrix.loc[eval, roi] = result.pvalue
+            eval_clean = eval[4:] if "rsa" in eval else eval[9:]
+            r_value_matrix.loc[eval_clean, roi] = result.rvalue
+            p_value_matrix.loc[eval_clean, roi] = result.pvalue
 
 
     r_value_matrix = r_value_matrix.astype(float)
 
     # Plot heatmap
     plt.figure(figsize=(10, 8))
-    sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
+    sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f", annot_kws={"size": 20})
+    colorbar = plt.gcf().axes[-1]  # get the last axis (the colorbar)
+    colorbar.tick_params(labelsize=16)
     for i in range(len(p_value_matrix.columns)):
         for j in range(len(p_value_matrix.columns)):
             p = p_value_matrix.iloc[i, j]
             text_color = 'black' if r_value_matrix.iloc[i, j] < 0.37 else 'white'
             plt.text(j + 0.5, i + 0.7, f"\n(p={p:.2f})",
-                     ha='center', va='center', fontsize=10, color=text_color)
+                     ha='center', va='center', fontsize=16, color=text_color)
 
     model_type = "all models" if all_models else "only CNNs"
-    plt.title(f"Correlation between {evaluation} and imagenet accuracy ({model_type})")
-    plt.xlabel("ROI")
-    plt.ylabel("fmri datasets")
+    plt.title(f"Correlation between {evaluation} and ImageNet accuracy", fontsize=18)
+    plt.xticks(fontsize=15)
+    plt.yticks(fontsize=15)
     plt.tight_layout()
 
     # Save figure
-    output_dir = f"../plots/heatmap_brain_vs_acc/{model_type}"
+    output_dir = f"../plots/heatmap_brain_vs_acc"
     os.makedirs(output_dir, exist_ok=True)
     plt.savefig(f"{output_dir}/heatmap_{evaluation}.png")
     plt.show()
@@ -66,5 +74,5 @@ def create_heatmap(evaluation, all_models=False):
 
 if __name__ == '__main__':
     for evaluation in ["encoding", "rsa"]:
-        create_heatmap(evaluation)
-        create_heatmap(evaluation, all_models=True)
+        create_heatmap(evaluation,True)
+        #create_heatmap(evaluation, all_models=True)

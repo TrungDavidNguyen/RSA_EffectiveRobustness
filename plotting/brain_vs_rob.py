@@ -42,8 +42,8 @@ def create_plot(ood_dataset, roi, evaluation, all_models=False):
             edgecolor="black",
             s=50,
         )
-        #plt.text(row[roi_name], row[ood_dataset], row["Model"],
-        #         fontsize=7, ha='right', va='bottom')
+        plt.text(row[roi_name], row[ood_dataset], row["Model"],
+                 fontsize=7, ha='right', va='bottom')
 
     # Regression line
     slope, intercept, r_value, p_value, _ = linregress(df[roi_name], df[ood_dataset])

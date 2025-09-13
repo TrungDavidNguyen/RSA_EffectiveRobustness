@@ -2,9 +2,11 @@ import sys
 import os
 from rsa import main
 from rsa import main_custom
+import numpy as np
 
 if __name__ == '__main__':
-    num = int(sys.argv[1])
+
+    num = 0
     standard = ['ResNet50', 'AlexNet', 'Densenet121', 'Densenet161', 'Densenet169',
                 'Densenet201', 'GoogleNet', 'ResNet101', 'ResNet152', 'ResNet18',
                 'ResNet34', 'ShuffleNetV2x05', 'ShuffleNetV2x10', 'Squeezenet1_0', 'Squeezenet1_1',

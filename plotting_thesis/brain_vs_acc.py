@@ -20,22 +20,18 @@ def create_plot(dataset, roi, evaluation, all_models=False):
     df = pd.merge(brain_similarity, robustness, on='Model', how='inner')
     df = pd.merge(df, categories, on='Model', how='inner')
     if not all_models:
-        df = df[(df["dataset"] != "more data") & (df["architecture"] == "CNN")]
+        df = df[(df["architecture"] == "CNN")]
 
     if dataset == "imagenet-a":
         df = df[df['Model'].str.lower() != "resnet50"]
         df = df.reset_index(drop=True)
 
-    # --- stable mappings ---
-    markers = ['o', 's', '^', 'v', 'D', 'P', '*', 'X', '<', '>']
-    marker_map = {ds: markers[i % len(markers)] for i, ds in enumerate(all_datasets)}
 
     colors = plt.cm.tab10.colors
     color_map = {arch: colors[i % len(colors)] for i, arch in enumerate(all_architectures)}
 
     for _, row in df.iterrows():
         plt.scatter(row[roi_name], row[dataset],
-                    marker=marker_map[row["dataset"]],
                     color=color_map[row["architecture"]],
                     edgecolor='black',
                     s=50,
@@ -73,18 +69,18 @@ def create_plot(dataset, roi, evaluation, all_models=False):
     output_dir = f"../plots/brain_vs_acc/{evaluation}/{model_type}"
     os.makedirs(output_dir, exist_ok=True)
     plt.savefig(f"{output_dir}/{roi}_{dataset}_{evaluation}.png")
-    plt.close()
+    plt.show()
 
 
 
 if __name__ == '__main__':
     evaluations = [
-        "encoding_illusion", "rsa_illusion",
+        "encoding_illusion"
     ]
     ood_datasets = ["imagenet1k"]
-    rois = ["V1", "V2", "V4", "IT"]
+    rois = ["V1"]
     for ood_dataset in ood_datasets:
         for roi in rois:
             for evaluation in evaluations:
-                create_plot(ood_dataset, roi, evaluation)
+                #create_plot(ood_dataset, roi, evaluation)
                 create_plot(ood_dataset, roi, evaluation, True)

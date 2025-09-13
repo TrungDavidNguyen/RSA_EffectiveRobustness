@@ -23,19 +23,21 @@ def plot_heatmap(r_matrix, p_matrix, title, output_path):
     """
     Plot heatmap with r-values and p-values annotated.
     """
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(r_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
+    plt.figure(figsize=(14, 9))
+    sns.heatmap(r_matrix, annot=True, annot_kws={"size": 20}, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
+    colorbar = plt.gcf().axes[-1]  # get the last axis (the colorbar)
+    colorbar.tick_params(labelsize=16)
 
     for i in range(r_matrix.shape[0]):
         for j in range(r_matrix.shape[1]):
             p_val = p_matrix.iloc[i, j]
             text_color = 'black' if r_matrix.iloc[i, j] < 0.37 else 'white'
             plt.text(j + 0.5, i + 0.7, f"\n(p={p_val:.2f})",
-                     ha='center', va='center', fontsize=10, color=text_color)
+                     ha='center', va='center', fontsize=16, color=text_color)
 
-    plt.title(title)
-    plt.xlabel("ROI")
-    plt.ylabel("fMRI datasets")
+    plt.title(title, fontsize=22)
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
     plt.tight_layout()
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -60,8 +62,7 @@ def load_and_merge_data(eval_id, eval_ood, roi, categories, all_models):
 
     if not all_models:
         df = df[df["architecture"] == "CNN"]
-    else:
-        df = df[df["architecture"] == "VIT"]
+
 
     return df, f"{roi_id_name}_id", f"{roi_ood_name}_ood"
 
@@ -105,8 +106,8 @@ def create_heatmap_different_stimuli(evaluation_type, all_models=False):
     r_matrix, p_matrix = compute_heatmap_for_pairs(evaluations, roi_names, categories, all_models)
 
     model_type = "all models" if all_models else "only CNNs"
-    title = f"Correlation between {evaluation_type} scores ({model_type})"
-    output_path = f"../plots/heatmap_brain_vs_brain/{model_type}/heatmap_{evaluation_type}.png"
+    title = f"Correlation between {evaluation_type} scores "
+    output_path = f"../plots/heatmap_brain_vs_brain/heatmap_{evaluation_type}.png"
     plot_heatmap(r_matrix, p_matrix, title, output_path)
 
 
@@ -120,7 +121,7 @@ def create_heatmap_same_stimuli(all_models=False):
         "encoding_illusion": "rsa_illusion"
     }
 
-    index_labels = [f"{e_id} vs {e_ood}" for e_id, e_ood in evaluations.items()]
+    index_labels = [e_id[9:] for e_id in evaluations.keys()]
     r_matrix = pd.DataFrame(index=index_labels, columns=roi_names, dtype=float)
     p_matrix = pd.DataFrame(index=index_labels, columns=roi_names, dtype=float)
 
@@ -132,16 +133,14 @@ def create_heatmap_same_stimuli(all_models=False):
             r_matrix.loc[label, roi] = r
             p_matrix.loc[label, roi] = p
 
-    model_type = "all models" if all_models else "only CNNs"
-    title = f"Correlation between scores ({model_type})"
-    output_path = f"../plots/heatmap_brain_vs_brain/{model_type}/heatmap_same_stimuli.png"
+    #model_type = "all models" if all_models else "only CNNs"
+    title = f"Correlation between RSA and Encoding"
+    output_path = f"../plots/heatmap_brain_vs_brain/heatmap_same_stimuli.png"
     plot_heatmap(r_matrix, p_matrix, title, output_path)
 
 
 if __name__ == "__main__":
     for eval_type in ["encoding", "rsa"]:
-        create_heatmap_different_stimuli(eval_type)
         create_heatmap_different_stimuli(eval_type, all_models=True)
 
-    create_heatmap_same_stimuli()
     create_heatmap_same_stimuli(all_models=True)

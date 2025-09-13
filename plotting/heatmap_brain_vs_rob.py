@@ -28,6 +28,7 @@ def create_heatmap(evaluation, all_models = False):
 
             if not all_models:
                 df = df[df["architecture"] == "CNN"]
+                df = df[df["dataset"] == "ImageNet1k"]
 
 
             result = linregress(df[roi_prefix + roi], df[ood_dataset])
@@ -35,19 +36,29 @@ def create_heatmap(evaluation, all_models = False):
             p_value_matrix.loc[ood_dataset, roi] = result.pvalue
 
     r_value_matrix = r_value_matrix.astype(float)
-
+    r_value_matrix = r_value_matrix.rename(index={"imagenetv2-matched-frequency": "imagenetv2"})
     plt.figure(figsize=(10, 8))
-    sns.heatmap(r_value_matrix, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
+    sns.heatmap(r_value_matrix, annot_kws={"size": 20}, annot=True, cmap='coolwarm', vmin=-0.7, vmax=0.7, center=0, fmt=".2f")
+    colorbar = plt.gcf().axes[-1]  # get the last axis (the colorbar)
+    colorbar.tick_params(labelsize=16)
     for i in range(len(p_value_matrix.columns)):
         for j in range(len(p_value_matrix.columns)):
             p = p_value_matrix.iloc[i, j]
             text_color = 'black' if r_value_matrix.iloc[i, j] < 0.37 else 'white'
             plt.text(j + 0.5, i + 0.7, f"\n(p={p:.2f})",
-                     ha='center', va='center', fontsize=10, color=text_color)
+                     ha='center', va='center', fontsize=16, color=text_color)
+    label = evaluation[9:] if "encoding" in evaluation else evaluation[4:]
+    dataset_name = {
+        "natural":"Natural",
+        "illusion":"Illusion",
+        "synthetic":"Synthetic",
+        "imagenet":"ImageNet"
+    }
+    eval = "Encoding" if "encoding" in evaluation else "RSA"
     model_type = "all models" if all_models else "only CNNs"
-    plt.title(f"Correlation between {evaluation} and effective robustness ({model_type})")
-    plt.xlabel("ROI")
-    plt.ylabel("OOD Dataset")
+    plt.title(f"{eval}–{dataset_name[label]} vs Effective Robustness", fontsize=18)
+    plt.xticks(fontsize=17)
+    plt.yticks(fontsize=17)
     plt.tight_layout()
 
     output_dir = f"../plots/heatmap_brain_vs_rob/{model_type}"
@@ -65,5 +76,4 @@ if __name__ == '__main__':
         "encoding_imagenet", "rsa_imagenet"
     ]
     for evaluation in evaluations:
-        create_heatmap(evaluation)
-        create_heatmap(evaluation, all_models=True)
+        create_heatmap(evaluation,True)
