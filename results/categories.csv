@@ -62,3 +62,10 @@ vit_base_patch16_224,VIT,ImageNet22K
 vit_large_patch16_224,VIT,ImageNet22K
 wide_resnet50_2,CNN,ImageNet1K
 xception,CNN,ImageNet1K
+mobilenetv3_large_100.miil_in21k_ft_in1k,CNN,ImageNet22K
+mixer_b16_224.goog_in21k_ft_in1k,MLP,ImageNet22K
+resnetv2_50x1_bit.goog_in21k_ft_in1k,CNN,ImageNet22K
+mobilevit_s.cvnets_in1k,VIT,ImageNet1K
+fastvit_t8.apple_dist_in1k,VIT,ImageNet1K
+maxvit_nano_rw_256.sw_in1k,VIT,ImageNet1K
+tf_efficientnetv2_s.in21k_ft_in1k,CNN,ImageNet22K
