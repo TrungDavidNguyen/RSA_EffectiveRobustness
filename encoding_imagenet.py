@@ -120,7 +120,7 @@ if __name__ == '__main__':
                    'mixer_b16_224.goog_in21k_ft_in1k','mobilenetv3_large_100.miil_in21k_ft_in1k',
                    'fastvit_t8.apple_dist_in1k','mobilevit_s.cvnets_in1k','maxvit_nano_rw_256.sw_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
-    models_list = ['inception_resnet_v2']
+    models_list = ['tf_efficientnetv2_s.in21k_ft_in1k']
 
     model_name = models_list[num]
     stimuli_path = os.path.join(os.getcwd(), "imagenet_stimuli")
@@ -142,6 +142,5 @@ if __name__ == '__main__':
         encoding(model_name, "Cornet", "V4", stimuli_path, fmri_dataset, save_folder, 6, features)
         encoding(model_name, "Cornet", "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
     else:
-        features = encoding_custom(model_name, "V4", stimuli_path, fmri_dataset, save_folder, 6)
-        encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, 6, features)
+        features = encoding_custom(model_name, "IT", stimuli_path, fmri_dataset, save_folder, 6)
 
