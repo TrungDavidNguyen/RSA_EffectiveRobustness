@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 from scipy.stats import linregress
 import seaborn as sns
-
+from plotting_thesis.utils import DataLoader
 sns.set(style="whitegrid")  # prettier style
 
 def logit(acc):
@@ -76,12 +76,15 @@ def logit_fit(id_dataset, ood_dataset):
     return slope, intercept
 
 def linear_fit(id_dataset, ood_dataset):
-    accuracies = pd.read_csv("../results/accuracies.csv")
-    categories = pd.read_csv("../results/categories.csv")
+    accuracies = DataLoader.accuracies
+    categories = DataLoader.categories
+
+    df = DataLoader.merge_with_accuracies()
 
     df = pd.merge(accuracies, categories, on='Model', how='inner')
     df = df[df["architecture"] == "CNN"]
     df = df[df["dataset"] == "ImageNet1K"]
+    df = df[df["Model"] != "cornet_z"] # remove this model to make plot prettier
 
     architectures = df["architecture"].unique()
     palette = sns.color_palette("tab10", n_colors=len(architectures))
@@ -148,6 +151,5 @@ def linear_fit(id_dataset, ood_dataset):
 
 if __name__ == '__main__':
     datasets = {"imagenetv2-matched-frequency": "imagenet1k"}
-
     for ood, id in datasets.items():
         linear_fit(id, ood)

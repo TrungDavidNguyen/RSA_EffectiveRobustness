@@ -2,14 +2,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from scipy.stats import linregress
-from matplotlib.lines import Line2D
-
+import plotting_thesis.utils as utils
 
 def create_plot(ood_dataset, roi, evaluation, all_models=False):
     roi_name = f"%R2_{roi}" if "rsa" in evaluation else f"R_{roi}"
+    roi_names = utils.PlottingConfig.ROIS
 
     # Load data
-    brain_similarity = pd.read_csv(f"../results/{evaluation}.csv").dropna(subset=[roi_name])
+    brain_similarity = pd.read_csv(f"../results/{evaluation}.csv").dropna(
+        subset=[utils.get_roi_col_name(roi, evaluation) for roi in roi_names])
     robustness = pd.read_csv("../results/effective_robustness.csv")
     categories = pd.read_csv("../results/categories.csv")
     architectures = categories["architecture"].unique()
@@ -98,10 +99,7 @@ def create_plot(ood_dataset, roi, evaluation, all_models=False):
 
 if __name__ == "__main__":
     evaluations = [
-        "encoding_natural", "rsa_natural",
-        "encoding_synthetic", "rsa_synthetic",
-        "encoding_illusion", "rsa_illusion",
-        "encoding_imagenet", "rsa_imagenet",
+        "encoding_imagenet"
     ]
     ood_datasets = ["imagenet-r", "imagenet-sketch", "imagenetv2-matched-frequency", "imagenet-a"]
     rois = ["V1", "V2", "V4", "IT"]
@@ -109,5 +107,4 @@ if __name__ == "__main__":
     for ood_dataset in ood_datasets:
         for roi in rois:
             for evaluation in evaluations:
-                create_plot(ood_dataset, roi, evaluation)
-                #create_plot(ood_dataset, roi, evaluation, True)
+                create_plot(ood_dataset, roi, evaluation, True)

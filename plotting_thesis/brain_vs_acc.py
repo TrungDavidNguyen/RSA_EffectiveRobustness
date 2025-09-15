@@ -83,4 +83,4 @@ if __name__ == '__main__':
         for roi in rois:
             for evaluation in evaluations:
                 #create_plot(ood_dataset, roi, evaluation)
-                create_plot(ood_dataset, roi, evaluation, True)
+                create_plot(ood_dataset, roi, evaluation, False)

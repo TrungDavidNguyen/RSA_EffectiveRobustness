@@ -8,11 +8,10 @@ BASE_PATH = r"C:\Users\david\Desktop\RSA_EffectiveRobustness\results"
 
 EVALUATIONS = [
     "encoding_imagenet", "encoding_synthetic", "encoding_illusion", "encoding_natural",
-    "rsa_synthetic", "rsa_illusion", "rsa_imagenet", "rsa_natural"
 ]
 
 # Define a standard set of column names to unify the data
-UNIFIED_SCORE_COLS = ['Score_V1', 'Score_V2', 'Score_V4', 'Score_IT']
+UNIFIED_SCORE_COLS = [ 'Score_IT']
 
 
 def assign_group(eval_name: str) -> str:
@@ -38,9 +37,9 @@ if __name__ == '__main__':
 
         # Determine the correct score columns based on the evaluation type
         if "rsa" in eval_name:
-            original_score_cols = ['%R2_V1', '%R2_V2', '%R2_V4', '%R2_IT']
+            original_score_cols = ['%R2_IT']
         elif "encoding" in eval_name:
-            original_score_cols = ['R_V1', 'R_V2', 'R_V4', 'R_IT']
+            original_score_cols = [ 'R_IT']
         else:
             print(f"Warning: Skipping '{eval_name}' - unknown type.")
             continue
@@ -82,12 +81,15 @@ if __name__ == '__main__':
         # Combine all individual DataFrames into one
         combined_df = pd.concat(all_results, ignore_index=True)
 
-        # Calculate the sum of scores for each model in each evaluation
-        combined_df['Sum_Score'] = combined_df[UNIFIED_SCORE_COLS].sum(axis=1)
+        # Calculate the average score across all available score columns
+        combined_df['Final_Score'] = (
+                combined_df[UNIFIED_SCORE_COLS].sum(axis=1) /
+                combined_df[UNIFIED_SCORE_COLS].notna().sum(axis=1)
+        )
 
-        # Group by model, sum the scores across all evaluations, and get the top 5
-        best_overall = (combined_df.groupby('Model')['Sum_Score']
-                        .sum()
+        # Group by model, average the scores across all evaluations, and get the top 5
+        best_overall = (combined_df.groupby('Model')['Final_Score']
+                        .mean()
                         .sort_values(ascending=False)
                         .head(5))
 
