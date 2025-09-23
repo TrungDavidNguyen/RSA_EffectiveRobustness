@@ -14,11 +14,11 @@ def performance_jitter_plot(data_file, categories_file):
 
     # Filter out architectures you don’t want
     categories = categories[~categories["architecture"].isin(["MLP", "RNN"])]
-    #categories = categories[categories["dataset"] != "ImageNet1K"]
+    #categories = categories[categories["dataset"] != "ImageNet22K"]
 
     df = df.merge(categories, on='Model', how='inner')
 
-    # ✅ Rename the column before melting
+    #  Rename the column before melting
     df = df.rename(columns={"imagenetv2-matched-frequency": "imagenetv2"})
 
     # Melt dataframe to long format

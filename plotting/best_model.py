@@ -8,10 +8,11 @@ BASE_PATH = r"C:\Users\david\Desktop\RSA_EffectiveRobustness\results"
 
 EVALUATIONS = [
     "encoding_imagenet", "encoding_synthetic", "encoding_illusion", "encoding_natural",
+    "rsa_natural", "rsa_imagenet", "rsa_synthetic", "rsa_illusion"
 ]
 
 # Define a standard set of column names to unify the data
-UNIFIED_SCORE_COLS = [ 'Score_IT']
+UNIFIED_SCORE_COLS = ['Score_V1','Score_V2','Score_V4','Score_IT']
 
 
 def assign_group(eval_name: str) -> str:
@@ -37,9 +38,9 @@ if __name__ == '__main__':
 
         # Determine the correct score columns based on the evaluation type
         if "rsa" in eval_name:
-            original_score_cols = ['%R2_IT']
+            original_score_cols = ['%R2_V1', '%R2_V2', '%R2_V4', '%R2_IT']
         elif "encoding" in eval_name:
-            original_score_cols = [ 'R_IT']
+            original_score_cols = ['R_V1', 'R_V2','R_V4', 'R_IT']
         else:
             print(f"Warning: Skipping '{eval_name}' - unknown type.")
             continue
@@ -91,7 +92,7 @@ if __name__ == '__main__':
         best_overall = (combined_df.groupby('Model')['Final_Score']
                         .mean()
                         .sort_values(ascending=False)
-                        .head(5))
+                        .head(71))
 
         print("\n--- Top 5 Models (Overall) ---")
         print(best_overall)

@@ -17,7 +17,7 @@ def performance_jitter_by_category(data_file, categories_file):
     # Merge dataset info from categories.csv
     df = pd.merge(df, categories_df[['Model', 'dataset']], on='Model', how='inner')
 
-    # ✅ Rename column before melting
+    # Rename column before melting
     df = df.rename(columns={"imagenetv2-matched-frequency": "imagenetv2"})
 
     # Melt wide dataframe to long format
@@ -63,7 +63,7 @@ def performance_jitter_by_category(data_file, categories_file):
                     color=category_colors[cat], lw=2)
             print(f"{eval_ds} - {cat} mean: {scores.mean():.3f}")
 
-        # ✅ Perform pairwise Welch’s t-tests between dataset categories
+        # Perform pairwise Welch’s t-tests between dataset categories
         for j in range(len(dataset_categories)):
             for k in range(j + 1, len(dataset_categories)):
                 cat1, cat2 = dataset_categories[j], dataset_categories[k]
@@ -85,9 +85,9 @@ def performance_jitter_by_category(data_file, categories_file):
     # Beautify plot
     ax.set_xticks(range(1, len(eval_datasets) + 1))
     ax.set_xticklabels(eval_datasets, rotation=30, fontsize=12)
-    ax.set_ylabel("Performance", fontsize=14)
-    ax.set_xlabel("Evaluation Dataset", fontsize=14)
-    ax.set_title("Model Performance by Evaluation Dataset & Dataset Category",
+    ax.set_ylabel("Effective Robustness", fontsize=14)
+    ax.set_xlabel("OOD Dataset", fontsize=14)
+    ax.set_title("Model Performance by Training Dataset",
                  fontsize=16, weight='bold')
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)

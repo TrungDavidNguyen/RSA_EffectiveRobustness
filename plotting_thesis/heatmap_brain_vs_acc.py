@@ -63,7 +63,7 @@ def create_heatmap(evaluation, all_models=False):
     plt.yticks(fontsize=15)
     plt.tight_layout()
 
-    output_path = os.path.join(PlottingConfig.PLOTS_DIR, "heatmap_brain","brain_vs_acc", f"heatmap_{evaluation}.png")
+    output_path = os.path.join(PlottingConfig.PLOTS_DIR, "heatmap","brain_vs_acc", f"heatmap_{evaluation}.png")
     utils.save_plot(os.path.basename(output_path), os.path.dirname(output_path))
     plt.show()
 

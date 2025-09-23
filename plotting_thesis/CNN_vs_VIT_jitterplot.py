@@ -21,8 +21,8 @@ def CNN_VIT_jitter_plot(eval, rois):
 
     for i, roi in enumerate(rois, start=1):
         roi_col_name = utils.get_roi_col_name(roi,eval)
-        df_cnn = utils.filter_df_by_dataset(df_merged, "ImageNet22K")
-        df_vit = utils.filter_df_by_dataset(df_merged, "ImageNet1K")
+        df_cnn = utils.filter_df_by_architecture(df_merged, "CNN")
+        df_vit = utils.filter_df_by_architecture(df_merged, "VIT")
 
         cnn_scores = df_cnn[roi_col_name]
         vit_scores = df_vit[roi_col_name]

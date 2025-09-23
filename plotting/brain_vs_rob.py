@@ -98,9 +98,7 @@ def create_plot(ood_dataset, roi, evaluation, all_models=False):
 
 
 if __name__ == "__main__":
-    evaluations = [
-        "encoding_imagenet"
-    ]
+    evaluations = utils.PlottingConfig.EVALUATIONS
     ood_datasets = ["imagenet-r", "imagenet-sketch", "imagenetv2-matched-frequency", "imagenet-a"]
     rois = ["V1", "V2", "V4", "IT"]
 
