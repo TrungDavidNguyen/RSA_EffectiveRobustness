@@ -24,9 +24,7 @@ if __name__ == '__main__':
                    'fastvit_t8.apple_dist_in1k','mobilevit_s.cvnets_in1k','maxvit_nano_rw_256.sw_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
-    models_list = ["tf_efficientnetv2_s.in21k_ft_in1k", 'resnetv2_50x1_bit.goog_in21k_ft_in1k',
-                   'mixer_b16_224.goog_in21k_ft_in1k','mobilenetv3_large_100.miil_in21k_ft_in1k',
-                   'fastvit_t8.apple_dist_in1k','mobilevit_s.cvnets_in1k','maxvit_nano_rw_256.sw_in1k']
+    models_list = standard+timm+timm_custom+cornet
 
     model_name = models_list[num]
 

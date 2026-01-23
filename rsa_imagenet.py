@@ -26,7 +26,8 @@ if __name__ == '__main__':
                    'fastvit_t8.apple_dist_in1k','mobilevit_s.cvnets_in1k','maxvit_nano_rw_256.sw_in1k']
     cornet = ["cornet_s", "cornet_z", "cornet_rt"]
 
-    models_list = [ "cornet_rt"]
+    models_list = standard+timm+timm_custom+cornet
+
     model_name = models_list[num]
 
     stimuli_path = os.path.join(os.getcwd(), "imagenet_stimuli")

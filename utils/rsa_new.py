@@ -32,15 +32,14 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name, dataset, num_sub
         model_rdm_npz = check_squareform(model_rdm_npz["rdm"])
         brain_rdms_npz = np.load(brain_rdms_path_full)["rdm"]
         corr = model_spearman(model_rdm_npz, brain_rdms_npz)
-        corr_list = np.square(corr)
         # Take mean
-        r = np.mean(corr_list)
+        r = np.mean(corr)
 
         # ttest: Ttest_1sampResult(statistic=3.921946, pvalue=0.001534)
-        significance = stats.ttest_1samp(corr_list, 0)[1]
+        significance = stats.ttest_1samp(corr, 0)[1]
 
         # standard error of mean
-        sem = stats.sem(corr_list)  # standard error of mean
+        sem = stats.sem(corr)  # standard error of mean
 
         # Create dictionary to save data
         layer_key = "(" + str(counter) + ") " + layer
@@ -49,8 +48,8 @@ def RSA(model_rdms_path, brain_rdms_path, model_name, roi_name, dataset, num_sub
                 "ROI": [roi_name],
                 "Model": [model_name],
                 "Layer": [layer_key],
-                "R2": [corr_list[i]],
-                "%R2": [(corr_list[i] / lnc) * 100.],
+                "R2": [corr[i]],
+                "%R2": [(corr[i] / lnc) * 100.],
                 "Significance": [significance],
                 "SEM": [sem],
                 "LNC": [lnc],
