@@ -91,11 +91,7 @@ def my_cleaner(features):
 if __name__ == '__main__':
     num = int(sys.argv[1])
     standard = []
-    timm = ['tf_efficientnet_b4_ns', 'resnext50_32x4d', 'resnext101_32x8d', 'vit_base_patch16_224', 'vit_large_patch16_224',
-            'deit_base_patch16_224',
-            'swin_base_patch4_window7_224', 'mixer_b16_224', 'nfnet_l0', 'dm_nfnet_f0', 'regnety_032',
-            'regnety_080', 'coat_lite_mini', 'seresnet50', 'gluon_resnet50_v1c', 'gluon_resnext101_64x4d',
-            'wide_resnet50_2', 'convit_small']
+    timm = []
     timm_custom = ['efficientnet_b3.ra2_in1k', 'beit_base_patch16_224.in22k_ft_in22k_in1k', 'gmlp_s16_224.ra3_in1k',
                    'convnext_base.fb_in22k_ft_in1k',"tf_efficientnetv2_s.in21k_ft_in1k", 'resnetv2_50x1_bit.goog_in21k_ft_in1k',
                    'mixer_b16_224.goog_in21k_ft_in1k','mobilenetv3_large_100.miil_in21k_ft_in1k',
